@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Colores principales del diseño -->
+    <color name="header_blue">#A8D2EB</color>
+    <color name="background_app">#EAF6FD</color>
+    <color name="card_blue">#A8D2EB</color>
+
+    <!-- Barra inferior -->
+    <color name="bottom_nav">#FFFFFF</color>
+
+    <!-- Textos e íconos -->
+    <color name="primary_dark">#40547A</color>
+    <color name="text_black">#000000</color>
+    <color name="text_gray">#4B4B4B</color>
+    <color name="icon_black">#000000</color>
+</resources>
