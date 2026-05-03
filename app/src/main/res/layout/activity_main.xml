@@ -81,6 +81,7 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/cardPacientes"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
                     android:layout_weight="1"
@@ -108,6 +109,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/cardDoctores"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
                     android:layout_weight="1"
