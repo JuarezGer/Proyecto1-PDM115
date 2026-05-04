@@ -12,11 +12,16 @@ import android.content.Intent;
 
 import ues.fia.proyecto1pdm115.pacientes.*;
 import ues.fia.proyecto1pdm115.doctores.*;
+import ues.fia.proyecto1pdm115.especialidades.*;
+import ues.fia.proyecto1pdm115.hospitales.*;
 
 public class MainActivity extends AppCompatActivity {
 
     LinearLayout cardPacientes;
     LinearLayout cardDoctores;
+    LinearLayout cardEspecialidades;
+    LinearLayout cardHospitales;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,18 @@ public class MainActivity extends AppCompatActivity {
         cardDoctores.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, DoctorMenuActivity.class);
             startActivity(intent);
+        });
+        //Navegación a Especialidades
+        cardEspecialidades = findViewById(R.id.cardEspecialidades);
+        cardEspecialidades.setOnClickListener(v ->{
+            Intent intent = new Intent(MainActivity.this, EspecialidadMenuActivity.class);
+            startActivity(intent);
+        });
+        //Navegación a Hospitales
+        cardHospitales = findViewById(R.id.cardHospitales);
+        cardHospitales.setOnClickListener(v -> {
+                    Intent intent = new Intent(MainActivity.this, HospitalMenuActivity.class);
+                    startActivity(intent);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainLayout), (v, insets) -> {
