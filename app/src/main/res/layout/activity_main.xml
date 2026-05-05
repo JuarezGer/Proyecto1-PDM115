@@ -58,11 +58,12 @@
             android:paddingBottom="20dp">
 
             <TextView
+                android:id="@+id/txtBienvenida"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/bienvenida"
+                android:text="¡Bienvenido!"
                 android:textColor="@color/text_black"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView

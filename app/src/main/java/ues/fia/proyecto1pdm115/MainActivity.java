@@ -9,6 +9,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import android.content.Intent;
+import android.widget.TextView;
 
 import ues.fia.proyecto1pdm115.pacientes.*;
 import ues.fia.proyecto1pdm115.doctores.*;
@@ -28,6 +29,13 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        TextView txtBienvenida = findViewById(R.id.txtBienvenida);
+        String nombreUsuario = getIntent().getStringExtra("nombreUsuario");
+
+        if (nombreUsuario != null && !nombreUsuario.isEmpty()) {
+            txtBienvenida.setText("¡Bienvenido " + nombreUsuario + "!");
+        }
         //Navegación a Pacientes
         cardPacientes = findViewById(R.id.cardPacientes);
         cardPacientes.setOnClickListener(v -> {

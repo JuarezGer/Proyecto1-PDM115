@@ -25,6 +25,67 @@ public class controlDBHospitalApp {
         this.context = ctx;
         DBHelper = new DatabaseHelper(context);
     }
+    // =========================================================
+    // LOGIN
+    // =========================================================
+
+    public boolean validarLogin(String idUsuario, String clave) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "USUARIO",
+                    null,
+                    "ID_USUARIO = ? AND CLAVE = ?",
+                    new String[]{idUsuario, clave},
+                    null,
+                    null,
+                    null
+            );
+
+            return cursor.moveToFirst();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public String obtenerNombreUsuario(String idUsuario) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "USUARIO",
+                    new String[]{"NOMBRE_USUARIO"},
+                    "ID_USUARIO = ?",
+                    new String[]{idUsuario},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_USUARIO"));
+            }
+
+            return "";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
