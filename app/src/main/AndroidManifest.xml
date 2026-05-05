@@ -20,8 +20,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <!-- CRUD De Pacientes -->
         <activity android:name=".pacientes.PacienteMenuActivity" />
+        <activity android:name=".pacientes.CrearPacienteActivity" />
+        <activity android:name=".pacientes.VisualizarPacientesActivity" />
+        <activity android:name=".pacientes.ModificarPacienteActivity" />
+        <activity android:name=".pacientes.EliminarPacienteActivity" />
+
         <activity android:name=".doctores.DoctorMenuActivity" />
         <activity android:name=".especialidades.EspecialidadMenuActivity" />
         <activity android:name=".hospitales.HospitalMenuActivity" />

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_app"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Crear Paciente"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_black"
+            android:gravity="center"
+            android:layout_marginBottom="28dp" />
+
+        <EditText
+            android:id="@+id/edtDuiCrear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="DUI del paciente"
+            android:padding="12dp"
+            android:textSize="15sp"
+            android:textColor="@color/text_black"
+            android:textColorHint="#999999"
+            android:backgroundTint="@color/card_blue"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/edtCodDistritoCrear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Código distrito"
+            android:text="SS0101"
+            android:padding="12dp"
+            android:textSize="15sp"
+            android:textColor="@color/text_black"
+            android:textColorHint="#999999"
+            android:backgroundTint="@color/card_blue"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/edtPrimerNombreCrear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Primer nombre"
+            android:padding="12dp"
+            android:textSize="15sp"
+            android:textColor="@color/text_black"
+            android:textColorHint="#999999"
+            android:backgroundTint="@color/card_blue"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/edtSegundoNombreCrear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Segundo nombre"
+            android:padding="12dp"
+            android:textSize="15sp"
+            android:textColor="@color/text_black"
+            android:textColorHint="#999999"
+            android:backgroundTint="@color/card_blue"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/edtPrimerApellidoCrear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Primer apellido"
+            android:padding="12dp"
+            android:textSize="15sp"
+            android:textColor="@color/text_black"
+            android:textColorHint="#999999"
+            android:backgroundTint="@color/card_blue"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/edtSegundoApellidoCrear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Segundo apellido"
+            android:padding="12dp"
+            android:textSize="15sp"
+            android:textColor="@color/text_black"
+            android:textColorHint="#999999"
+            android:backgroundTint="@color/card_blue"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/edtFechaNacimientoCrear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Fecha nacimiento YYYY-MM-DD"
+            android:padding="12dp"
+            android:textSize="15sp"
+            android:textColor="@color/text_black"
+            android:textColorHint="#999999"
+            android:backgroundTint="@color/card_blue"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/edtGeneroCrear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Género"
+            android:padding="12dp"
+            android:textSize="15sp"
+            android:textColor="@color/text_black"
+            android:textColorHint="#999999"
+            android:backgroundTint="@color/card_blue"
+            android:layout_marginBottom="12dp" />
+
+        <EditText
+            android:id="@+id/edtTelefonoCrear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="Teléfono"
+            android:inputType="phone"
+            android:padding="12dp"
+            android:textSize="15sp"
+            android:textColor="@color/text_black"
+            android:textColorHint="#999999"
+            android:backgroundTint="@color/card_blue"
+            android:layout_marginBottom="20dp" />
+
+        <Button
+            android:id="@+id/btnGuardarPaciente"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Guardar paciente"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:backgroundTint="@color/card_blue"
+            android:textColor="@color/primary_dark"
+            android:layout_marginBottom="12dp" />
+
+        <Button
+            android:id="@+id/btnRegresarCrear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="Regresar"
+            android:textAllCaps="false"
+            android:textSize="14sp"
+            android:backgroundTint="@color/card_blue"
+            android:textColor="@color/primary_dark" />
+
+    </LinearLayout>
+</ScrollView>

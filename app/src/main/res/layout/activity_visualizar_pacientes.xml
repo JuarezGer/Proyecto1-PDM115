@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_app"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Visualizar Pacientes"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_black"
+            android:gravity="center"
+            android:layout_marginBottom="28dp" />
+
+        <Button
+            android:id="@+id/btnCargarPacientes"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="Cargar pacientes"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:backgroundTint="@color/card_blue"
+            android:textColor="@color/primary_dark"
+            android:layout_marginBottom="20dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/text_black"
+            android:alpha="0.1"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:id="@+id/txtListaPacientes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lista de pacientes..."
+            android:textSize="16sp"
+            android:textColor="@color/text_black"
+            android:padding="16dp"
+            android:layout_marginBottom="20dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginTop="16dp">
+
+            <Button
+                android:id="@+id/btnRegresarVisualizar"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="Regresar"
+                android:textAllCaps="false"
+                android:textSize="14sp"
+                android:backgroundTint="@color/card_blue"
+                android:textColor="@color/primary_dark" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
