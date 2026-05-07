@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 
+import ues.fia.proyecto1pdm115.modelos.Especialidad;
 import ues.fia.proyecto1pdm115.modelos.Paciente;
 
 public class controlDBHospitalApp {
@@ -450,6 +451,7 @@ public class controlDBHospitalApp {
 
     public void abrir() throws SQLException {
         db = DBHelper.getWritableDatabase();
+        db.execSQL("PRAGMA foreing_keys=ON;");
     }
 
     public void cerrar() {
@@ -641,6 +643,170 @@ public class controlDBHospitalApp {
 
         return paciente;
     }
+    //=========================================================
+    // METODOS PARA ESPECIALIDAD
+    //=========================================================
+    public String insertarEspecialidad(Especialidad especialidad) {
+
+        String resultado;
+
+        long control;
+
+        ContentValues values = new ContentValues();
+
+        values.put("NOMBRE_ESPECIALIDAD",
+                especialidad.getNombreEspecialidad());
+
+        control = db.insert("ESPECIALIDAD", null, values);
+
+        if (control == -1) {
+
+            resultado = "Error al insertar especialidad";
+
+        } else {
+
+            resultado = "Especialidad registrada correctamente";
+        }
+
+        return resultado;
+    }
+
+    public ArrayList<Especialidad> consultarEspecialidades() {
+
+        ArrayList<Especialidad> lista =
+                new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM ESPECIALIDAD",
+                null
+        );
+
+        if (cursor.moveToFirst()) {
+
+            do {
+
+                Especialidad especialidad =
+                        new Especialidad();
+
+                especialidad.setIdEspecialidad(
+                        cursor.getInt(0)
+                );
+
+                especialidad.setNombreEspecialidad(
+                        cursor.getString(1)
+                );
+
+                lista.add(especialidad);
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return lista;
+    }
+
+    public Especialidad consultarEspecialidad(int idEspecialidad) {
+
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM ESPECIALIDAD WHERE ID_ESPECIALIDAD = ?",
+                new String[]{
+                        String.valueOf(idEspecialidad)
+                }
+        );
+
+        if (cursor.moveToFirst()) {
+
+            Especialidad especialidad =
+                    new Especialidad();
+
+            especialidad.setIdEspecialidad(
+                    cursor.getInt(0)
+            );
+
+            especialidad.setNombreEspecialidad(
+                    cursor.getString(1)
+            );
+
+            cursor.close();
+
+            return especialidad;
+        }
+
+        cursor.close();
+
+        return null;
+    }
+    public String eliminarEspecialidad(int idEspecialidad) {
+
+        try {
+
+            int control = db.delete(
+                    "ESPECIALIDAD",
+                    "ID_ESPECIALIDAD = ?",
+                    new String[]{
+                            String.valueOf(idEspecialidad)
+                    }
+            );
+
+            if (control > 0) {
+
+                return "Especialidad eliminada correctamente";
+
+            } else {
+
+                return "Especialidad no encontrada";
+            }
+
+        } catch (Exception e) {
+
+            return "No se puede eliminar.\n" +
+                    "La especialidad está asociada a hospitales o doctores.";
+        }
+    }
+    public String actualizarEspecialidad(
+            Especialidad especialidad
+    ) {
+
+        try {
+
+            ContentValues values =
+                    new ContentValues();
+
+            values.put(
+                    "NOMBRE_ESPECIALIDAD",
+                    especialidad.getNombreEspecialidad()
+            );
+
+            int control = db.update(
+                    "ESPECIALIDAD",
+                    values,
+                    "ID_ESPECIALIDAD = ?",
+                    new String[]{
+                            String.valueOf(
+                                    especialidad.getIdEspecialidad()
+                            )
+                    }
+            );
+
+            if (control > 0) {
+
+                return "Especialidad actualizada correctamente";
+
+            } else {
+
+                return "Especialidad no encontrada";
+            }
+
+        } catch (Exception e) {
+
+            return "Error al actualizar especialidad";
+        }
+    }
+
+    //=========================================================
+    // METODOS PARA Hospital
+    //=========================================================
 
     // =========================================================
     // MÉTODOS GENÉRICOS OPCIONALES

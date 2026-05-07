@@ -1,5 +1,6 @@
 package ues.fia.proyecto1pdm115.especialidades;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -29,19 +30,19 @@ public class EspecialidadMenuActivity extends AppCompatActivity {
         });
 
         cardVisualizarEspecialidad.setOnClickListener(v -> {
-            // startActivity(new Intent(this, VisualizarPacientesActivity.class));
+            startActivity(new Intent(this, VisualizarEspecialidadesActivity.class));
         });
 
         cardCrearEspecialidad.setOnClickListener(v -> {
-            // startActivity(new Intent(this, CrearPacienteActivity.class));
+            startActivity(new Intent(this, CrearEspecialidadActivity.class));
         });
 
         cardModificarEspecialidad.setOnClickListener(v -> {
-            // startActivity(new Intent(this, ModificarPacienteActivity.class));
+             startActivity(new Intent(this, ModificarEspecialidadActivity.class));
         });
 
         cardEliminarEspecialidad.setOnClickListener(v -> {
-            // startActivity(new Intent(this, EliminarPacienteActivity.class));
+            startActivity(new Intent(this, EliminarEspecialidadActivity.class));
         });
     }
 }

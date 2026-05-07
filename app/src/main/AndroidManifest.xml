@@ -11,27 +11,33 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
-
+        <activity
+            android:name=".especialidades.ModificarEspecialidadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".especialidades.EliminarEspecialidadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".especialidades.VisualizarEspecialidadesActivity"
+            android:exported="false" />
         <activity
             android:name=".LoginActivity"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-
-        <!-- CRUD De Pacientes -->
+        <activity android:name=".MainActivity" /> <!-- CRUD De Pacientes -->
         <activity android:name=".pacientes.PacienteMenuActivity" />
         <activity android:name=".pacientes.CrearPacienteActivity" />
         <activity android:name=".pacientes.VisualizarPacientesActivity" />
         <activity android:name=".pacientes.ModificarPacienteActivity" />
         <activity android:name=".pacientes.EliminarPacienteActivity" />
-
         <activity android:name=".doctores.DoctorMenuActivity" />
         <activity android:name=".especialidades.EspecialidadMenuActivity" />
+        <activity android:name=".especialidades.CrearEspecialidadActivity" />
         <activity android:name=".hospitales.HospitalMenuActivity" />
     </application>
 
