@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+import ues.fia.proyecto1pdm115.Navegador;
 import ues.fia.proyecto1pdm115.R;
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
 import ues.fia.proyecto1pdm115.modelos.Paciente;
@@ -26,6 +27,7 @@ public class VisualizarPacientesActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualizar_pacientes);
+        Navegador.configurarBarra(this);
 
         helper = new controlDBHospitalApp(this);
 
@@ -85,7 +87,11 @@ public class VisualizarPacientesActivity extends AppCompatActivity {
 
         int anchoPx = convertirDpAPx(anchoDp);
 
-        TableRow.LayoutParams params = new TableRow.LayoutParams(anchoPx, TableRow.LayoutParams.WRAP_CONTENT);
+        TableRow.LayoutParams params = new TableRow.LayoutParams(
+                anchoPx,
+                TableRow.LayoutParams.WRAP_CONTENT
+        );
+
         textView.setLayoutParams(params);
 
         textView.setText(texto);
@@ -98,8 +104,10 @@ public class VisualizarPacientesActivity extends AppCompatActivity {
     }
 
     private void mostrarModalPaciente(Paciente paciente) {
+        String nombreDistrito = obtenerNombreDistritoPaciente(paciente.getCodDistrito());
+
         String datos = "DUI: " + valor(paciente.getDuiPaciente()) + "\n\n" +
-                "Código distrito: " + valor(paciente.getCodDistrito()) + "\n\n" +
+                "Distrito: " + nombreDistrito + "\n\n" +
                 "Primer nombre: " + valor(paciente.getPrimerNombrePaciente()) + "\n" +
                 "Segundo nombre: " + valor(paciente.getSegundoNombrePaciente()) + "\n\n" +
                 "Primer apellido: " + valor(paciente.getPrimerApellidoPaciente()) + "\n" +
@@ -117,10 +125,35 @@ public class VisualizarPacientesActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    private String obtenerNombreDistritoPaciente(String codDistrito) {
+        if (codDistrito == null || codDistrito.trim().isEmpty()) {
+            return "N/A";
+        }
+
+        String nombreDistrito = "";
+
+        try {
+            helper.abrir();
+            nombreDistrito = helper.obtenerNombreDistrito(codDistrito);
+            helper.cerrar();
+
+        } catch (Exception e) {
+            helper.cerrar();
+            return codDistrito;
+        }
+
+        if (nombreDistrito == null || nombreDistrito.trim().isEmpty()) {
+            return codDistrito;
+        }
+
+        return nombreDistrito;
+    }
+
     private String valor(String texto) {
         if (texto == null || texto.trim().isEmpty()) {
             return "N/A";
         }
+
         return texto;
     }
 

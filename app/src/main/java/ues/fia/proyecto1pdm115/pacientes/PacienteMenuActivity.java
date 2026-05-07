@@ -6,6 +6,8 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import ues.fia.proyecto1pdm115.Navegador;
 import ues.fia.proyecto1pdm115.R;
 
 public class PacienteMenuActivity extends AppCompatActivity {
@@ -17,6 +19,7 @@ public class PacienteMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pacientes);
+        Navegador.configurarBarra(this);
 
         cardVisualizarPaciente = findViewById(R.id.cardVisualizarPaciente);
         cardCrearPaciente = findViewById(R.id.cardCrearPaciente);

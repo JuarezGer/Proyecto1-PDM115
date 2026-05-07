@@ -5,6 +5,7 @@ public class Paciente {
     private String duiPaciente;
     private Integer idPoliza;
     private String codDistrito;
+    private String nomDistrito;
     private String primerNombrePaciente;
     private String segundoNombrePaciente;
     private String primerApellidoPaciente;
@@ -16,7 +17,7 @@ public class Paciente {
     public Paciente() {
     }
 
-    public Paciente(String duiPaciente, Integer idPoliza, String codDistrito,
+    public Paciente(String duiPaciente, Integer idPoliza, String codDistrito, String nomDistrito,
                     String primerNombrePaciente, String segundoNombrePaciente,
                     String primerApellidoPaciente, String segundoApellidoPaciente,
                     String fechaNacimientoPaciente, String generoPaciente,
@@ -24,6 +25,7 @@ public class Paciente {
         this.duiPaciente = duiPaciente;
         this.idPoliza = idPoliza;
         this.codDistrito = codDistrito;
+        this.nomDistrito = nomDistrito;
         this.primerNombrePaciente = primerNombrePaciente;
         this.segundoNombrePaciente = segundoNombrePaciente;
         this.primerApellidoPaciente = primerApellidoPaciente;
@@ -56,7 +58,8 @@ public class Paciente {
     public void setCodDistrito(String codDistrito) {
         this.codDistrito = codDistrito;
     }
-
+    public String getNomDistrito() { return nomDistrito; }
+    public void setNomDistrito(String nomDistrito) { this.nomDistrito = nomDistrito; }
     public String getPrimerNombrePaciente() {
         return primerNombrePaciente;
     }

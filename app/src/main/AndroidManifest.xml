@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
+        <activity android:name=".PerfilActivity" />
         <activity
             android:name=".especialidades.ModificarEspecialidadActivity"
             android:exported="false" />

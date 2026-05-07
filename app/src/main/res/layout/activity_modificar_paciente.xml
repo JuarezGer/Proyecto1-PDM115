@@ -80,7 +80,6 @@
                     android:textColor="#666666"
                     android:layout_marginBottom="20dp" />
 
-                <!-- SEPARADOR -->
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
@@ -135,16 +134,15 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="12dp" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/edtCodDistritoModificar"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:hint="Código distrito"
-                android:padding="12dp"
-                android:textSize="15sp"
-                android:textColor="@color/text_black"
-                android:textColorHint="#999999"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:spinnerMode="dropdown"
                 android:backgroundTint="@color/card_blue"
+                android:popupBackground="@color/background_app"
                 android:layout_marginBottom="20dp" />
 
             <!-- SECCIÓN: NOMBRES -->

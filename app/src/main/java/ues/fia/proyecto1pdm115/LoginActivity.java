@@ -1,6 +1,7 @@
 package ues.fia.proyecto1pdm115;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,23 +41,35 @@ public class LoginActivity extends AppCompatActivity {
 
         helper.abrir();
 
-        // Inserta datos iniciales, incluyendo usuario admin/1234, si aún no existen.
-        helper.llenarDatosIniciales();
-
         boolean loginValido = helper.validarLogin(usuario, clave);
         String nombreUsuario = helper.obtenerNombreUsuario(usuario);
 
         helper.cerrar();
 
         if (loginValido) {
+
+            if (nombreUsuario == null || nombreUsuario.isEmpty()) {
+                nombreUsuario = usuario;
+            }
+
+            SharedPreferences preferences = getSharedPreferences("sesion_usuario", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+
+            editor.putString("idUsuario", usuario);
+            editor.putString("nombreUsuario", nombreUsuario);
+            editor.putBoolean("sesionActiva", true);
+
+            editor.apply();
+
             Toast.makeText(this, "Bienvenido " + nombreUsuario, Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("nombreUsuario", nombreUsuario);
             intent.putExtra("idUsuario", usuario);
+            intent.putExtra("nombreUsuario", nombreUsuario);
             startActivity(intent);
 
             finish();
+
         } else {
             Toast.makeText(this, "Usuario o contraseña incorrectos", Toast.LENGTH_SHORT).show();
         }

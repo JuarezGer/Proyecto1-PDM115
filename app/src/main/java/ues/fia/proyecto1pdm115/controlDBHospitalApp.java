@@ -16,7 +16,7 @@ import ues.fia.proyecto1pdm115.modelos.Paciente;
 public class controlDBHospitalApp {
 
     private static final String BASE_DATOS = "hospital_app.db";
-    private static final int VERSION = 1;
+    private static final int VERSION = 3;
 
     private final Context context;
     private DatabaseHelper DBHelper;
@@ -26,19 +26,20 @@ public class controlDBHospitalApp {
         this.context = ctx;
         DBHelper = new DatabaseHelper(context);
     }
+
     // =========================================================
     // LOGIN
     // =========================================================
 
-    public boolean validarLogin(String idUsuario, String clave) {
+    public boolean validarLogin(String usuario, String clave) {
         Cursor cursor = null;
 
         try {
             cursor = db.query(
                     "USUARIO",
                     null,
-                    "ID_USUARIO = ? AND CLAVE = ?",
-                    new String[]{idUsuario, clave},
+                    "(ID_USUARIO = ? OR NOMBRE_USUARIO = ?) AND CLAVE = ?",
+                    new String[]{usuario, usuario, clave},
                     null,
                     null,
                     null
@@ -57,15 +58,15 @@ public class controlDBHospitalApp {
         }
     }
 
-    public String obtenerNombreUsuario(String idUsuario) {
+    public String obtenerNombreUsuario(String usuario) {
         Cursor cursor = null;
 
         try {
             cursor = db.query(
                     "USUARIO",
                     new String[]{"NOMBRE_USUARIO"},
-                    "ID_USUARIO = ?",
-                    new String[]{idUsuario},
+                    "ID_USUARIO = ? OR NOMBRE_USUARIO = ?",
+                    new String[]{usuario, usuario},
                     null,
                     null,
                     null
@@ -103,10 +104,21 @@ public class controlDBHospitalApp {
         @Override
         public void onCreate(SQLiteDatabase db) {
             try {
+                db.beginTransaction();
+
                 crearTablas(db);
                 crearTriggers(db);
+                llenarDatosIniciales(db);
+
+                db.setTransactionSuccessful();
+
             } catch (SQLException e) {
                 e.printStackTrace();
+
+            } finally {
+                if (db.inTransaction()) {
+                    db.endTransaction();
+                }
             }
         }
 
@@ -169,6 +181,8 @@ public class controlDBHospitalApp {
                     "FOREIGN KEY (COD_MUNICIPIO) REFERENCES MUNICIPIO(COD_MUNICIPIO)" +
                     ");");
 
+            // Tu script final usa ESTABLECIMIENTO en TRABAJA_CON y VENDEN.
+            // Por eso se mantiene esta tabla para que las llaves foráneas funcionen.
             db.execSQL("CREATE TABLE ESTABLECIMIENTO (" +
                     "ID_ESTABLECIMIENTO INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     "NOMBRE_ESTABLECIMIENTO TEXT NOT NULL, " +
@@ -329,23 +343,7 @@ public class controlDBHospitalApp {
                     "BEGIN " +
                     "SELECT CASE " +
                     "WHEN NEW.FECHA_VENCIMIENTO <= DATE('now') " +
-                    "THEN RAISE(ABORT, 'Error: No se puede registrar un medicamento vencido.') " +
-                    "END; " +
-                    "END;");
-
-            db.execSQL("CREATE TRIGGER validar_especialidad_hospital_doctor " +
-                    "BEFORE UPDATE OF ID_HOSPITAL ON DOCTOR " +
-                    "FOR EACH ROW " +
-                    "BEGIN " +
-                    "SELECT CASE " +
-                    "WHEN EXISTS ( " +
-                    "SELECT 1 FROM CUENTA_CON CC " +
-                    "WHERE CC.DUI_DOCTOR = OLD.DUI_DOCTOR " +
-                    "AND CC.ID_ESPECIALIDAD NOT IN ( " +
-                    "SELECT P.ID_ESPECIALIDAD FROM POSEE P WHERE P.ID_HOSPITAL = NEW.ID_HOSPITAL " +
-                    ") " +
-                    ") " +
-                    "THEN RAISE(ABORT, 'Error: El hospital no cuenta con la especialidad del doctor.') " +
+                    "THEN RAISE(ABORT, 'Error: No se puede registrar un medicamento que ya esta vencido.') " +
                     "END; " +
                     "END;");
 
@@ -393,30 +391,501 @@ public class controlDBHospitalApp {
                     "DELETE FROM CUENTA_CON WHERE DUI_DOCTOR = OLD.DUI_DOCTOR; " +
                     "END;");
 
-            db.execSQL("CREATE TRIGGER calcular_total_consulta_base " +
-                    "AFTER INSERT ON CONSULTA " +
+            db.execSQL("CREATE TRIGGER registrar_hospitalizacion_en_consulta " +
+                    "AFTER INSERT ON HOSPITALIZACION " +
                     "FOR EACH ROW " +
                     "BEGIN " +
                     "UPDATE CONSULTA " +
-                    "SET CARGO_TOTAL_CONSULTA = ( " +
-                    "SELECT COSTO_EMERGENCIA " +
-                    "FROM TIPO_EMERGENCIA " +
-                    "WHERE COD_EMERGENCIA = NEW.COD_EMERGENCIA " +
-                    ") " +
+                    "SET ID_HOSPITALIZACION = NEW.ID_HOSPITALIZACION " +
                     "WHERE ID_CONSULTA = NEW.ID_CONSULTA; " +
                     "END;");
+
+            db.execSQL("CREATE TRIGGER guardar_precio_unitario_historico " +
+                    "AFTER INSERT ON FORMADO_POR " +
+                    "FOR EACH ROW " +
+                    "BEGIN " +
+                    "UPDATE DETALLE_RECETA " +
+                    "SET PRECIO_UNITARIO_HISTORICO = ( " +
+                    "SELECT PRECIO_VENTA FROM MEDICAMENTO WHERE COD_MEDICAMENTO = NEW.COD_MEDICAMENTO " +
+                    ") " +
+                    "WHERE ID_DETALLE_RECETA = NEW.ID_DETALLE_RECETA; " +
+                    "END;");
+
+            db.execSQL("CREATE TRIGGER retiro_superior_al_stock " +
+                    "BEFORE INSERT ON FORMADO_POR " +
+                    "FOR EACH ROW " +
+                    "BEGIN " +
+                    "SELECT CASE " +
+                    "WHEN (SELECT CANTIDAD_INVENTARIO FROM MEDICAMENTO WHERE COD_MEDICAMENTO = NEW.COD_MEDICAMENTO) < " +
+                    "(SELECT CANTIDAD FROM DETALLE_RECETA WHERE ID_DETALLE_RECETA = NEW.ID_DETALLE_RECETA) " +
+                    "THEN RAISE(ABORT, 'Error: NO HAY SUFICIENTE MEDICAMENTO.') " +
+                    "END; " +
+                    "END;");
+
+            db.execSQL("CREATE TRIGGER actualizar_inventario_stock " +
+                    "AFTER INSERT ON FORMADO_POR " +
+                    "FOR EACH ROW " +
+                    "BEGIN " +
+                    "UPDATE MEDICAMENTO " +
+                    "SET CANTIDAD_INVENTARIO = CANTIDAD_INVENTARIO - ( " +
+                    "SELECT CANTIDAD FROM DETALLE_RECETA WHERE ID_DETALLE_RECETA = NEW.ID_DETALLE_RECETA " +
+                    ") " +
+                    "WHERE COD_MEDICAMENTO = NEW.COD_MEDICAMENTO; " +
+                    "END;");
+
+            db.execSQL("CREATE TRIGGER validar_especialidad_hospital_doctor " +
+                    "BEFORE UPDATE OF ID_HOSPITAL ON DOCTOR " +
+                    "FOR EACH ROW " +
+                    "BEGIN " +
+                    "SELECT CASE " +
+                    "WHEN EXISTS ( " +
+                    "SELECT 1 FROM CUENTA_CON CC " +
+                    "WHERE CC.DUI_DOCTOR = OLD.DUI_DOCTOR " +
+                    "AND CC.ID_ESPECIALIDAD NOT IN ( " +
+                    "SELECT P.ID_ESPECIALIDAD FROM POSEE P WHERE P.ID_HOSPITAL = NEW.ID_HOSPITAL " +
+                    ") " +
+                    ") " +
+                    "THEN RAISE(ABORT, 'Error: El hospital no cuenta con la especialidad del doctor.') " +
+                    "END; " +
+                    "END;");
+
+            db.execSQL("CREATE TRIGGER calcular_pago_final_con_seguro " +
+                    "AFTER INSERT ON PAGO " +
+                    "FOR EACH ROW " +
+                    "BEGIN " +
+                    "UPDATE PAGO " +
+                    "SET MONTO_TOTAL = " +
+                    "CASE " +
+                    "WHEN EXISTS ( " +
+                    "SELECT 1 FROM SEGURO S " +
+                    "JOIN CONSULTA C ON S.DUI_PACIENTE = C.DUI_PACIENTE " +
+                    "WHERE C.ID_CONSULTA = NEW.ID_CONSULTA " +
+                    ") " +
+                    "THEN ( " +
+                    "SELECT (C.CARGO_TOTAL_CONSULTA * (1 - S.PORCENTAJE_COBERTURA / 100.0)) + " +
+                    "S.DEDUCTIBLE_MEDICINA + S.DEDUCTIBLE_OPERACION " +
+                    "FROM CONSULTA C " +
+                    "JOIN SEGURO S ON C.DUI_PACIENTE = S.DUI_PACIENTE " +
+                    "WHERE C.ID_CONSULTA = NEW.ID_CONSULTA " +
+                    ") " +
+                    "ELSE (SELECT CARGO_TOTAL_CONSULTA FROM CONSULTA WHERE ID_CONSULTA = NEW.ID_CONSULTA) " +
+                    "END " +
+                    "WHERE ID_PAGO = NEW.ID_PAGO; " +
+                    "END;");
+
+            db.execSQL("CREATE TRIGGER actualizar_total_por_hospitalizacion " +
+                    "AFTER INSERT ON HOSPITALIZACION " +
+                    "FOR EACH ROW " +
+                    "BEGIN " +
+                    "UPDATE CONSULTA " +
+                    "SET CARGO_TOTAL_CONSULTA = " +
+                    "(SELECT COSTO_EMERGENCIA FROM TIPO_EMERGENCIA WHERE COD_EMERGENCIA = CONSULTA.COD_EMERGENCIA) + " +
+                    "NEW.COSTO_HOSPITALIZACION + " +
+                    "CASE " +
+                    "WHEN CONSULTA.PAGA_MEDICAMENTO = 1 THEN " +
+                    "COALESCE(( " +
+                    "SELECT SUM(DR.SUB_TOTAL_ITEM) " +
+                    "FROM RECETA R " +
+                    "JOIN DETALLE_RECETA DR ON R.ID_RECETA = DR.ID_RECETA " +
+                    "WHERE R.ID_CONSULTA = CONSULTA.ID_CONSULTA " +
+                    "), 0) " +
+                    "ELSE 0 " +
+                    "END " +
+                    "WHERE ID_CONSULTA = NEW.ID_CONSULTA; " +
+                    "END;");
+
+            db.execSQL("CREATE TRIGGER actualizar_total_por_detalle_receta " +
+                    "AFTER INSERT ON DETALLE_RECETA " +
+                    "FOR EACH ROW " +
+                    "BEGIN " +
+                    "UPDATE CONSULTA " +
+                    "SET CARGO_TOTAL_CONSULTA = " +
+                    "(SELECT COSTO_EMERGENCIA FROM TIPO_EMERGENCIA WHERE COD_EMERGENCIA = CONSULTA.COD_EMERGENCIA) + " +
+                    "COALESCE(( " +
+                    "SELECT COSTO_HOSPITALIZACION " +
+                    "FROM HOSPITALIZACION " +
+                    "WHERE ID_CONSULTA = CONSULTA.ID_CONSULTA " +
+                    "), 0) + " +
+                    "CASE " +
+                    "WHEN CONSULTA.PAGA_MEDICAMENTO = 1 THEN " +
+                    "COALESCE(( " +
+                    "SELECT SUM(DR.SUB_TOTAL_ITEM) " +
+                    "FROM RECETA R " +
+                    "JOIN DETALLE_RECETA DR ON R.ID_RECETA = DR.ID_RECETA " +
+                    "WHERE R.ID_CONSULTA = CONSULTA.ID_CONSULTA " +
+                    "), 0) " +
+                    "ELSE 0 " +
+                    "END " +
+                    "WHERE ID_CONSULTA = ( " +
+                    "SELECT ID_CONSULTA FROM RECETA WHERE ID_RECETA = NEW.ID_RECETA " +
+                    "); " +
+                    "END;");
+
+            db.execSQL("CREATE TRIGGER recalcular_pago_por_cambio_consulta " +
+                    "AFTER UPDATE OF CARGO_TOTAL_CONSULTA ON CONSULTA " +
+                    "FOR EACH ROW " +
+                    "BEGIN " +
+                    "UPDATE PAGO " +
+                    "SET MONTO_TOTAL = " +
+                    "CASE " +
+                    "WHEN EXISTS (SELECT 1 FROM SEGURO S WHERE S.DUI_PACIENTE = NEW.DUI_PACIENTE) " +
+                    "THEN ( " +
+                    "SELECT (NEW.CARGO_TOTAL_CONSULTA * (1 - S.PORCENTAJE_COBERTURA / 100.0)) + " +
+                    "S.DEDUCTIBLE_MEDICINA + S.DEDUCTIBLE_OPERACION " +
+                    "FROM SEGURO S " +
+                    "WHERE S.DUI_PACIENTE = NEW.DUI_PACIENTE " +
+                    ") " +
+                    "ELSE NEW.CARGO_TOTAL_CONSULTA " +
+                    "END " +
+                    "WHERE ID_CONSULTA = NEW.ID_CONSULTA; " +
+                    "END;");
+        }
+
+        private void llenarDatosIniciales(SQLiteDatabase db) {
+
+            // ============================
+            // DEPARTAMENTO
+            // Se respetan las llaves originales: SV-AH, SV-CA, etc.
+            // Por eso MUNICIPIO referencia esas mismas llaves.
+            // ============================
+            insertarDepartamento(db, "SV-AH", "Ahuachapan");
+            insertarDepartamento(db, "SV-CA", "Cabanas");
+            insertarDepartamento(db, "SV-CH", "Chalatenango");
+            insertarDepartamento(db, "SV-CU", "Cuscatlan");
+            insertarDepartamento(db, "SV-LI", "La Libertad");
+            insertarDepartamento(db, "SV-PA", "La Paz");
+            insertarDepartamento(db, "SV-MO", "Morazan");
+            insertarDepartamento(db, "SV-SA", "Santa Ana");
+            insertarDepartamento(db, "SV-SM", "San Miguel");
+            insertarDepartamento(db, "SV-SS", "San Salvador");
+            insertarDepartamento(db, "SV-SO", "Sonsonate");
+            insertarDepartamento(db, "SV-US", "Usulutan");
+            insertarDepartamento(db, "SV-SV", "San Vicente");
+            insertarDepartamento(db, "SV-UN", "La Union");
+
+            // ============================
+            // ESPECIALIDAD
+            // ============================
+            insertarEspecialidadInicial(db, "Medicina General");
+            insertarEspecialidadInicial(db, "Pediatria");
+            insertarEspecialidadInicial(db, "Cardiologia");
+            insertarEspecialidadInicial(db, "Ginecologia");
+            insertarEspecialidadInicial(db, "Neurologia");
+
+            // ============================
+            // TIPO_EMERGENCIA
+            // ============================
+            insertarTipoEmergencia(db, "E01", "Alta", 150.00);
+            insertarTipoEmergencia(db, "E02", "Media", 100.00);
+            insertarTipoEmergencia(db, "E03", "Baja", 50.00);
+            insertarTipoEmergencia(db, "E04", "Critica", 300.00);
+            insertarTipoEmergencia(db, "E05", "Urgente", 200.00);
+
+            // ============================
+            // MEDICAMENTO
+            // ============================
+            insertarMedicamento(db, "M001", "Paracetamol 500mg", "2027-06-01", 200, 0.25, "L001");
+            insertarMedicamento(db, "M002", "Ibuprofeno 400mg", "2026-12-15", 150, 0.40, "L002");
+            insertarMedicamento(db, "M003", "Amoxicilina 500mg", "2027-03-20", 100, 0.60, "L003");
+            insertarMedicamento(db, "M004", "Omeprazol 20mg", "2028-01-10", 80, 0.75, "L004");
+            insertarMedicamento(db, "M005", "Loratadina 10mg", "2026-11-05", 120, 0.35, "L005");
+
+            // ============================
+            // USUARIO
+            // ============================
+            insertarUsuario(db, "U1", "admin", "admin123");
+            insertarUsuario(db, "U2", "doc_general", "docpass1");
+            insertarUsuario(db, "U3", "doc_especialidad", "docpass2");
+
+            // ============================
+            // ASEGURADORA
+            // ============================
+            insertarAseguradoraInicial(db, "Seguros Vida", "22221111");
+            insertarAseguradoraInicial(db, "Salud Total", "22222222");
+            insertarAseguradoraInicial(db, "Proteccion Medica", "22223333");
+            insertarAseguradoraInicial(db, "Cobertura Plus", "22224444");
+            insertarAseguradoraInicial(db, "AseguraYa", "22225555");
+
+            // ============================
+            // OPCION_CRUD
+            // ============================
+            insertarOpcionCrud(db, "O01", "Crear registro", 1);
+            insertarOpcionCrud(db, "O02", "Leer registro", 2);
+            insertarOpcionCrud(db, "O03", "Actualizar registro", 3);
+            insertarOpcionCrud(db, "O04", "Eliminar registro", 4);
+            insertarOpcionCrud(db, "O05", "Listar registros", 5);
+
+            // ============================
+            // MUNICIPIO
+            // El segundo valor respeta COD_DPTO real de DEPARTAMENTO.
+            // ============================
+            insertarMunicipio(db, "MUN_AH1", "SV-AH", "Ahuachapan");
+            insertarMunicipio(db, "MUN_AH2", "SV-AH", "Apaneca");
+            insertarMunicipio(db, "MUN_AH3", "SV-AH", "Atiquizaya");
+            insertarMunicipio(db, "MUN_AH4", "SV-AH", "Tacuba");
+
+            insertarMunicipio(db, "MUN_CA1", "SV-CA", "Sensuntepeque");
+            insertarMunicipio(db, "MUN_CA2", "SV-CA", "Victoria");
+            insertarMunicipio(db, "MUN_CA3", "SV-CA", "Ilobasco");
+            insertarMunicipio(db, "MUN_CA4", "SV-CA", "Tejutepeque");
+
+            insertarMunicipio(db, "MUN_CH1", "SV-CH", "La Palma");
+            insertarMunicipio(db, "MUN_CH2", "SV-CH", "Chalatenango");
+            insertarMunicipio(db, "MUN_CH3", "SV-CH", "Nueva Concepcion");
+            insertarMunicipio(db, "MUN_CH4", "SV-CH", "San Ignacio");
+
+            insertarMunicipio(db, "MUN_CU1", "SV-CU", "Cojutepeque");
+            insertarMunicipio(db, "MUN_CU2", "SV-CU", "Suchitoto");
+            insertarMunicipio(db, "MUN_CU3", "SV-CU", "San Rafael Cedros");
+            insertarMunicipio(db, "MUN_CU4", "SV-CU", "San Cristobal");
+
+            insertarMunicipio(db, "MUN_LI1", "SV-LI", "Santa Tecla");
+            insertarMunicipio(db, "MUN_LI2", "SV-LI", "Colon");
+            insertarMunicipio(db, "MUN_LI3", "SV-LI", "Quezaltepeque");
+            insertarMunicipio(db, "MUN_LI4", "SV-LI", "Zaragoza");
+
+            insertarMunicipio(db, "MUN_LP1", "SV-PA", "Zacatecoluca");
+            insertarMunicipio(db, "MUN_LP2", "SV-PA", "San Juan Nonualco");
+            insertarMunicipio(db, "MUN_LP3", "SV-PA", "San Pedro Masahuat");
+            insertarMunicipio(db, "MUN_LP4", "SV-PA", "Olocuilta");
+
+            insertarMunicipio(db, "MUN_MO1", "SV-MO", "San Francisco Gotera");
+            insertarMunicipio(db, "MUN_MO2", "SV-MO", "Guatajiagua");
+            insertarMunicipio(db, "MUN_MO3", "SV-MO", "Sociedad");
+            insertarMunicipio(db, "MUN_MO4", "SV-MO", "Yamabal");
+
+            insertarMunicipio(db, "MUN_SA1", "SV-SA", "Santa Ana");
+            insertarMunicipio(db, "MUN_SA2", "SV-SA", "Metapan");
+            insertarMunicipio(db, "MUN_SA3", "SV-SA", "Chalchuapa");
+            insertarMunicipio(db, "MUN_SA4", "SV-SA", "Coatepeque");
+
+            insertarMunicipio(db, "MUN_SM1", "SV-SM", "San Miguel");
+            insertarMunicipio(db, "MUN_SM2", "SV-SM", "Chinameca");
+            insertarMunicipio(db, "MUN_SM3", "SV-SM", "Ciudad Barrios");
+            insertarMunicipio(db, "MUN_SM4", "SV-SM", "Moncagua");
+
+            insertarMunicipio(db, "MUN_SS1", "SV-SS", "Soyapango");
+            insertarMunicipio(db, "MUN_SS2", "SV-SS", "Mejicanos");
+            insertarMunicipio(db, "MUN_SS3", "SV-SS", "Ilopango");
+            insertarMunicipio(db, "MUN_SS4", "SV-SS", "San Marcos");
+
+            insertarMunicipio(db, "MUN_SO1", "SV-SO", "Sonsonate");
+            insertarMunicipio(db, "MUN_SO2", "SV-SO", "Nahuizalco");
+            insertarMunicipio(db, "MUN_SO3", "SV-SO", "Izalco");
+            insertarMunicipio(db, "MUN_SO4", "SV-SO", "Armenia");
+
+            insertarMunicipio(db, "MUN_US1", "SV-US", "Usulutan");
+            insertarMunicipio(db, "MUN_US2", "SV-US", "Jiquilisco");
+            insertarMunicipio(db, "MUN_US3", "SV-US", "Santa Maria");
+            insertarMunicipio(db, "MUN_US4", "SV-US", "Santiago de Maria");
+
+            insertarMunicipio(db, "MUN_SV1", "SV-SV", "San Vicente");
+            insertarMunicipio(db, "MUN_SV2", "SV-SV", "Apastepeque");
+            insertarMunicipio(db, "MUN_SV3", "SV-SV", "Tecoluca");
+            insertarMunicipio(db, "MUN_SV4", "SV-SV", "Guadalupe");
+
+            insertarMunicipio(db, "MUN_UN1", "SV-UN", "La Union");
+            insertarMunicipio(db, "MUN_UN2", "SV-UN", "Conchagua");
+            insertarMunicipio(db, "MUN_UN3", "SV-UN", "Santa Rosa de Lima");
+            insertarMunicipio(db, "MUN_UN4", "SV-UN", "Yucuaiquin");
+
+            // ============================
+            // DISTRITO
+            // Se agrega un distrito por municipio para que PACIENTE pueda usar COD_DISTRITO.
+            // ============================
+            insertarDistrito(db, "DIS_AH1", "MUN_AH1", "Ahuachapan");
+            insertarDistrito(db, "DIS_AH2", "MUN_AH2", "Apaneca");
+            insertarDistrito(db, "DIS_AH3", "MUN_AH3", "Atiquizaya");
+            insertarDistrito(db, "DIS_AH4", "MUN_AH4", "Tacuba");
+
+            insertarDistrito(db, "DIS_CA1", "MUN_CA1", "Sensuntepeque");
+            insertarDistrito(db, "DIS_CA2", "MUN_CA2", "Victoria");
+            insertarDistrito(db, "DIS_CA3", "MUN_CA3", "Ilobasco");
+            insertarDistrito(db, "DIS_CA4", "MUN_CA4", "Tejutepeque");
+
+            insertarDistrito(db, "DIS_CH1", "MUN_CH1", "La Palma");
+            insertarDistrito(db, "DIS_CH2", "MUN_CH2", "Chalatenango");
+            insertarDistrito(db, "DIS_CH3", "MUN_CH3", "Nueva Concepcion");
+            insertarDistrito(db, "DIS_CH4", "MUN_CH4", "San Ignacio");
+
+            insertarDistrito(db, "DIS_CU1", "MUN_CU1", "Cojutepeque");
+            insertarDistrito(db, "DIS_CU2", "MUN_CU2", "Suchitoto");
+            insertarDistrito(db, "DIS_CU3", "MUN_CU3", "San Rafael Cedros");
+            insertarDistrito(db, "DIS_CU4", "MUN_CU4", "San Cristobal");
+
+            insertarDistrito(db, "DIS_LI1", "MUN_LI1", "Santa Tecla");
+            insertarDistrito(db, "DIS_LI2", "MUN_LI2", "Colon");
+            insertarDistrito(db, "DIS_LI3", "MUN_LI3", "Quezaltepeque");
+            insertarDistrito(db, "DIS_LI4", "MUN_LI4", "Zaragoza");
+
+            insertarDistrito(db, "DIS_LP1", "MUN_LP1", "Zacatecoluca");
+            insertarDistrito(db, "DIS_LP2", "MUN_LP2", "San Juan Nonualco");
+            insertarDistrito(db, "DIS_LP3", "MUN_LP3", "San Pedro Masahuat");
+            insertarDistrito(db, "DIS_LP4", "MUN_LP4", "Olocuilta");
+
+            insertarDistrito(db, "DIS_MO1", "MUN_MO1", "San Francisco Gotera");
+            insertarDistrito(db, "DIS_MO2", "MUN_MO2", "Guatajiagua");
+            insertarDistrito(db, "DIS_MO3", "MUN_MO3", "Sociedad");
+            insertarDistrito(db, "DIS_MO4", "MUN_MO4", "Yamabal");
+
+            insertarDistrito(db, "DIS_SA1", "MUN_SA1", "Santa Ana");
+            insertarDistrito(db, "DIS_SA2", "MUN_SA2", "Metapan");
+            insertarDistrito(db, "DIS_SA3", "MUN_SA3", "Chalchuapa");
+            insertarDistrito(db, "DIS_SA4", "MUN_SA4", "Coatepeque");
+
+            insertarDistrito(db, "DIS_SM1", "MUN_SM1", "San Miguel");
+            insertarDistrito(db, "DIS_SM2", "MUN_SM2", "Chinameca");
+            insertarDistrito(db, "DIS_SM3", "MUN_SM3", "Ciudad Barrios");
+            insertarDistrito(db, "DIS_SM4", "MUN_SM4", "Moncagua");
+
+            insertarDistrito(db, "DIS_SS1", "MUN_SS1", "Soyapango");
+            insertarDistrito(db, "DIS_SS2", "MUN_SS2", "Mejicanos");
+            insertarDistrito(db, "DIS_SS3", "MUN_SS3", "Ilopango");
+            insertarDistrito(db, "DIS_SS4", "MUN_SS4", "San Marcos");
+
+            insertarDistrito(db, "DIS_SO1", "MUN_SO1", "Sonsonate");
+            insertarDistrito(db, "DIS_SO2", "MUN_SO2", "Nahuizalco");
+            insertarDistrito(db, "DIS_SO3", "MUN_SO3", "Izalco");
+            insertarDistrito(db, "DIS_SO4", "MUN_SO4", "Armenia");
+
+            insertarDistrito(db, "DIS_US1", "MUN_US1", "Usulutan");
+            insertarDistrito(db, "DIS_US2", "MUN_US2", "Jiquilisco");
+            insertarDistrito(db, "DIS_US3", "MUN_US3", "Santa Maria");
+            insertarDistrito(db, "DIS_US4", "MUN_US4", "Santiago de Maria");
+
+            insertarDistrito(db, "DIS_SV1", "MUN_SV1", "San Vicente");
+            insertarDistrito(db, "DIS_SV2", "MUN_SV2", "Apastepeque");
+            insertarDistrito(db, "DIS_SV3", "MUN_SV3", "Tecoluca");
+            insertarDistrito(db, "DIS_SV4", "MUN_SV4", "Guadalupe");
+
+            insertarDistrito(db, "DIS_UN1", "MUN_UN1", "La Union");
+            insertarDistrito(db, "DIS_UN2", "MUN_UN2", "Conchagua");
+            insertarDistrito(db, "DIS_UN3", "MUN_UN3", "Santa Rosa de Lima");
+            insertarDistrito(db, "DIS_UN4", "MUN_UN4", "Yucuaiquin");
+        }
+
+        private void insertarDepartamento(SQLiteDatabase db, String codDpto, String nombreDpto) {
+            ContentValues valores = new ContentValues();
+            valores.put("COD_DPTO", codDpto);
+            valores.put("NOMBRE_DPTO", nombreDpto);
+            db.insertWithOnConflict("DEPARTAMENTO", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+
+        private void insertarEspecialidadInicial(SQLiteDatabase db, String nombreEspecialidad) {
+            if (existeValor(db, "ESPECIALIDAD", "NOMBRE_ESPECIALIDAD", nombreEspecialidad)) {
+                return;
+            }
+
+            ContentValues valores = new ContentValues();
+            valores.put("NOMBRE_ESPECIALIDAD", nombreEspecialidad);
+            db.insert("ESPECIALIDAD", null, valores);
+        }
+
+        private void insertarTipoEmergencia(SQLiteDatabase db, String codEmergencia, String prioridad, double costo) {
+            ContentValues valores = new ContentValues();
+            valores.put("COD_EMERGENCIA", codEmergencia);
+            valores.put("PRIORIDAD", prioridad);
+            valores.put("COSTO_EMERGENCIA", costo);
+            db.insertWithOnConflict("TIPO_EMERGENCIA", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+
+        private void insertarMedicamento(SQLiteDatabase db, String codMedicamento, String nombreMedicamento,
+                                         String fechaVencimiento, int cantidadInventario,
+                                         double precioVenta, String lote) {
+            ContentValues valores = new ContentValues();
+            valores.put("COD_MEDICAMENTO", codMedicamento);
+            valores.put("NOMBRE_MEDICAMENTO", nombreMedicamento);
+            valores.put("FECHA_VENCIMIENTO", fechaVencimiento);
+            valores.put("CANTIDAD_INVENTARIO", cantidadInventario);
+            valores.put("PRECIO_VENTA", precioVenta);
+            valores.put("LOTE", lote);
+            db.insertWithOnConflict("MEDICAMENTO", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+
+        private void insertarUsuario(SQLiteDatabase db, String idUsuario, String nombreUsuario, String clave) {
+            ContentValues valores = new ContentValues();
+            valores.put("ID_USUARIO", idUsuario);
+            valores.put("NOMBRE_USUARIO", nombreUsuario);
+            valores.put("CLAVE", clave);
+            db.insertWithOnConflict("USUARIO", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+
+        private void insertarAseguradoraInicial(SQLiteDatabase db, String nombreAseguradora, String telefonoAseguradora) {
+            if (existeValor(db, "ASEGURADORA", "NOMBRE_ASEGURADORA", nombreAseguradora)) {
+                return;
+            }
+
+            ContentValues valores = new ContentValues();
+            valores.put("NOMBRE_ASEGURADORA", nombreAseguradora);
+            valores.put("TELEFONO_ASEGURADORA", telefonoAseguradora);
+            db.insert("ASEGURADORA", null, valores);
+        }
+
+        private void insertarOpcionCrud(SQLiteDatabase db, String idOpcion, String descripcion, int numCrud) {
+            ContentValues valores = new ContentValues();
+            valores.put("ID_OPCION", idOpcion);
+            valores.put("DESCRIPCION_OPC", descripcion);
+            valores.put("NUM_CRUD", numCrud);
+            db.insertWithOnConflict("OPCION_CRUD", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+
+        private void insertarMunicipio(SQLiteDatabase db, String codMunicipio, String codDpto, String nombreMunicipio) {
+            ContentValues valores = new ContentValues();
+            valores.put("COD_MUNICIPIO", codMunicipio);
+            valores.put("COD_DPTO", codDpto);
+            valores.put("NOMBRE_MUNICIPIO", nombreMunicipio);
+            db.insertWithOnConflict("MUNICIPIO", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+
+        private void insertarDistrito(SQLiteDatabase db, String codDistrito, String codMunicipio, String nombreDistrito) {
+            ContentValues valores = new ContentValues();
+            valores.put("COD_DISTRITO", codDistrito);
+            valores.put("COD_MUNICIPIO", codMunicipio);
+            valores.put("NOMBRE_DISTRITO", nombreDistrito);
+            db.insertWithOnConflict("DISTRITO", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+        }
+
+        private boolean existeValor(SQLiteDatabase db, String tabla, String columna, String valor) {
+            Cursor cursor = null;
+
+            try {
+                cursor = db.query(
+                        tabla,
+                        new String[]{columna},
+                        columna + " = ?",
+                        new String[]{valor},
+                        null,
+                        null,
+                        null
+                );
+
+                return cursor.moveToFirst();
+
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
         }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
             db.execSQL("DROP TRIGGER IF EXISTS validar_vencimiento_medicamento");
-            db.execSQL("DROP TRIGGER IF EXISTS validar_especialidad_hospital_doctor");
             db.execSQL("DROP TRIGGER IF EXISTS validar_vencimiento_medicamento_actualizado");
             db.execSQL("DROP TRIGGER IF EXISTS calcular_subtotal_item");
             db.execSQL("DROP TRIGGER IF EXISTS calcular_subtotal_update");
             db.execSQL("DROP TRIGGER IF EXISTS asignar_especialidad_general_auto");
             db.execSQL("DROP TRIGGER IF EXISTS eliminar_especialidades_cascada");
+            db.execSQL("DROP TRIGGER IF EXISTS registrar_hospitalizacion_en_consulta");
+            db.execSQL("DROP TRIGGER IF EXISTS guardar_precio_unitario_historico");
+            db.execSQL("DROP TRIGGER IF EXISTS retiro_superior_al_stock");
+            db.execSQL("DROP TRIGGER IF EXISTS actualizar_inventario_stock");
+            db.execSQL("DROP TRIGGER IF EXISTS validar_especialidad_hospital_doctor");
+            db.execSQL("DROP TRIGGER IF EXISTS calcular_pago_final_con_seguro");
+            db.execSQL("DROP TRIGGER IF EXISTS actualizar_total_por_hospitalizacion");
+            db.execSQL("DROP TRIGGER IF EXISTS actualizar_total_por_detalle_receta");
+            db.execSQL("DROP TRIGGER IF EXISTS recalcular_pago_por_cambio_consulta");
             db.execSQL("DROP TRIGGER IF EXISTS calcular_total_consulta_base");
 
             db.execSQL("DROP TABLE IF EXISTS VENDEN");
@@ -451,7 +920,7 @@ public class controlDBHospitalApp {
 
     public void abrir() throws SQLException {
         db = DBHelper.getWritableDatabase();
-        db.execSQL("PRAGMA foreing_keys=ON;");
+        db.execSQL("PRAGMA foreign_keys=ON;");
     }
 
     public void cerrar() {
@@ -643,170 +1112,195 @@ public class controlDBHospitalApp {
 
         return paciente;
     }
-    //=========================================================
-    // METODOS PARA ESPECIALIDAD
-    //=========================================================
+
+    // =========================================================
+    // MÉTODOS PARA ESPECIALIDAD
+    // =========================================================
+
     public String insertarEspecialidad(Especialidad especialidad) {
+        try {
+            ContentValues values = new ContentValues();
+            values.put("NOMBRE_ESPECIALIDAD", especialidad.getNombreEspecialidad());
 
-        String resultado;
+            long control = db.insert("ESPECIALIDAD", null, values);
 
-        long control;
+            if (control == -1) {
+                return "Error al insertar especialidad";
+            }
 
-        ContentValues values = new ContentValues();
+            return "Especialidad registrada correctamente";
 
-        values.put("NOMBRE_ESPECIALIDAD",
-                especialidad.getNombreEspecialidad());
-
-        control = db.insert("ESPECIALIDAD", null, values);
-
-        if (control == -1) {
-
-            resultado = "Error al insertar especialidad";
-
-        } else {
-
-            resultado = "Especialidad registrada correctamente";
+        } catch (Exception e) {
+            return "Error al insertar especialidad: " + e.getMessage();
         }
-
-        return resultado;
     }
 
     public ArrayList<Especialidad> consultarEspecialidades() {
+        ArrayList<Especialidad> lista = new ArrayList<>();
+        Cursor cursor = null;
 
-        ArrayList<Especialidad> lista =
-                new ArrayList<>();
+        try {
+            cursor = db.rawQuery(
+                    "SELECT * FROM ESPECIALIDAD ORDER BY NOMBRE_ESPECIALIDAD ASC",
+                    null
+            );
 
-        Cursor cursor = db.rawQuery(
-                "SELECT * FROM ESPECIALIDAD",
-                null
-        );
+            if (cursor.moveToFirst()) {
+                do {
+                    Especialidad especialidad = new Especialidad();
 
-        if (cursor.moveToFirst()) {
+                    especialidad.setIdEspecialidad(cursor.getInt(cursor.getColumnIndexOrThrow("ID_ESPECIALIDAD")));
+                    especialidad.setNombreEspecialidad(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_ESPECIALIDAD")));
 
-            do {
+                    lista.add(especialidad);
 
-                Especialidad especialidad =
-                        new Especialidad();
+                } while (cursor.moveToNext());
+            }
 
-                especialidad.setIdEspecialidad(
-                        cursor.getInt(0)
-                );
-
-                especialidad.setNombreEspecialidad(
-                        cursor.getString(1)
-                );
-
-                lista.add(especialidad);
-
-            } while (cursor.moveToNext());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
-
-        cursor.close();
 
         return lista;
     }
 
     public Especialidad consultarEspecialidad(int idEspecialidad) {
-
-        Cursor cursor = db.rawQuery(
-                "SELECT * FROM ESPECIALIDAD WHERE ID_ESPECIALIDAD = ?",
-                new String[]{
-                        String.valueOf(idEspecialidad)
-                }
-        );
-
-        if (cursor.moveToFirst()) {
-
-            Especialidad especialidad =
-                    new Especialidad();
-
-            especialidad.setIdEspecialidad(
-                    cursor.getInt(0)
-            );
-
-            especialidad.setNombreEspecialidad(
-                    cursor.getString(1)
-            );
-
-            cursor.close();
-
-            return especialidad;
-        }
-
-        cursor.close();
-
-        return null;
-    }
-    public String eliminarEspecialidad(int idEspecialidad) {
+        Cursor cursor = null;
 
         try {
+            cursor = db.rawQuery(
+                    "SELECT * FROM ESPECIALIDAD WHERE ID_ESPECIALIDAD = ?",
+                    new String[]{String.valueOf(idEspecialidad)}
+            );
 
+            if (cursor.moveToFirst()) {
+                Especialidad especialidad = new Especialidad();
+
+                especialidad.setIdEspecialidad(cursor.getInt(cursor.getColumnIndexOrThrow("ID_ESPECIALIDAD")));
+                especialidad.setNombreEspecialidad(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_ESPECIALIDAD")));
+
+                return especialidad;
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public String eliminarEspecialidad(int idEspecialidad) {
+        try {
             int control = db.delete(
                     "ESPECIALIDAD",
                     "ID_ESPECIALIDAD = ?",
-                    new String[]{
-                            String.valueOf(idEspecialidad)
-                    }
+                    new String[]{String.valueOf(idEspecialidad)}
             );
 
             if (control > 0) {
-
                 return "Especialidad eliminada correctamente";
-
             } else {
-
                 return "Especialidad no encontrada";
             }
 
         } catch (Exception e) {
-
-            return "No se puede eliminar.\n" +
-                    "La especialidad está asociada a hospitales o doctores.";
+            return "No se puede eliminar.\nLa especialidad está asociada a hospitales o doctores.";
         }
     }
-    public String actualizarEspecialidad(
-            Especialidad especialidad
-    ) {
 
+    public String actualizarEspecialidad(Especialidad especialidad) {
         try {
-
-            ContentValues values =
-                    new ContentValues();
-
-            values.put(
-                    "NOMBRE_ESPECIALIDAD",
-                    especialidad.getNombreEspecialidad()
-            );
+            ContentValues values = new ContentValues();
+            values.put("NOMBRE_ESPECIALIDAD", especialidad.getNombreEspecialidad());
 
             int control = db.update(
                     "ESPECIALIDAD",
                     values,
                     "ID_ESPECIALIDAD = ?",
-                    new String[]{
-                            String.valueOf(
-                                    especialidad.getIdEspecialidad()
-                            )
-                    }
+                    new String[]{String.valueOf(especialidad.getIdEspecialidad())}
             );
 
             if (control > 0) {
-
                 return "Especialidad actualizada correctamente";
-
             } else {
-
                 return "Especialidad no encontrada";
             }
 
         } catch (Exception e) {
-
             return "Error al actualizar especialidad";
         }
     }
 
-    //=========================================================
-    // METODOS PARA Hospital
-    //=========================================================
+    // =========================================================
+    // CONSULTAS AUXILIARES PARA SPINNERS / LISTAS
+    // =========================================================
+
+    public Cursor consultarDistritosCursor() {
+        return db.rawQuery(
+                "SELECT COD_DISTRITO, COD_MUNICIPIO, NOMBRE_DISTRITO " +
+                        "FROM DISTRITO " +
+                        "ORDER BY NOMBRE_DISTRITO ASC",
+                null
+        );
+    }
+
+    public String obtenerNombreDistrito(String codDistrito) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "DISTRITO",
+                    new String[]{"NOMBRE_DISTRITO"},
+                    "COD_DISTRITO = ?",
+                    new String[]{codDistrito},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DISTRITO"));
+            }
+
+            return "";
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public String obtenerCodigoDistritoPorNombre(String nombreDistrito) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "DISTRITO",
+                    new String[]{"COD_DISTRITO"},
+                    "NOMBRE_DISTRITO = ?",
+                    new String[]{nombreDistrito},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndexOrThrow("COD_DISTRITO"));
+            }
+
+            return "";
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
 
     // =========================================================
     // MÉTODOS GENÉRICOS OPCIONALES
@@ -891,51 +1385,61 @@ public class controlDBHospitalApp {
     }
 
     // =========================================================
-    // DATOS INICIALES PARA PODER PROBAR PACIENTES
+    // DATOS INICIALES
     // =========================================================
 
     public String llenarDatosIniciales() {
         try {
-            ContentValues valores;
+            if (db == null || !db.isOpen()) {
+                return "La base de datos no está abierta.";
+            }
 
-            valores = new ContentValues();
-            valores.put("COD_DPTO", "SS");
-            valores.put("NOMBRE_DPTO", "San Salvador");
-            db.insertWithOnConflict("DEPARTAMENTO", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+            if (datosInicialesCargados()) {
+                return "Los datos iniciales ya estaban cargados.";
+            }
 
-            valores = new ContentValues();
-            valores.put("COD_MUNICIPIO", "SS01");
-            valores.put("COD_DPTO", "SS");
-            valores.put("NOMBRE_MUNICIPIO", "San Salvador Centro");
-            db.insertWithOnConflict("MUNICIPIO", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+            db.beginTransaction();
 
-            valores = new ContentValues();
-            valores.put("COD_DISTRITO", "SS0101");
-            valores.put("COD_MUNICIPIO", "SS01");
-            valores.put("NOMBRE_DISTRITO", "San Salvador");
-            db.insertWithOnConflict("DISTRITO", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+            DatabaseHelper helper = DBHelper;
+            helper.llenarDatosIniciales(db);
 
-            valores = new ContentValues();
-            valores.put("ID_ESPECIALIDAD", 1);
-            valores.put("NOMBRE_ESPECIALIDAD", "General");
-            db.insertWithOnConflict("ESPECIALIDAD", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
+            db.setTransactionSuccessful();
 
-            valores = new ContentValues();
-            valores.put("COD_EMERGENCIA", "EMG01");
-            valores.put("PRIORIDAD", "Baja");
-            valores.put("COSTO_EMERGENCIA", 25.00);
-            db.insertWithOnConflict("TIPO_EMERGENCIA", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
-
-            valores = new ContentValues();
-            valores.put("ID_USUARIO", "admin");
-            valores.put("NOMBRE_USUARIO", "Administrador");
-            valores.put("CLAVE", "1234");
-            db.insertWithOnConflict("USUARIO", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
-
-            return "Datos iniciales guardados correctamente.";
+            return "Datos iniciales cargados correctamente.";
 
         } catch (Exception e) {
-            return "Error al llenar datos iniciales: " + e.getMessage();
+            return "Error al cargar datos iniciales: " + e.getMessage();
+
+        } finally {
+            if (db != null && db.inTransaction()) {
+                db.endTransaction();
+            }
+        }
+    }
+
+    private boolean datosInicialesCargados() {
+        return contarRegistros("DEPARTAMENTO") > 0 &&
+                contarRegistros("MUNICIPIO") > 0 &&
+                contarRegistros("DISTRITO") > 0 &&
+                contarRegistros("USUARIO") > 0;
+    }
+
+    private int contarRegistros(String tabla) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("SELECT COUNT(*) FROM " + tabla, null);
+
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(0);
+            }
+
+            return 0;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
         }
     }
 }
