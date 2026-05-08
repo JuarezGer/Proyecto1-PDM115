@@ -44,6 +44,13 @@
         <activity android:name=".hospitales.HospitalMenuActivity" />
 
         <!-- CRUD De Establecimientos -->
+        <activity android:name=".aseguradoras.AseguradoraMenuActivity" />
+        <activity android:name=".aseguradoras.CrearAseguradoraActivity" />
+        <activity android:name=".aseguradoras.VisualizarAseguradorasActivity" />
+        <activity android:name=".aseguradoras.ActualizarAseguradoraActivity" />
+        <activity android:name=".aseguradoras.EliminarAseguradoraActivity" />
+
+        <!-- CRUD De Establecimientos -->
         <activity android:name=".establecimientos.EstablecimientoMenuActivity" />
         <activity android:name=".establecimientos.CrearEstablecimientoActivity" />
         <activity android:name=".establecimientos.VisualizarEstablecimientosActivity" />

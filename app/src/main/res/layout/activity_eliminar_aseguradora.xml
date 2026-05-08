@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activityEliminarEstablecimiento"
+    android:id="@+id/activityEliminarAseguradora"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -56,7 +56,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Eliminar Establecimiento"
+                android:text="Eliminar Aseguradora"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 android:textColor="@color/text_black"
@@ -65,7 +65,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Busca el establecimiento por ID antes de eliminarlo"
+                android:text="Busca por ID antes de eliminar"
                 android:textSize="14sp"
                 android:textColor="#666666"
                 android:layout_marginBottom="20dp" />
@@ -78,7 +78,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Búsqueda"
+                android:text="Buscar aseguradora"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/header_blue"
@@ -89,14 +89,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginBottom="22dp">
+                android:layout_marginBottom="20dp">
 
                 <EditText
-                    android:id="@+id/edtIdEstablecimientoEliminar"
+                    android:id="@+id/edtIdAseguradoraEliminar"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:hint="ID del establecimiento"
+                    android:hint="ID aseguradora"
                     android:inputType="number"
                     android:padding="12dp"
                     android:textSize="15sp"
@@ -106,7 +106,7 @@
                     android:layout_marginEnd="8dp" />
 
                 <Button
-                    android:id="@+id/btnBuscarEstablecimientoEliminar"
+                    android:id="@+id/btnBuscarAseguradoraEliminar"
                     android:layout_width="115dp"
                     android:layout_height="48dp"
                     android:text="Buscar"
@@ -117,22 +117,13 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/txtDatosAseguradoraEliminar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Datos encontrados"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/header_blue"
-                android:layout_marginBottom="12dp" />
-
-            <TextView
-                android:id="@+id/txtDatosEstablecimientoEliminar"
-                android:layout_width="match_parent"
-                android:layout_height="140dp"
-                android:text="Busque un establecimiento para mostrar sus datos."
+                android:layout_height="150dp"
+                android:text="Busque una aseguradora para mostrar sus datos."
                 android:textSize="15sp"
                 android:textColor="@color/text_black"
-                android:padding="12dp"
+                android:padding="14dp"
                 android:gravity="top"
                 android:background="@drawable/bg_table_card"
                 android:layout_marginBottom="28dp" />
@@ -141,11 +132,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginTop="12dp">
+                android:gravity="center">
 
                 <Button
-                    android:id="@+id/btnRegresarEliminarEstablecimiento"
+                    android:id="@+id/btnRegresarEliminarAseguradora"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
@@ -158,7 +148,7 @@
                     android:layout_marginEnd="8dp" />
 
                 <Button
-                    android:id="@+id/btnEliminarEstablecimiento"
+                    android:id="@+id/btnEliminarAseguradora"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"

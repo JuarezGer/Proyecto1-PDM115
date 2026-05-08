@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import ues.fia.proyecto1pdm115.modelos.Especialidad;
 import ues.fia.proyecto1pdm115.modelos.Paciente;
 import ues.fia.proyecto1pdm115.modelos.Establecimiento;
+import ues.fia.proyecto1pdm115.modelos.Aseguradora;
 
 public class controlDBHospitalApp {
 
@@ -1301,6 +1302,146 @@ public class controlDBHospitalApp {
                 cursor.close();
             }
         }
+    }
+
+    // =========================================================
+// CRUD ASEGURADORA
+// =========================================================
+
+    public String insertarAseguradora(Aseguradora aseguradora) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("NOMBRE_ASEGURADORA", aseguradora.getNombreAseguradora());
+            valores.put("TELEFONO_ASEGURADORA", aseguradora.getTelefonoAseguradora());
+
+            long resultado = db.insertOrThrow("ASEGURADORA", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar aseguradora.";
+            }
+
+            return "Aseguradora insertada correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al insertar aseguradora: " + e.getMessage();
+        }
+    }
+
+    public Aseguradora consultarAseguradora(int idAseguradora) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "ASEGURADORA",
+                    null,
+                    "ID_ASEGURADORA = ?",
+                    new String[]{String.valueOf(idAseguradora)},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorAAseguradora(cursor);
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public ArrayList<Aseguradora> consultarTodasAseguradoras() {
+        ArrayList<Aseguradora> listaAseguradoras = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "ASEGURADORA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "NOMBRE_ASEGURADORA ASC"
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Aseguradora aseguradora = cursorAAseguradora(cursor);
+                    listaAseguradoras.add(aseguradora);
+                } while (cursor.moveToNext());
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return listaAseguradoras;
+    }
+
+    public String actualizarAseguradora(Aseguradora aseguradora) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("NOMBRE_ASEGURADORA", aseguradora.getNombreAseguradora());
+            valores.put("TELEFONO_ASEGURADORA", aseguradora.getTelefonoAseguradora());
+
+            int filas = db.update(
+                    "ASEGURADORA",
+                    valores,
+                    "ID_ASEGURADORA = ?",
+                    new String[]{String.valueOf(aseguradora.getIdAseguradora())}
+            );
+
+            if (filas > 0) {
+                return "Aseguradora actualizada correctamente.";
+            } else {
+                return "No se encontró la aseguradora.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al actualizar aseguradora: " + e.getMessage();
+        }
+    }
+
+    public String eliminarAseguradora(int idAseguradora) {
+        try {
+            int filas = db.delete(
+                    "ASEGURADORA",
+                    "ID_ASEGURADORA = ?",
+                    new String[]{String.valueOf(idAseguradora)}
+            );
+
+            if (filas > 0) {
+                return "Aseguradora eliminada correctamente.";
+            } else {
+                return "No se encontró la aseguradora.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar la aseguradora porque tiene registros relacionados.";
+        } catch (Exception e) {
+            return "Error al eliminar aseguradora: " + e.getMessage();
+        }
+    }
+
+    private Aseguradora cursorAAseguradora(Cursor cursor) {
+        Aseguradora aseguradora = new Aseguradora();
+
+        aseguradora.setIdAseguradora(cursor.getInt(cursor.getColumnIndexOrThrow("ID_ASEGURADORA")));
+        aseguradora.setNombreAseguradora(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_ASEGURADORA")));
+        aseguradora.setTelefonoAseguradora(cursor.getString(cursor.getColumnIndexOrThrow("TELEFONO_ASEGURADORA")));
+
+        return aseguradora;
     }
 
     // =========================================================

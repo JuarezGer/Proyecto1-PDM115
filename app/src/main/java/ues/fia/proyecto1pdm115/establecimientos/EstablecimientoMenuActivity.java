@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ues.fia.proyecto1pdm115.R;
-import ues.fia.proyecto1pdm115.pacientes.VisualizarPacientesActivity;
 
 public class EstablecimientoMenuActivity extends AppCompatActivity {
 

@@ -85,30 +85,36 @@
                 android:layout_marginTop="28dp"
                 android:layout_marginBottom="12dp" />
 
-            <EditText
-                android:id="@+id/edtIdEstablecimientoModificar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="ID del establecimiento"
-                android:inputType="number"
-                android:padding="12dp"
-                android:textSize="15sp"
-                android:textColor="@color/text_black"
-                android:textColorHint="#999999"
-                android:backgroundTint="@color/card_blue"
-                android:layout_marginBottom="12dp" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
 
-            <Button
-                android:id="@+id/btnBuscarEstablecimientoModificar"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Buscar"
-                android:textAllCaps="false"
-                android:textStyle="bold"
-                android:textSize="15sp"
-                android:textColor="@color/primary_dark"
-                android:backgroundTint="@color/card_blue"
-                android:layout_marginBottom="24dp" />
+                <EditText
+                    android:id="@+id/edtIdEstablecimientoModificar"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="ID del establecimiento"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="#999999"
+                    android:backgroundTint="@color/card_blue"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnBuscarEstablecimientoModificar"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:text="Buscar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="@color/card_blue" />
+            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
