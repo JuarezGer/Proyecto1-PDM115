@@ -7,10 +7,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
+import ues.fia.proyecto1pdm115.Navegador;
 import ues.fia.proyecto1pdm115.R;
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
 import ues.fia.proyecto1pdm115.modelos.Especialidad;

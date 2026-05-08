@@ -5,8 +5,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import ues.fia.proyecto1pdm115.Navegador;
 import ues.fia.proyecto1pdm115.R;
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
 import ues.fia.proyecto1pdm115.modelos.Especialidad;

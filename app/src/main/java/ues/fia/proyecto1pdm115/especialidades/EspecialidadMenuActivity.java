@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import ues.fia.proyecto1pdm115.Navegador;
 import ues.fia.proyecto1pdm115.R;
 
 public class EspecialidadMenuActivity extends AppCompatActivity {
@@ -18,6 +20,8 @@ public class EspecialidadMenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_especialidades);
+        EdgeToEdge.enable(this);
+        Navegador.configurarBarra(this);
 
         cardVisualizarEspecialidad = findViewById(R.id.cardVisualizarEspecialidad);
         cardCrearEspecialidad = findViewById(R.id.cardCrearEspecialidad);
