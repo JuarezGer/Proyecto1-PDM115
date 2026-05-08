@@ -15,6 +15,8 @@ import ues.fia.proyecto1pdm115.pacientes.*;
 import ues.fia.proyecto1pdm115.doctores.*;
 import ues.fia.proyecto1pdm115.especialidades.*;
 import ues.fia.proyecto1pdm115.hospitales.*;
+import ues.fia.proyecto1pdm115.establecimientos.*;
+import ues.fia.proyecto1pdm115.aseguradoras.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout cardDoctores;
     LinearLayout cardEspecialidades;
     LinearLayout cardHospitales;
+    LinearLayout cardEstablecimientos;
+    LinearLayout cardAseguradoras;
 
 
     @Override
@@ -61,6 +65,19 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, HospitalMenuActivity.class);
                     startActivity(intent);
         });
+        //Navegación a Aseguradoras
+        cardAseguradoras = findViewById(R.id.cardAseguradoras);
+        cardAseguradoras.setOnClickListener(v -> {
+                    Intent intent = new Intent(MainActivity.this, AseguradoraMenuActivity.class);
+                    startActivity(intent);
+        });
+        //Navegación a Establecimientos
+        cardEstablecimientos = findViewById(R.id.cardEstablecimientos);
+        cardEstablecimientos.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, EstablecimientoMenuActivity.class);
+            startActivity(intent);
+        });
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainLayout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
