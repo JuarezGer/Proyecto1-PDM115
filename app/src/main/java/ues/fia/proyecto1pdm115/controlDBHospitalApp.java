@@ -594,8 +594,7 @@ public class controlDBHospitalApp {
             // USUARIO
             // ============================
             insertarUsuario(db, "U1", "admin", "admin123");
-            insertarUsuario(db, "U2", "doc_general", "docpass1");
-            insertarUsuario(db, "U3", "doc_especialidad", "docpass2");
+            insertarUsuario(db, "U2", "facturacion", "factu123");
 
             // ============================
             // ASEGURADORA
@@ -607,13 +606,19 @@ public class controlDBHospitalApp {
             insertarAseguradoraInicial(db, "AseguraYa", "22225555");
 
             // ============================
+            // puede_elegir
+            // ============================
+            insertarOpcionCrud(db, "ADM", "Pantallas de administracion", 1);
+            insertarOpcionCrud(db, "FAC", "Gestion de pagos", 2);
+            insertarOpcionCrud(db, "PAC", "Atencion medica", 3);
+
+            // ============================
             // OPCION_CRUD
             // ============================
-            insertarOpcionCrud(db, "O01", "Crear registro", 1);
-            insertarOpcionCrud(db, "O02", "Leer registro", 2);
-            insertarOpcionCrud(db, "O03", "Actualizar registro", 3);
-            insertarOpcionCrud(db, "O04", "Eliminar registro", 4);
-            insertarOpcionCrud(db, "O05", "Listar registros", 5);
+            insertarPuedeElegir(db,"U1","ADM");
+            insertarPuedeElegir(db,"U1","FAC");
+            insertarPuedeElegir(db,"U1","PAC");
+            insertarPuedeElegir(db,"U2","FAC");
 
             // ============================
             // MUNICIPIO
@@ -829,6 +834,12 @@ public class controlDBHospitalApp {
             db.insertWithOnConflict("OPCION_CRUD", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
         }
 
+        private void insertarPuedeElegir(SQLiteDatabase db, String idUsuario, String idOpcion){
+            ContentValues valores= new ContentValues();
+            valores.put("ID_USUARIO",idUsuario);
+            valores.put("ID_OPCION",idOpcion);
+            db.insertWithOnConflict("PUEDE_ELEGIR",null,valores,SQLiteDatabase.CONFLICT_IGNORE);
+        }
         private void insertarMunicipio(SQLiteDatabase db, String codMunicipio, String codDpto, String nombreMunicipio) {
             ContentValues valores = new ContentValues();
             valores.put("COD_MUNICIPIO", codMunicipio);
