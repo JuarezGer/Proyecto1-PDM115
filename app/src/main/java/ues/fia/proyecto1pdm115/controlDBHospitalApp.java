@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import ues.fia.proyecto1pdm115.modelos.Especialidad;
 import ues.fia.proyecto1pdm115.modelos.Paciente;
+import ues.fia.proyecto1pdm115.modelos.Establecimiento;
 
 public class controlDBHospitalApp {
 
@@ -1301,6 +1302,150 @@ public class controlDBHospitalApp {
             }
         }
     }
+
+    // =========================================================
+// CRUD ESTABLECIMIENTO
+// =========================================================
+
+    public String insertarEstablecimiento(Establecimiento establecimiento) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("NOMBRE_ESTABLECIMIENTO", establecimiento.getNombreEstablecimiento());
+            valores.put("TELEFONO_ESTABLECIMIENTO", establecimiento.getTelefonoEstablecimiento());
+            valores.put("DIRECCION_ESTABLECIMIENTO", establecimiento.getDireccionEstablecimiento());
+
+            long resultado = db.insertOrThrow("ESTABLECIMIENTO", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar establecimiento.";
+            }
+
+            return "Establecimiento insertado correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al insertar establecimiento: " + e.getMessage();
+        }
+    }
+
+    public Establecimiento consultarEstablecimiento(int idEstablecimiento) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "ESTABLECIMIENTO",
+                    null,
+                    "ID_ESTABLECIMIENTO = ?",
+                    new String[]{String.valueOf(idEstablecimiento)},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorAEstablecimiento(cursor);
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public ArrayList<Establecimiento> consultarTodosEstablecimientos() {
+        ArrayList<Establecimiento> listaEstablecimientos = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "ESTABLECIMIENTO",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "NOMBRE_ESTABLECIMIENTO ASC"
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Establecimiento establecimiento = cursorAEstablecimiento(cursor);
+                    listaEstablecimientos.add(establecimiento);
+                } while (cursor.moveToNext());
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return listaEstablecimientos;
+    }
+
+    public String actualizarEstablecimiento(Establecimiento establecimiento) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("NOMBRE_ESTABLECIMIENTO", establecimiento.getNombreEstablecimiento());
+            valores.put("TELEFONO_ESTABLECIMIENTO", establecimiento.getTelefonoEstablecimiento());
+            valores.put("DIRECCION_ESTABLECIMIENTO", establecimiento.getDireccionEstablecimiento());
+
+            int filas = db.update(
+                    "ESTABLECIMIENTO",
+                    valores,
+                    "ID_ESTABLECIMIENTO = ?",
+                    new String[]{String.valueOf(establecimiento.getIdEstablecimiento())}
+            );
+
+            if (filas > 0) {
+                return "Establecimiento actualizado correctamente.";
+            } else {
+                return "No se encontró el establecimiento.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al actualizar establecimiento: " + e.getMessage();
+        }
+    }
+
+    public String eliminarEstablecimiento(int idEstablecimiento) {
+        try {
+            int filas = db.delete(
+                    "ESTABLECIMIENTO",
+                    "ID_ESTABLECIMIENTO = ?",
+                    new String[]{String.valueOf(idEstablecimiento)}
+            );
+
+            if (filas > 0) {
+                return "Establecimiento eliminado correctamente.";
+            } else {
+                return "No se encontró el establecimiento.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar el establecimiento porque tiene registros relacionados.";
+        } catch (Exception e) {
+            return "Error al eliminar establecimiento: " + e.getMessage();
+        }
+    }
+
+    private Establecimiento cursorAEstablecimiento(Cursor cursor) {
+        Establecimiento establecimiento = new Establecimiento();
+
+        establecimiento.setIdEstablecimiento(cursor.getInt(cursor.getColumnIndexOrThrow("ID_ESTABLECIMIENTO")));
+        establecimiento.setNombreEstablecimiento(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_ESTABLECIMIENTO")));
+        establecimiento.setTelefonoEstablecimiento(cursor.getString(cursor.getColumnIndexOrThrow("TELEFONO_ESTABLECIMIENTO")));
+        establecimiento.setDireccionEstablecimiento(cursor.getString(cursor.getColumnIndexOrThrow("DIRECCION_ESTABLECIMIENTO")));
+
+        return establecimiento;
+    }
+
 
     // =========================================================
     // MÉTODOS GENÉRICOS OPCIONALES

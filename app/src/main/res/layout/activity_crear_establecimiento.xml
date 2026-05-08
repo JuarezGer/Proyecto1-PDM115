@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activityEliminarPaciente"
+    android:id="@+id/activityCrearEstablecimiento"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background_app">
 
-    <!-- HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="108dp"
@@ -37,10 +36,8 @@
             android:layout_height="38dp"
             android:src="@drawable/ic_user_circle"
             android:scaleType="fitCenter" />
-
     </LinearLayout>
 
-    <!-- CONTENIDO -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -56,54 +53,43 @@
             android:paddingTop="28dp"
             android:paddingBottom="20dp">
 
-            <!-- TÍTULO Y DESCRIPCIÓN -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginBottom="28dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Eliminar Paciente"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_black"
-                    android:layout_marginBottom="4dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Busca y elimina un paciente del sistema"
-                    android:textSize="14sp"
-                    android:textColor="#666666"
-                    android:layout_marginBottom="20dp" />
-
-                <!-- SEPARADOR -->
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:background="@color/card_blue" />
-
-            </LinearLayout>
-
-            <!-- SECCIÓN: BÚSQUEDA -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Búsqueda de Paciente"
+                android:text="Crear Establecimiento"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_black"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ingresa los datos del nuevo establecimiento"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/card_blue" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Datos del establecimiento"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/header_blue"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="28dp"
                 android:layout_marginBottom="12dp" />
 
             <EditText
-                android:id="@+id/edtDuiEliminar"
+                android:id="@+id/edtNombreEstablecimientoCrear"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:hint="DUI del paciente"
+                android:hint="Nombre del establecimiento"
                 android:padding="12dp"
                 android:textSize="15sp"
                 android:textColor="@color/text_black"
@@ -111,48 +97,33 @@
                 android:backgroundTint="@color/card_blue"
                 android:layout_marginBottom="12dp" />
 
-            <Button
-                android:id="@+id/btnBuscarEliminar"
+            <EditText
+                android:id="@+id/edtTelefonoEstablecimientoCrear"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:text="Buscar paciente"
-                android:textAllCaps="false"
+                android:hint="Teléfono"
+                android:inputType="phone"
+                android:padding="12dp"
                 android:textSize="15sp"
-                android:textStyle="bold"
+                android:textColor="@color/text_black"
+                android:textColorHint="#999999"
                 android:backgroundTint="@color/card_blue"
-                android:textColor="@color/primary_dark"
-                android:layout_marginBottom="28dp" />
-
-            <!-- SECCIÓN: DATOS DEL PACIENTE -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Datos del Paciente"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/header_blue"
                 android:layout_marginBottom="12dp" />
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/edtDireccionEstablecimientoCrear"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:background="@drawable/bg_table_card"
-                android:padding="16dp"
-                android:layout_marginBottom="28dp">
+                android:layout_height="110dp"
+                android:hint="Dirección"
+                android:gravity="top"
+                android:inputType="textMultiLine"
+                android:padding="12dp"
+                android:textSize="15sp"
+                android:textColor="@color/text_black"
+                android:textColorHint="#999999"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="28dp" />
 
-                <TextView
-                    android:id="@+id/txtPacienteEliminar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Busca un paciente para visualizar sus datos"
-                    android:textSize="14sp"
-                    android:textColor="@color/text_black"
-                    android:lineSpacingExtra="8dp" />
-
-            </LinearLayout>
-
-            <!-- BOTONES -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -161,7 +132,7 @@
                 android:layout_marginTop="12dp">
 
                 <Button
-                    android:id="@+id/btnRegresarEliminar"
+                    android:id="@+id/btnRegresarCrearEstablecimiento"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
@@ -174,25 +145,21 @@
                     android:layout_marginEnd="8dp" />
 
                 <Button
-                    android:id="@+id/btnEliminarPaciente"
+                    android:id="@+id/btnGuardarEstablecimiento"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:text="Eliminar"
+                    android:text="Guardar"
                     android:textAllCaps="false"
                     android:textStyle="bold"
                     android:textSize="15sp"
-                    android:textColor="@android:color/white"
-                    android:backgroundTint="#D9534F"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="@color/card_blue"
                     android:layout_marginStart="8dp" />
-
             </LinearLayout>
-
         </LinearLayout>
-
     </ScrollView>
 
-    <!-- BARRA INFERIOR -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="78dp"
@@ -221,7 +188,6 @@
                 android:text="Inicio"
                 android:textSize="13sp"
                 android:textColor="@color/text_gray" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -244,7 +210,6 @@
                 android:text="Perfil"
                 android:textSize="13sp"
                 android:textColor="@color/text_gray" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -267,9 +232,6 @@
                 android:text="Salir"
                 android:textSize="13sp"
                 android:textColor="@color/text_gray" />
-
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>
