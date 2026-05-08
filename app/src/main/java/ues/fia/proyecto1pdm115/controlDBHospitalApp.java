@@ -606,14 +606,14 @@ public class controlDBHospitalApp {
             insertarAseguradoraInicial(db, "AseguraYa", "22225555");
 
             // ============================
-            // puede_elegir
+            // OPCION_CRUD
             // ============================
             insertarOpcionCrud(db, "ADM", "Pantallas de administracion", 1);
             insertarOpcionCrud(db, "FAC", "Gestion de pagos", 2);
             insertarOpcionCrud(db, "PAC", "Atencion medica", 3);
 
             // ============================
-            // OPCION_CRUD
+            // PUEDE_ELEGIR
             // ============================
             insertarPuedeElegir(db,"U1","ADM");
             insertarPuedeElegir(db,"U1","FAC");
