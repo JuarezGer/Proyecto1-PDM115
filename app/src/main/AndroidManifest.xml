@@ -11,6 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
+        <activity
+            android:name=".usuarios.UsuariosMenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".usuarios.CrearUsuarioActivity"
+            android:exported="false" />
         <activity android:name=".PerfilActivity" />
         <activity
             android:name=".especialidades.ModificarEspecialidadActivity"

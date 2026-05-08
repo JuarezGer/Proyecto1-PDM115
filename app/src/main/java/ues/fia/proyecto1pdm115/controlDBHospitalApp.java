@@ -12,6 +12,7 @@ import java.util.ArrayList;
 
 import ues.fia.proyecto1pdm115.modelos.Especialidad;
 import ues.fia.proyecto1pdm115.modelos.Paciente;
+import ues.fia.proyecto1pdm115.modelos.Usuario;
 
 public class controlDBHospitalApp {
 
@@ -1122,6 +1123,27 @@ public class controlDBHospitalApp {
         paciente.setTelefonoPaciente(cursor.getString(cursor.getColumnIndexOrThrow("TELEFONO_PACIENTE")));
 
         return paciente;
+    }
+
+    // =========================================================
+    // MÉTODOS PARA USUARIOS
+    // =========================================================
+    public String insertarUsuario(Usuario usuario){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("ID_USUARIO",usuario.getIdUsuario());
+            values.put("NOMBRE_USUARIO",usuario.getNombreUsuario());
+            values.put("CLAVE",usuario.getClave());
+
+            long control = db.insert("USUARIO",null,values);
+
+            if (control==-1){
+                return "Error al crear usuario";
+            }
+            return "Usuario creado exitosamente";
+        }catch (Exception e){
+            return "Error al crear usuario: "+e.getMessage();
+        }
     }
 
     // =========================================================

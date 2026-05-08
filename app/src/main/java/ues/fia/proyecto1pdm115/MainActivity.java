@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,6 +16,7 @@ import ues.fia.proyecto1pdm115.pacientes.*;
 import ues.fia.proyecto1pdm115.doctores.*;
 import ues.fia.proyecto1pdm115.especialidades.*;
 import ues.fia.proyecto1pdm115.hospitales.*;
+import ues.fia.proyecto1pdm115.usuarios.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout cardDoctores;
     LinearLayout cardEspecialidades;
     LinearLayout cardHospitales;
+    LinearLayout cardUsuarios;
 
 
     @Override
@@ -60,6 +63,13 @@ public class MainActivity extends AppCompatActivity {
         cardHospitales.setOnClickListener(v -> {
                     Intent intent = new Intent(MainActivity.this, HospitalMenuActivity.class);
                     startActivity(intent);
+        });
+
+        //Navegacion a usuarios
+        cardUsuarios = findViewById(R.id.cardUsuarios);
+        cardUsuarios.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UsuariosMenuActivity.class);
+            startActivity(intent);
         });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainLayout), (v, insets) -> {
