@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import ues.fia.proyecto1pdm115.modelos.Especialidad;
 import ues.fia.proyecto1pdm115.modelos.Paciente;
@@ -19,7 +21,7 @@ import ues.fia.proyecto1pdm115.modelos.Aseguradora;
 public class controlDBHospitalApp {
 
     private static final String BASE_DATOS = "hospital_app.db";
-    private static final int VERSION = 3;
+    private static final int VERSION = 4;
 
     private final Context context;
     private DatabaseHelper DBHelper;
@@ -90,6 +92,67 @@ public class controlDBHospitalApp {
                 cursor.close();
             }
         }
+    }
+
+
+
+    public String obtenerIdUsuario(String usuario) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "USUARIO",
+                    new String[]{"ID_USUARIO"},
+                    "ID_USUARIO = ? OR NOMBRE_USUARIO = ?",
+                    new String[]{usuario, usuario},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO"));
+            }
+
+            return "";
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public Set<String> obtenerOpcionesUsuario(String idUsuario) {
+        Set<String> opciones = new HashSet<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(
+                    "SELECT ID_OPCION FROM PUEDE_ELEGIR WHERE ID_USUARIO = ?",
+                    new String[]{idUsuario}
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    opciones.add(cursor.getString(cursor.getColumnIndexOrThrow("ID_OPCION")));
+                } while (cursor.moveToNext());
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return opciones;
     }
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
@@ -938,7 +1001,10 @@ public class controlDBHospitalApp {
     }
 
     public void cerrar() {
-        DBHelper.close();
+        if (DBHelper != null) {
+            DBHelper.close();
+        }
+        db = null;
     }
 
     public SQLiteDatabase getDb() {

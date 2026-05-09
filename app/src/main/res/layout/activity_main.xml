@@ -208,6 +208,7 @@
 
             <!-- FILA 3 -->
             <LinearLayout
+                android:id="@+id/cardConsultas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -241,6 +242,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/cardTipoEmergencia"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
                     android:layout_weight="1"
@@ -270,6 +272,7 @@
 
             <!-- FILA 4 -->
             <LinearLayout
+                android:id="@+id/cardRecetas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -303,6 +306,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/cardHospitalizacion"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
                     android:layout_weight="1"
@@ -332,6 +336,7 @@
 
             <!-- FILA 5 -->
             <LinearLayout
+                android:id="@+id/cardMedicamentos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -365,6 +370,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/cardDetalleReceta"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
                     android:layout_weight="1"
@@ -394,6 +400,7 @@
 
             <!-- FILA 6 -->
             <LinearLayout
+                android:id="@+id/cardPagos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -427,6 +434,7 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/cardSeguros"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
                     android:layout_weight="1"
@@ -446,7 +454,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Sesguros"
+                        android:text="Seguros"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_black"
@@ -456,6 +464,7 @@
 
             <!-- FILA 7 -->
             <LinearLayout
+                android:id="@+id/cardSeguros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -520,6 +529,7 @@
 
             <!-- FILA 8 -->
             <LinearLayout
+                android:id="@+id/cardUsuariosAdmin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -552,6 +562,7 @@
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
                 <LinearLayout
+                    android:id="@+id/cardPermisos"
                     android:layout_width="135dp"
                     android:layout_height="124dp"
 
