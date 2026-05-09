@@ -254,14 +254,14 @@
                     <ImageView
                         android:layout_width="62dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_diagnosis"
+                        android:src="@drawable/ic_emergency"
                         app:tint="@color/icon_black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Diagnosticos"
-                        android:textSize="16sp"
+                        android:text="Tipo de Emergencia"
+                        android:textSize="14sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
@@ -289,14 +289,14 @@
                     <ImageView
                         android:layout_width="62dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_emergency"
+                        android:src="@drawable/ic_medicalfile"
                         app:tint="@color/icon_black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Tipos de Emergencia"
-                        android:textSize="14sp"
+                        android:text="Receta"
+                        android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
@@ -316,13 +316,13 @@
                     <ImageView
                         android:layout_width="62dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_medicalfile"
+                        android:src="@drawable/ic_hospitalbed"
                         app:tint="@color/icon_black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Receta"
+                        android:text="Especialización"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_black"
@@ -351,13 +351,13 @@
                     <ImageView
                         android:layout_width="62dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_hospitalbed"
+                        android:src="@drawable/ic_medicaments"
                         app:tint="@color/icon_black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Hospitalización"
+                        android:text="Medicamentos"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_black"
@@ -378,13 +378,13 @@
                     <ImageView
                         android:layout_width="62dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_medicaments"
+                        android:src="@drawable/ic_detailsrecet"
                         app:tint="@color/icon_black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Medicamentos"
+                        android:text="Detalles de Receta"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_black"
@@ -413,33 +413,6 @@
                     <ImageView
                         android:layout_width="62dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_detailsrecet"
-                        app:tint="@color/icon_black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Detalles de Receta"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_black"
-                        android:layout_marginTop="6dp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/bg_menu_card"
-                    android:clickable="true"
-                    android:focusable="true">
-
-                    <ImageView
-                        android:layout_width="62dp"
-                        android:layout_height="62dp"
                         android:src="@drawable/ic_pay"
                         app:tint="@color/icon_black" />
 
@@ -452,20 +425,12 @@
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
-            </LinearLayout>
-
-            <!-- FILA 7 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="124dp"
                     android:layout_weight="1"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="16dp"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
@@ -481,18 +446,27 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Seguros"
+                        android:text="Sesguros"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
+            </LinearLayout>
+
+            <!-- FILA 7 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="24dp">
 
                 <LinearLayout
+                    android:id="@+id/cardAseguradoras"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
                     android:layout_weight="1"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
@@ -509,6 +483,34 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Aseguradoras"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_black"
+                        android:layout_marginTop="6dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/cardEstablecimientos"
+                    android:layout_width="0dp"
+                    android:layout_height="124dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_menu_card"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:src="@drawable/ic_establecement"
+                        app:tint="@color/icon_black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Establecimientos"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_black"
@@ -537,13 +539,13 @@
                     <ImageView
                         android:layout_width="62dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_establecement"
+                        android:src="@drawable/ic_user_circle"
                         app:tint="@color/icon_black" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Establecimientos"
+                        android:text="Usuarios"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_black"

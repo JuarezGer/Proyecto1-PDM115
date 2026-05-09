@@ -36,16 +36,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" /> <!-- CRUD De Pacientes -->
+        <activity android:name=".MainActivity" />
+        <!-- CRUD De Pacientes -->
         <activity android:name=".pacientes.PacienteMenuActivity" />
         <activity android:name=".pacientes.CrearPacienteActivity" />
         <activity android:name=".pacientes.VisualizarPacientesActivity" />
         <activity android:name=".pacientes.ModificarPacienteActivity" />
         <activity android:name=".pacientes.EliminarPacienteActivity" />
+
         <activity android:name=".doctores.DoctorMenuActivity" />
         <activity android:name=".especialidades.EspecialidadMenuActivity" />
         <activity android:name=".especialidades.CrearEspecialidadActivity" />
         <activity android:name=".hospitales.HospitalMenuActivity" />
+
+        <!-- CRUD De Establecimientos -->
+        <activity android:name=".aseguradoras.AseguradoraMenuActivity" />
+        <activity android:name=".aseguradoras.CrearAseguradoraActivity" />
+        <activity android:name=".aseguradoras.VisualizarAseguradorasActivity" />
+        <activity android:name=".aseguradoras.ActualizarAseguradoraActivity" />
+        <activity android:name=".aseguradoras.EliminarAseguradoraActivity" />
+
+        <!-- CRUD De Establecimientos -->
+        <activity android:name=".establecimientos.EstablecimientoMenuActivity" />
+        <activity android:name=".establecimientos.CrearEstablecimientoActivity" />
+        <activity android:name=".establecimientos.VisualizarEstablecimientosActivity" />
+        <activity android:name=".establecimientos.ActualizarEstablecimientoActivity" />
+        <activity android:name=".establecimientos.EliminarEstablecimientoActivity" />
+
     </application>
 
 </manifest>

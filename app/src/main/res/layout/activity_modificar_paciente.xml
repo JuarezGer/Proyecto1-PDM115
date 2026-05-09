@@ -98,30 +98,36 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="12dp" />
 
-            <EditText
-                android:id="@+id/edtDuiModificar"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="DUI del paciente"
-                android:inputType="text"
-                android:padding="12dp"
-                android:textSize="15sp"
-                android:textColor="@color/text_black"
-                android:textColorHint="#999999"
-                android:backgroundTint="@color/card_blue"
-                android:layout_marginBottom="12dp" />
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="28dp">
 
-            <Button
-                android:id="@+id/btnBuscarModificar"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:text="Buscar paciente"
-                android:textAllCaps="false"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:backgroundTint="@color/card_blue"
-                android:textColor="@color/primary_dark"
-                android:layout_marginBottom="28dp" />
+                <EditText
+                    android:id="@+id/edtDuiModificar"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="DUI del paciente"
+                    android:inputType="text"
+                    android:padding="12dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="#999999"
+                    android:backgroundTint="@color/card_blue"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnBuscarModificar"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:text="Buscar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="@color/card_blue" />
+            </LinearLayout>
 
             <!-- SECCIÓN: INFORMACIÓN DE IDENTIFICACIÓN -->
             <TextView
