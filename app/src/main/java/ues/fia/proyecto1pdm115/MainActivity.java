@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.LinearLayout;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -15,6 +16,7 @@ import ues.fia.proyecto1pdm115.pacientes.*;
 import ues.fia.proyecto1pdm115.doctores.*;
 import ues.fia.proyecto1pdm115.especialidades.*;
 import ues.fia.proyecto1pdm115.hospitales.*;
+import ues.fia.proyecto1pdm115.usuarios.*;
 import ues.fia.proyecto1pdm115.establecimientos.*;
 import ues.fia.proyecto1pdm115.aseguradoras.*;
 
@@ -24,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout cardDoctores;
     LinearLayout cardEspecialidades;
     LinearLayout cardHospitales;
+    LinearLayout cardUsuarios;
     LinearLayout cardEstablecimientos;
     LinearLayout cardAseguradoras;
 
@@ -78,6 +81,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
+
+        //Navegacion a usuarios
+        cardUsuarios = findViewById(R.id.cardUsuarios);
+        cardUsuarios.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, UsuariosMenuActivity.class);
+            startActivity(intent);
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.mainLayout), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
