@@ -1214,6 +1214,92 @@ public class controlDBHospitalApp {
         }
     }
 
+    public ArrayList<Usuario> consultarUsuarios(){
+        ArrayList<Usuario> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try{
+            cursor = db.rawQuery(
+                    "SELECT * FROM USUARIO ORDER BY ID_USUARIO ASC",
+                    null
+            );
+            if (cursor.moveToFirst()){
+                do {
+                    Usuario usuario = new Usuario();
+
+                    usuario.setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
+                    usuario.setNombreUsuario(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_USUARIO")));
+
+                    lista.add(usuario);
+                }while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+
+    public Usuario consultarUsuario(String idUsuario){
+        Cursor cursor = null;
+
+        try{
+            cursor=db.rawQuery(
+                    "SELECT * FROM USUARIO WHERE ID_USUARIO = ?",
+                    new String[]{String.valueOf(idUsuario)}
+            );
+
+            if (cursor.moveToFirst()){
+                Usuario usuario =new Usuario();
+                usuario.setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
+                usuario.setNombreUsuario(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_USUARIO")));
+                usuario.setClave(cursor.getString(cursor.getColumnIndexOrThrow("CLAVE")));
+
+                return usuario;
+            }
+            return null;
+        }finally {
+            {
+                if (cursor!=null){
+                    cursor.close();
+                }
+            }
+        }
+    }
+
+    public String actualizarUsuario(Usuario usuario){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("NOMBRE_USUARIO",usuario.getNombreUsuario());
+            values.put("CLAVE",usuario.getClave());
+            int control = db.update("USUARIO",values,"ID_USUARIO =?",new String[]{
+                    String.valueOf(usuario.getIdUsuario())
+            });
+
+            if (control>0){
+                return "Usuario actualizado correctamente";
+            }else {
+                return "Usuario no encontrado";
+            }
+        }catch (Exception e){
+            return "Error al actualizar usuario";
+        }
+    }
+
+    public String eliminarUsuario(String idUsuario){
+        try{
+            int control = db.delete("USUARIO","ID_USUARIO=?",
+                    new String[]{String.valueOf(idUsuario)});
+            if (control>0){
+                return "Usuario eliminado";
+            }else {
+                return "Usuario no encontrado";
+            }
+        }catch (Exception e){
+            return "No se puede eliminar. \nEl usuario cuenta con permisos existentes.";
+        }
+    }
     // =========================================================
     // MÉTODOS PARA ESPECIALIDAD
     // =========================================================
