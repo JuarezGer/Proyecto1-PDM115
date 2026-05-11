@@ -21,6 +21,7 @@ import ues.fia.proyecto1pdm115.pacientes.*;
 import ues.fia.proyecto1pdm115.doctores.*;
 import ues.fia.proyecto1pdm115.especialidades.*;
 import ues.fia.proyecto1pdm115.hospitales.*;
+import ues.fia.proyecto1pdm115.permisos.PermisosMenuActivity;
 import ues.fia.proyecto1pdm115.usuarios.*;
 import ues.fia.proyecto1pdm115.establecimientos.*;
 import ues.fia.proyecto1pdm115.aseguradoras.*;
@@ -121,12 +122,13 @@ public class MainActivity extends AppCompatActivity {
         configurarClick("cardEstablecimientos", EstablecimientoMenuActivity.class);
         configurarClick("cardUsuarios", UsuariosMenuActivity.class);
         configurarClick("cardUsuariosAdmin", UsuariosMenuActivity.class);
+        configurarClick("cardPermisos", PermisosMenuActivity.class);
 
-        View cardPermisos = buscarVista("cardPermisos");
-        if (cardPermisos != null) {
-            cardPermisos.setOnClickListener(v ->
-                    Toast.makeText(this, "Pantalla de permisos pendiente", Toast.LENGTH_SHORT).show());
-        }
+        //View cardPermisos = buscarVista("cardPermisos");
+        //if (cardPermisos != null) {
+        //    cardPermisos.setOnClickListener(v ->
+        //            Toast.makeText(this, "Pantalla de permisos pendiente", Toast.LENGTH_SHORT).show());
+        //}
     }
 
     private void configurarClick(String nombreId, Class<?> activityDestino) {

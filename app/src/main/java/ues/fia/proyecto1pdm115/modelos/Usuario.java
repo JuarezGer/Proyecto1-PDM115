@@ -7,6 +7,11 @@ public class Usuario {
 
     public Usuario(){}
 
+    public Usuario(String idUsuario, String nombreUsuario) {
+        this.idUsuario = idUsuario;
+        this.nombreUsuario = nombreUsuario;
+    }
+
     public String getIdUsuario() {
         return idUsuario;
     }
@@ -29,5 +34,10 @@ public class Usuario {
 
     public void setClave(String clave) {
         this.clave = clave;
+    }
+
+    @Override
+    public String toString() {
+        return idUsuario + " - " + nombreUsuario;
     }
 }

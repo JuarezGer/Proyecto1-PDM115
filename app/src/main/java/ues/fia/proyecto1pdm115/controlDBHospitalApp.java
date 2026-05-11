@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ues.fia.proyecto1pdm115.modelos.Especialidad;
+import ues.fia.proyecto1pdm115.modelos.Opcion_crud;
 import ues.fia.proyecto1pdm115.modelos.Paciente;
 import ues.fia.proyecto1pdm115.modelos.Usuario;
 import ues.fia.proyecto1pdm115.modelos.Establecimiento;
@@ -1191,6 +1192,50 @@ public class controlDBHospitalApp {
         paciente.setTelefonoPaciente(cursor.getString(cursor.getColumnIndexOrThrow("TELEFONO_PACIENTE")));
 
         return paciente;
+    }
+    // =========================================================
+    // MÉTODOS PARA PUEDE_ELEGIR (PERMISOS)
+    // =========================================================
+    public ArrayList<Opcion_crud> consultarPermisos(){
+        ArrayList<Opcion_crud> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try{
+            cursor = db.rawQuery("SELECT ID_OPCION,DESCRIPCION_OPC FROM OPCION_CRUD ORDER BY ID_OPCION ASC",
+                    null);
+            if (cursor.moveToFirst()){
+                do {
+                    Opcion_crud opcionCrud = new Opcion_crud();
+
+                    opcionCrud.setIdopcion(cursor.getString(cursor.getColumnIndexOrThrow("ID_OPCION")));
+                    opcionCrud.setDescripcion(cursor.getString(cursor.getColumnIndexOrThrow("DESCRIPCION_OPC")));
+
+                    lista.add(opcionCrud);
+                }while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+
+    public String insertarPermiso(String idUsuario,String idPermiso){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("ID_USUARIO",idUsuario);
+            values.put("ID_OPCION",idPermiso);
+
+            long control = db.insert("PUEDE_ELEGIR",null,values);
+
+            if (control==-1){
+                return "Error al crear permiso";
+            }
+            return "Permiso creado exitosamente";
+        }catch (Exception e){
+            return "Fallo al crear permiso: "+e.getMessage();
+        }
     }
 
     // =========================================================
