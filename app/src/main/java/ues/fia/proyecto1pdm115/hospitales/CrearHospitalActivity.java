@@ -21,8 +21,6 @@ import java.util.List;
 
 import ues.fia.proyecto1pdm115.R;
 import ues.fia.proyecto1pdm115.modelos.Municipio;
-import ues.fia.proyecto1pdm115.modelos.Opcion_crud;
-import ues.fia.proyecto1pdm115.modelos.Usuario;
 
 public class CrearHospitalActivity extends AppCompatActivity {
     Spinner spinnerHospitalDistritoCrear,spinnerHospitalEspecialidadCrear, spinnerHospitalDepartamentoCrear, spinnerHospitalMunicipioCrear;

@@ -211,7 +211,13 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <!-- BOTÓN REGRESAR -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <!-- BOTÓN REGRESAR -->
+
+
+        </LinearLayout>
         <Button
             android:id="@+id/btnRegresarHospital"
             android:layout_width="120dp"
@@ -222,6 +228,28 @@
             android:textSize="15sp"
             android:textColor="@color/primary_dark"
             android:backgroundTint="@color/button_blue" />
+        <Button
+            android:id="@+id/btnCrearEspeHospital"
+            android:layout_width="200dp"
+            android:layout_weight="0"
+            android:layout_height="42dp"
+            android:text="Asignar Especialidad"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@color/primary_dark"
+            android:backgroundTint="@color/button_blue" />
+        <Button
+            android:id="@+id/btnEliminarEspeHospital"
+            android:layout_width="200dp"
+            android:layout_height="42dp"
+            android:text="Quitar Especialidad"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            android:textSize="15sp"
+            android:textColor="@color/primary_dark"
+            android:backgroundTint="@color/button_blue" />
+
 
     </LinearLayout>
 

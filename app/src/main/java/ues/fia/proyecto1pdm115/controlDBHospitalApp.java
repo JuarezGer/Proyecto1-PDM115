@@ -7,8 +7,10 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +21,7 @@ import ues.fia.proyecto1pdm115.modelos.Hospital;
 import ues.fia.proyecto1pdm115.modelos.Municipio;
 import ues.fia.proyecto1pdm115.modelos.Opcion_crud;
 import ues.fia.proyecto1pdm115.modelos.Paciente;
+import ues.fia.proyecto1pdm115.modelos.Posee;
 import ues.fia.proyecto1pdm115.modelos.Puede_elegir;
 import ues.fia.proyecto1pdm115.modelos.Usuario;
 import ues.fia.proyecto1pdm115.modelos.Establecimiento;
@@ -1397,6 +1400,252 @@ public class controlDBHospitalApp {
             return "Error al crear hospital: "+e.getMessage();
         }
     }
+
+    public ArrayList<HashMap<String, String>> consultarHospitalesDetalle() {
+        ArrayList<HashMap<String, String>> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        // La consulta pro con JOINs y GROUP_CONCAT
+        String query = "SELECT h.NOMBRE_HOSPITAL, h.TELEFONO_HOSPITAL, " +
+                "dept.NOMBRE_DPTO || ' - ' || m.NOMBRE_MUNICIPIO AS UBICACION, " +
+                "GROUP_CONCAT(e.NOMBRE_ESPECIALIDAD, ', ') AS ESPECIALIDADES " +
+                "FROM HOSPITAL h " +
+                "INNER JOIN DISTRITO d ON h.COD_DISTRITO = d.COD_DISTRITO " +
+                "INNER JOIN MUNICIPIO m ON d.COD_MUNICIPIO = m.COD_MUNICIPIO " +
+                "INNER JOIN DEPARTAMENTO dept ON m.COD_DPTO = dept.COD_DPTO " +
+                "LEFT JOIN POSEE p ON h.ID_HOSPITAL = p.ID_HOSPITAL " +
+                "LEFT JOIN ESPECIALIDAD e ON p.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD " +
+                "GROUP BY h.ID_HOSPITAL " +
+                "ORDER BY h.NOMBRE_HOSPITAL ASC";
+
+        try {
+            cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    HashMap<String, String> map = new HashMap<>();
+
+                    map.put("hospital", cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_HOSPITAL")));
+                    map.put("telefono", cursor.getString(cursor.getColumnIndexOrThrow("TELEFONO_HOSPITAL")));
+                    map.put("ubicacion", cursor.getString(cursor.getColumnIndexOrThrow("UBICACION")));
+                    map.put("especialidades", cursor.getString(cursor.getColumnIndexOrThrow("ESPECIALIDADES")));
+
+                    lista.add(map);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return lista;
+    }
+
+    public HashMap<String,String> consultarHospitalDetalle(int idHospital){
+        Cursor cursor = null;
+        HashMap<String,String> map = null;
+
+        String query = "SELECT h.NOMBRE_HOSPITAL, h.TELEFONO_HOSPITAL, " +
+                "dept.NOMBRE_DPTO || ' - ' || m.NOMBRE_MUNICIPIO AS UBICACION, " +
+                "GROUP_CONCAT(e.NOMBRE_ESPECIALIDAD, ', ') AS ESPECIALIDADES " +
+                "FROM HOSPITAL h " +
+                "INNER JOIN DISTRITO d ON h.COD_DISTRITO = d.COD_DISTRITO " +
+                "INNER JOIN MUNICIPIO m ON d.COD_MUNICIPIO = m.COD_MUNICIPIO " +
+                "INNER JOIN DEPARTAMENTO dept ON m.COD_DPTO = dept.COD_DPTO " +
+                "LEFT JOIN POSEE p ON h.ID_HOSPITAL = p.ID_HOSPITAL " +
+                "LEFT JOIN ESPECIALIDAD e ON p.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD " +
+                "WHERE h.ID_HOSPITAL=? "+
+                "GROUP BY h.ID_HOSPITAL " +
+                "ORDER BY h.NOMBRE_HOSPITAL ASC";
+
+        try{
+            cursor=db.rawQuery(query,new String[]{String.valueOf(idHospital)});
+            if (cursor.moveToFirst()){
+                map = new HashMap<>();
+                map.put("hospital", cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_HOSPITAL")));
+                map.put("telefono", cursor.getString(cursor.getColumnIndexOrThrow("TELEFONO_HOSPITAL")));
+                map.put("ubicacion", cursor.getString(cursor.getColumnIndexOrThrow("UBICACION")));
+                map.put("especialidades", cursor.getString(cursor.getColumnIndexOrThrow("ESPECIALIDADES")));
+            }
+        }catch (Exception e){
+            Log.e("DB_ERROR","FALLO AL CONSULTAR DETALLE: "+e.getMessage());
+
+        } finally{
+            if (cursor!=null) cursor.close();
+        }
+        return map;
+    }
+
+    public ArrayList<Hospital> consultarHospitales(){
+        ArrayList<Hospital> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try{
+            cursor = db.rawQuery("SELECT * FROM HOSPITAL ORDER BY ID_HOSPITAL ASC",
+                    null);
+            if (cursor.moveToFirst()){
+                do {
+                    Hospital hospital = new Hospital();
+
+                    hospital.setIdHospital(cursor.getInt(cursor.getColumnIndexOrThrow("ID_HOSPITAL")));
+                    hospital.setNombreHospital(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_HOSPITAL")));
+                    hospital.setCodDistrito(cursor.getString(cursor.getColumnIndexOrThrow("COD_DISTRITO")));
+                    hospital.setTelefonoHospital(cursor.getString(cursor.getColumnIndexOrThrow("TELEFONO_HOSPITAL")));
+
+                    lista.add(hospital);
+                }while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+
+    public String insertarPosee(Integer idHospi,Integer idEspe){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("ID_HOSPITAL",idHospi);
+            values.put("ID_ESPECIALIDAD",idEspe);
+
+            long control = db.insert("POSEE",null,values);
+
+            if (control==-1){
+                return "Error al asignar especialidad";
+            }
+            return "Especialidad asignada";
+        }catch (Exception e){
+            return "Fallo al asignar especialidad: "+e.getMessage();
+        }
+    }
+
+    public String eliminarPosee(Integer idHospi,Integer idEspe){
+        try{
+            int control = db.delete("POSEE","ID_HOSPITAL=? AND ID_ESPECIALIDAD=?",
+                    new String[]{idHospi.toString(),idEspe.toString()});
+            if (control>0){
+                return "Especialidad eliminada de hospital";
+            }else {
+                return "Error en eliminacion";
+            }
+        }catch (Exception e){
+            return "No se pudo eliminar la especialidad del hospital por: "+e.getMessage();
+        }
+    }
+
+    public ArrayList<Especialidad> consultarEspecialidadesPorHospital(Integer idHospi) {
+        ArrayList<Especialidad> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        // La "magia" del JOIN: unimos POSEE con ESPECIALIDAD
+        String sql = "SELECT E.ID_ESPECIALIDAD, E.NOMBRE_ESPECIALIDAD " +
+                "FROM ESPECIALIDAD E " +
+                "INNER JOIN POSEE P ON E.ID_ESPECIALIDAD = P.ID_ESPECIALIDAD " +
+                "WHERE P.ID_HOSPITAL = ?";
+
+        try {
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(idHospi)});
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Especialidad especialidad = new Especialidad();
+                    // Asegúrate de que los nombres de columna coincidan con tu tabla ESPECIALIDAD
+                    especialidad.setIdEspecialidad(cursor.getInt(0));
+                    especialidad.setNombreEspecialidad(cursor.getString(1));
+
+                    lista.add(especialidad);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DB_ERROR", "Error al consultar especialidades: " + e.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return lista;
+    }
+
+    public String actualizarHospital(Hospital hospital){
+        try{
+            ContentValues values = new ContentValues();
+
+            values.put("COD_DISTRITO", hospital.getCodDistrito());
+            values.put("NOMBRE_HOSPITAL", hospital.getNombreHospital());
+            values.put("TELEFONO_HOSPITAL", hospital.getTelefonoHospital());
+
+            int control = db.update(
+                    "HOSPITAL",
+                    values,
+                    "ID_HOSPITAL=?",
+                    new String[]{String.valueOf(hospital.getIdHospital())}
+            );
+
+            if(control == 0){
+                return "Hospital no encontrado";
+            }
+
+            return "Hospital actualizado correctamente";
+
+        }catch(Exception e){
+            return "Error al actualizar: " + e.getMessage();
+        }
+    }
+
+    public String eliminarHospital(int idHospital){
+        try{
+
+            db.delete(
+                    "POSEE",
+                    "ID_HOSPITAL=?",
+                    new String[]{String.valueOf(idHospital)}
+            );
+
+            int control = db.delete(
+                    "HOSPITAL",
+                    "ID_HOSPITAL=?",
+                    new String[]{String.valueOf(idHospital)}
+            );
+
+            if(control > 0){
+                return "Hospital eliminado correctamente";
+            }else{
+                return "Hospital no encontrado";
+            }
+
+        }catch (Exception e){
+            return "Error al eliminar: " + e.getMessage();
+        }
+    }
+
+    public Hospital consultarHospital(int idHospital) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(
+                    "SELECT * FROM HOSPITAL WHERE ID_HOSPITAL = ?",
+                    new String[]{String.valueOf(idHospital)}
+            );
+
+            if (cursor.moveToFirst()) {
+                Hospital hospital = new Hospital();
+
+                hospital.setIdHospital(cursor.getInt(cursor.getColumnIndexOrThrow("ID_HOSPITAL")));
+                hospital.setNombreHospital(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_HOSPITAL")));
+                hospital.setTelefonoHospital(cursor.getString(cursor.getColumnIndexOrThrow("TELEFONO_HOSPITAL")));
+                hospital.setCodDistrito(
+                        cursor.getString(cursor.getColumnIndexOrThrow("COD_DISTRITO"))
+                );
+
+                return hospital;
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
     // =========================================================
     // MÉTODOS PARA USUARIOS
     // =========================================================
@@ -1532,7 +1781,7 @@ public class controlDBHospitalApp {
 
         try {
             cursor = db.rawQuery(
-                    "SELECT * FROM ESPECIALIDAD ORDER BY NOMBRE_ESPECIALIDAD ASC",
+                    "SELECT * FROM ESPECIALIDAD ORDER BY ID_ESPECIALIDAD ASC",
                     null
             );
 
