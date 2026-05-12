@@ -61,7 +61,7 @@ public class CrearPermisoActivity extends AppCompatActivity {
         Usuario usuarioSel = (Usuario) spinnerUsuarios.getSelectedItem();
         Opcion_crud permisoSel = (Opcion_crud) spinnerPermisos.getSelectedItem();
 
-        if(usuarioSel!=null && permisoSel !=null){
+        if(usuarioSel!=null && permisoSel !=null && !usuarioSel.getIdUsuario().equals("-1")&&!permisoSel.getIdopcion().equals("-1")){
             String idUsuario = usuarioSel.getIdUsuario();
             String idPermiso = permisoSel.getIdopcion();
 
@@ -75,6 +75,10 @@ public class CrearPermisoActivity extends AppCompatActivity {
                     mensaje,
                     Toast.LENGTH_LONG
             ).show();
+            spinnerUsuarios.setSelection(0);
+            spinnerPermisos.setSelection(0);
+        }else{
+            Toast.makeText(this,"Por favor, seleccione un usuario y un permiso",Toast.LENGTH_LONG).show();
         }
     }
 }

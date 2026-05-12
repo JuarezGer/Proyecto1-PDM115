@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
         <activity
+            android:name=".permisos.EliminarPermisoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".permisos.VisualizarPermisosActivity"
+            android:exported="false" />
+        <activity
             android:name=".permisos.CrearPermisoActivity"
             android:exported="false" />
         <activity

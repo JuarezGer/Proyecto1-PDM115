@@ -15,6 +15,7 @@ import java.util.Set;
 import ues.fia.proyecto1pdm115.modelos.Especialidad;
 import ues.fia.proyecto1pdm115.modelos.Opcion_crud;
 import ues.fia.proyecto1pdm115.modelos.Paciente;
+import ues.fia.proyecto1pdm115.modelos.Puede_elegir;
 import ues.fia.proyecto1pdm115.modelos.Usuario;
 import ues.fia.proyecto1pdm115.modelos.Establecimiento;
 import ues.fia.proyecto1pdm115.modelos.Aseguradora;
@@ -1238,6 +1239,44 @@ public class controlDBHospitalApp {
         }
     }
 
+    public ArrayList<Puede_elegir> consultarPermisos(String idUsuario){
+        ArrayList<Puede_elegir> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try{
+            cursor = db.rawQuery("SELECT * FROM PUEDE_ELEGIR WHERE ID_USUARIO =?",
+                    new String[]{String.valueOf(idUsuario)});
+
+            if(cursor.moveToFirst()){
+                do {
+                    Puede_elegir puedeElegir = new Puede_elegir();
+                    puedeElegir.setId_usuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
+                    puedeElegir.setId_opcion(cursor.getString(cursor.getColumnIndexOrThrow("ID_OPCION")));
+
+                    lista.add(puedeElegir);
+                }while(cursor.moveToNext());
+            }
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+
+    public String eliminarPermiso(String idUsuario,String idOpcion){
+        try{
+            int control = db.delete("PUEDE_ELEGIR","ID_USUARIO=? AND ID_OPCION=?",
+                    new String[]{idUsuario,idOpcion});
+            if (control>0){
+                return "Permiso eliminado";
+            }else {
+                return "Error en eliminacion";
+            }
+        }catch (Exception e){
+            return "No se pudo eliminar el permiso de usuario por: "+e.getMessage();
+        }
+    }
     // =========================================================
     // MÉTODOS PARA USUARIOS
     // =========================================================

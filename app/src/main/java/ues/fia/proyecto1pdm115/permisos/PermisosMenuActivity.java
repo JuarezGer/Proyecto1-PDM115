@@ -25,7 +25,6 @@ public class PermisosMenuActivity extends AppCompatActivity {
 
         cardVisualizarPermiso = findViewById(R.id.cardVisualizarPermiso);
         cardCrearPermiso = findViewById(R.id.cardCrearPermiso);
-        cardModificarPermiso = findViewById(R.id.cardModificarPermiso);
         cardEliminarPermiso = findViewById(R.id.cardEliminarPermiso);
         btnRegresarPermiso = findViewById(R.id.btnRegresarPermiso);
 
@@ -33,18 +32,14 @@ public class PermisosMenuActivity extends AppCompatActivity {
             finish();
         });
 
-        //cardVisualizarPermiso.setOnClickListener(v -> {startActivity(new Intent(this, VisualizarUsuarioActivity.class));});
+        cardVisualizarPermiso.setOnClickListener(v -> {startActivity(new Intent(this, VisualizarPermisosActivity.class));});
 
         cardCrearPermiso.setOnClickListener(v -> {
             startActivity(new Intent(this, CrearPermisoActivity.class));
         });
 
-        //cardModificarUsuario.setOnClickListener(v -> {
-        //    startActivity(new Intent(this, ModificarUsuarioActivity.class));
-        //});
-
-        //cardEliminarUsuario.setOnClickListener(v -> {
-        //    startActivity(new Intent(this, EliminarUsuarioActivity.class));
-        //});
+        cardEliminarPermiso.setOnClickListener(v -> {
+            startActivity(new Intent(this, EliminarPermisoActivity.class));
+        });
     }
 }

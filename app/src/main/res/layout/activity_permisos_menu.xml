@@ -143,35 +143,6 @@
             android:orientation="horizontal"
             android:layout_marginTop="18dp">
 
-            <!-- MODIFICAR -->
-            <LinearLayout
-                android:id="@+id/cardModificarPermiso"
-                android:layout_width="0dp"
-                android:layout_height="92dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="18dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="@drawable/bg_menu_card"
-                android:clickable="true"
-                android:focusable="true">
-
-                <ImageView
-                    android:layout_width="44dp"
-                    android:layout_height="44dp"
-                    android:src="@drawable/ic_modificar"
-                    android:scaleType="fitCenter" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Modificar"
-                    android:textColor="@color/text_black"
-                    android:textSize="13sp"
-                    android:textStyle="bold"
-                    android:layout_marginTop="4dp" />
-
-            </LinearLayout>
 
             <!-- ELIMINAR -->
             <LinearLayout
