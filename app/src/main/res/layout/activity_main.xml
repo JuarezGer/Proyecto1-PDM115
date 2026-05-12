@@ -24,7 +24,7 @@
             app:tint="@color/primary_dark" />
 
         <TextView
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Hospital App"
@@ -75,23 +75,28 @@
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="28dp" />
 
-            <!-- FILA 1 -->
-            <LinearLayout
+            <!-- GRID DE CARDS -->
+            <GridLayout
+                android:id="@+id/contenedorCards"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:columnCount="2"
+                android:alignmentMode="alignMargins"
+                android:useDefaultMargins="false">
 
+                <!-- FILA 1 -->
                 <LinearLayout
                     android:id="@+id/cardPacientes"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="58dp"
@@ -113,13 +118,14 @@
                     android:id="@+id/cardDoctores"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="58dp"
@@ -137,26 +143,19 @@
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <!-- FILA 2 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
-
+                <!-- FILA 2 -->
                 <LinearLayout
                     android:id="@+id/cardEspecialidades"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -178,22 +177,21 @@
                     android:id="@+id/cardHospitales"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
                         android:layout_height="62dp"
                         android:src="@drawable/ic_hospital"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_black"
-                        android:layout_marginTop="6dp" />
+                        app:tint="@color/icon_black" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -204,26 +202,19 @@
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
 
-            </LinearLayout>
-
-            <!-- FILA 3 -->
-            <LinearLayout
-                android:id="@+id/cardConsultas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
-
+                <!-- FILA 3 -->
                 <LinearLayout
+                    android:id="@+id/cardConsultas"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -245,13 +236,14 @@
                     android:id="@+id/cardTipoEmergencia"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -268,26 +260,20 @@
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
-            </LinearLayout>
 
-            <!-- FILA 4 -->
-            <LinearLayout
-                android:id="@+id/cardRecetas"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
-
+                <!-- FILA 4 -->
                 <LinearLayout
+                    android:id="@+id/cardRecetas"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -309,13 +295,14 @@
                     android:id="@+id/cardHospitalizacion"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -332,26 +319,20 @@
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
-            </LinearLayout>
 
-            <!-- FILA 5 -->
-            <LinearLayout
-                android:id="@+id/cardMedicamentos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
-
+                <!-- FILA 5 -->
                 <LinearLayout
+                    android:id="@+id/cardMedicamentos"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -373,13 +354,14 @@
                     android:id="@+id/cardDetalleReceta"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -396,26 +378,20 @@
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
-            </LinearLayout>
 
-            <!-- FILA 6 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
-
+                <!-- FILA 6 -->
                 <LinearLayout
                     android:id="@+id/cardPagos"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -437,13 +413,14 @@
                     android:id="@+id/cardSeguros"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -460,26 +437,20 @@
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
-            </LinearLayout>
 
-            <!-- FILA 7 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
-
+                <!-- FILA 7 -->
                 <LinearLayout
                     android:id="@+id/cardAseguradoras"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -501,13 +472,14 @@
                     android:id="@+id/cardEstablecimientos"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginStart="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -524,26 +496,20 @@
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
-            </LinearLayout>
 
-            <!-- FILA 8 -->
-            <LinearLayout
-                android:id="@+id/cardUsuariosAdmin"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
-
+                <!-- FILA 8 -->
                 <LinearLayout
-                    android:layout_width="135dp"
+                    android:id="@+id/cardUsuarios"
+                    android:layout_width="0dp"
                     android:layout_height="124dp"
-
-                    android:layout_marginEnd="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -560,17 +526,19 @@
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/cardPermisos"
-                    android:layout_width="135dp"
+                    android:layout_width="0dp"
                     android:layout_height="124dp"
-
-                    android:layout_marginEnd="16dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
-                    android:focusable="true">
+                    android:focusable="true"
+                   >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -587,41 +555,8 @@
                         android:textColor="@color/text_black"
                         android:layout_marginTop="6dp" />
                 </LinearLayout>
-            </LinearLayout>
-            <!-- FILA 9 -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="24dp">
-                <LinearLayout
-                    android:id="@+id/cardUsuarios"
-                    android:layout_width="0dp"
-                    android:layout_height="124dp"
-                    android:layout_weight="1"
-                    android:layout_marginEnd="16dp"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/bg_menu_card"
-                    android:clickable="true"
-                    android:focusable="true">
 
-                    <ImageView
-                        android:layout_width="62dp"
-                        android:layout_height="62dp"
-                        android:src="@drawable/ic_usuarios"
-                        app:tint="@color/icon_black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Usuarios"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="@color/text_black"
-                        android:layout_marginTop="6dp" />
-                </LinearLayout>
-            </LinearLayout>
+            </GridLayout>
 
         </LinearLayout>
     </ScrollView>
@@ -639,7 +574,7 @@
 
         <LinearLayout
             android:id="@+id/navInicio"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -661,7 +596,7 @@
 
         <LinearLayout
             android:id="@+id/navPerfil"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -683,7 +618,7 @@
 
         <LinearLayout
             android:id="@+id/navSalir"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:orientation="vertical"
@@ -706,3 +641,4 @@
     </LinearLayout>
 
 </LinearLayout>
+

@@ -93,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         agregarCard("cardEspecialidades");
         agregarCard("cardHospitales");
         agregarCard("cardUsuarios");
-        agregarCard("cardUsuariosAdmin");
         agregarCard("cardEstablecimientos");
         agregarCard("cardAseguradoras");
         agregarCard("cardConsultas");
@@ -124,16 +123,9 @@ public class MainActivity extends AppCompatActivity {
         configurarClick("cardAseguradoras", AseguradoraMenuActivity.class);
         configurarClick("cardEstablecimientos", EstablecimientoMenuActivity.class);
         configurarClick("cardUsuarios", UsuariosMenuActivity.class);
-        configurarClick("cardUsuariosAdmin", UsuariosMenuActivity.class);
         configurarClick("cardPermisos", PermisosMenuActivity.class);
         configurarClick("cardPagos", PagoMenuActivity.class);
         configurarClick("cardSeguros",SeguroMenuActivity.class);
-
-        //View cardPermisos = buscarVista("cardPermisos");
-        //if (cardPermisos != null) {
-        //    cardPermisos.setOnClickListener(v ->
-        //            Toast.makeText(this, "Pantalla de permisos pendiente", Toast.LENGTH_SHORT).show());
-        //}
     }
 
     private void configurarClick(String nombreId, Class<?> activityDestino) {
@@ -203,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void mostrarCardsAdministracion() {
         mostrar("cardDoctores", "cardEspecialidades", "cardHospitales", "cardUsuarios",
-                "cardUsuariosAdmin", "cardEstablecimientos", "cardAseguradoras",
+                "cardEstablecimientos", "cardAseguradoras",
                 "cardTipoEmergencia", "cardMedicamentos", "cardPermisos");
     }
 
