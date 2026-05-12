@@ -21,10 +21,13 @@ import ues.fia.proyecto1pdm115.pacientes.*;
 import ues.fia.proyecto1pdm115.doctores.*;
 import ues.fia.proyecto1pdm115.especialidades.*;
 import ues.fia.proyecto1pdm115.hospitales.*;
+import ues.fia.proyecto1pdm115.pagos.PagoMenuActivity;
 import ues.fia.proyecto1pdm115.permisos.PermisosMenuActivity;
 import ues.fia.proyecto1pdm115.usuarios.*;
 import ues.fia.proyecto1pdm115.establecimientos.*;
 import ues.fia.proyecto1pdm115.aseguradoras.*;
+import ues.fia.proyecto1pdm115.pagos.*;
+import ues.fia.proyecto1pdm115.seguros.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -90,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         agregarCard("cardEspecialidades");
         agregarCard("cardHospitales");
         agregarCard("cardUsuarios");
-        agregarCard("cardUsuariosAdmin");
         agregarCard("cardEstablecimientos");
         agregarCard("cardAseguradoras");
         agregarCard("cardConsultas");
@@ -121,14 +123,9 @@ public class MainActivity extends AppCompatActivity {
         configurarClick("cardAseguradoras", AseguradoraMenuActivity.class);
         configurarClick("cardEstablecimientos", EstablecimientoMenuActivity.class);
         configurarClick("cardUsuarios", UsuariosMenuActivity.class);
-        configurarClick("cardUsuariosAdmin", UsuariosMenuActivity.class);
         configurarClick("cardPermisos", PermisosMenuActivity.class);
-
-        //View cardPermisos = buscarVista("cardPermisos");
-        //if (cardPermisos != null) {
-        //    cardPermisos.setOnClickListener(v ->
-        //            Toast.makeText(this, "Pantalla de permisos pendiente", Toast.LENGTH_SHORT).show());
-        //}
+        configurarClick("cardPagos", PagoMenuActivity.class);
+        configurarClick("cardSeguros",SeguroMenuActivity.class);
     }
 
     private void configurarClick(String nombreId, Class<?> activityDestino) {
@@ -198,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void mostrarCardsAdministracion() {
         mostrar("cardDoctores", "cardEspecialidades", "cardHospitales", "cardUsuarios",
-                "cardUsuariosAdmin", "cardEstablecimientos", "cardAseguradoras",
+                "cardEstablecimientos", "cardAseguradoras",
                 "cardTipoEmergencia", "cardMedicamentos", "cardPermisos");
     }
 

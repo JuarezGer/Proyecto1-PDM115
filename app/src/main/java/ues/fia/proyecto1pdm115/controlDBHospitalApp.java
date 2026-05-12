@@ -23,6 +23,8 @@ import ues.fia.proyecto1pdm115.modelos.Puede_elegir;
 import ues.fia.proyecto1pdm115.modelos.Usuario;
 import ues.fia.proyecto1pdm115.modelos.Establecimiento;
 import ues.fia.proyecto1pdm115.modelos.Aseguradora;
+import ues.fia.proyecto1pdm115.modelos.Pago;
+import ues.fia.proyecto1pdm115.modelos.Seguro;
 
 public class controlDBHospitalApp {
 
@@ -1690,6 +1692,424 @@ public class controlDBHospitalApp {
             }
         }
     }
+
+    // =========================================================
+// CRUD PAGO
+// =========================================================
+
+    public String insertarPago(Pago pago) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("ID_CONSULTA", pago.getIdConsulta());
+            valores.put("TIPO_PAGO", pago.getTipoPago());
+            valores.put("MONTO_TOTAL", pago.getMontoTotal());
+            valores.put("FECHA_PAGO", pago.getFechaPago());
+
+            long resultado = db.insertOrThrow("PAGO", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar pago.";
+            }
+
+            return "Pago insertado correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: verifique que la consulta exista y que no tenga un pago registrado. " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al insertar pago: " + e.getMessage();
+        }
+    }
+
+    public Pago consultarPago(int idPago) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "PAGO",
+                    null,
+                    "ID_PAGO = ?",
+                    new String[]{String.valueOf(idPago)},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorAPago(cursor);
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public ArrayList<Pago> consultarTodosPagos() {
+        ArrayList<Pago> listaPagos = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "PAGO",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "ID_PAGO DESC"
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Pago pago = cursorAPago(cursor);
+                    listaPagos.add(pago);
+                } while (cursor.moveToNext());
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return listaPagos;
+    }
+
+    public String actualizarPago(Pago pago) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("ID_CONSULTA", pago.getIdConsulta());
+            valores.put("TIPO_PAGO", pago.getTipoPago());
+            valores.put("MONTO_TOTAL", pago.getMontoTotal());
+            valores.put("FECHA_PAGO", pago.getFechaPago());
+
+            int filas = db.update(
+                    "PAGO",
+                    valores,
+                    "ID_PAGO = ?",
+                    new String[]{String.valueOf(pago.getIdPago())}
+            );
+
+            if (filas > 0) {
+                return "Pago actualizado correctamente.";
+            } else {
+                return "No se encontró el pago.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: verifique que la consulta exista y que no esté asociada a otro pago. " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al actualizar pago: " + e.getMessage();
+        }
+    }
+
+    public String eliminarPago(int idPago) {
+        try {
+            int filas = db.delete(
+                    "PAGO",
+                    "ID_PAGO = ?",
+                    new String[]{String.valueOf(idPago)}
+            );
+
+            if (filas > 0) {
+                return "Pago eliminado correctamente.";
+            } else {
+                return "No se encontró el pago.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar el pago porque tiene registros relacionados.";
+        } catch (Exception e) {
+            return "Error al eliminar pago: " + e.getMessage();
+        }
+    }
+
+    private Pago cursorAPago(Cursor cursor) {
+        Pago pago = new Pago();
+
+        pago.setIdPago(cursor.getInt(cursor.getColumnIndexOrThrow("ID_PAGO")));
+        pago.setIdConsulta(cursor.getInt(cursor.getColumnIndexOrThrow("ID_CONSULTA")));
+        pago.setTipoPago(cursor.getString(cursor.getColumnIndexOrThrow("TIPO_PAGO")));
+        pago.setMontoTotal(cursor.getDouble(cursor.getColumnIndexOrThrow("MONTO_TOTAL")));
+        pago.setFechaPago(cursor.getString(cursor.getColumnIndexOrThrow("FECHA_PAGO")));
+
+        return pago;
+    }
+
+// =========================================================
+// CONSULTA AUXILIAR PARA SPINNER DE CONSULTAS SIN PAGO
+// =========================================================
+
+    public Cursor consultarConsultasSinPagoCursor() {
+        return db.rawQuery(
+                "SELECT C.ID_CONSULTA, C.DUI_PACIENTE, C.FECHA_CONSULTA, C.CARGO_TOTAL_CONSULTA " +
+                        "FROM CONSULTA C " +
+                        "LEFT JOIN PAGO P ON P.ID_CONSULTA = C.ID_CONSULTA " +
+                        "WHERE P.ID_PAGO IS NULL " +
+                        "ORDER BY C.ID_CONSULTA DESC",
+                null
+        );
+    }
+
+
+    // =========================================================
+// CRUD SEGURO
+// =========================================================
+
+    public String insertarSeguro(Seguro seguro) {
+        try {
+            if (existeSeguroParaPaciente(seguro.getDuiPaciente(), -1)) {
+                return "El paciente seleccionado ya tiene un seguro registrado.";
+            }
+
+            ContentValues valores = new ContentValues();
+            valores.put("DUI_PACIENTE", seguro.getDuiPaciente());
+            valores.put("ID_ASEGURADORA", seguro.getIdAseguradora());
+            valores.put("PORCENTAJE_COBERTURA", seguro.getPorcentajeCobertura());
+            valores.put("TIPO_ASEGURADO", seguro.getTipoAsegurado());
+            valores.put("DEDUCTIBLE_MEDICINA", seguro.getDeductibleMedicina());
+            valores.put("DEDUCTIBLE_OPERACION", seguro.getDeductibleOperacion());
+
+            long resultado = db.insertOrThrow("SEGURO", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar seguro.";
+            }
+
+            actualizarPolizaPaciente(seguro.getDuiPaciente(), (int) resultado);
+
+            return "Seguro insertado correctamente. ID póliza: " + resultado;
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: verifique que el paciente y la aseguradora existan. " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al insertar seguro: " + e.getMessage();
+        }
+    }
+
+    public Seguro consultarSeguro(int idPoliza) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "SEGURO",
+                    null,
+                    "ID_POLIZA = ?",
+                    new String[]{String.valueOf(idPoliza)},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorASeguro(cursor);
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public ArrayList<Seguro> consultarTodosSeguros() {
+        ArrayList<Seguro> listaSeguros = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "SEGURO",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "ID_POLIZA DESC"
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Seguro seguro = cursorASeguro(cursor);
+                    listaSeguros.add(seguro);
+                } while (cursor.moveToNext());
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return listaSeguros;
+    }
+
+    public String actualizarSeguro(Seguro seguro) {
+        try {
+            Seguro seguroAnterior = consultarSeguro(seguro.getIdPoliza());
+
+            if (seguroAnterior == null) {
+                return "No se encontró el seguro.";
+            }
+
+            if (existeSeguroParaPaciente(seguro.getDuiPaciente(), seguro.getIdPoliza())) {
+                return "El paciente seleccionado ya está asociado a otro seguro.";
+            }
+
+            ContentValues valores = new ContentValues();
+            valores.put("DUI_PACIENTE", seguro.getDuiPaciente());
+            valores.put("ID_ASEGURADORA", seguro.getIdAseguradora());
+            valores.put("PORCENTAJE_COBERTURA", seguro.getPorcentajeCobertura());
+            valores.put("TIPO_ASEGURADO", seguro.getTipoAsegurado());
+            valores.put("DEDUCTIBLE_MEDICINA", seguro.getDeductibleMedicina());
+            valores.put("DEDUCTIBLE_OPERACION", seguro.getDeductibleOperacion());
+
+            int filas = db.update(
+                    "SEGURO",
+                    valores,
+                    "ID_POLIZA = ?",
+                    new String[]{String.valueOf(seguro.getIdPoliza())}
+            );
+
+            if (filas > 0) {
+                if (!seguroAnterior.getDuiPaciente().equals(seguro.getDuiPaciente())) {
+                    limpiarPolizaPaciente(seguroAnterior.getDuiPaciente(), seguro.getIdPoliza());
+                }
+
+                actualizarPolizaPaciente(seguro.getDuiPaciente(), seguro.getIdPoliza());
+                return "Seguro actualizado correctamente.";
+            } else {
+                return "No se encontró el seguro.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: verifique que el paciente y la aseguradora existan. " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al actualizar seguro: " + e.getMessage();
+        }
+    }
+
+    public String eliminarSeguro(int idPoliza) {
+        try {
+            Seguro seguro = consultarSeguro(idPoliza);
+
+            if (seguro == null) {
+                return "No se encontró el seguro.";
+            }
+
+            int filas = db.delete(
+                    "SEGURO",
+                    "ID_POLIZA = ?",
+                    new String[]{String.valueOf(idPoliza)}
+            );
+
+            if (filas > 0) {
+                limpiarPolizaPaciente(seguro.getDuiPaciente(), idPoliza);
+                return "Seguro eliminado correctamente.";
+            } else {
+                return "No se encontró el seguro.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar el seguro porque tiene registros relacionados.";
+        } catch (Exception e) {
+            return "Error al eliminar seguro: " + e.getMessage();
+        }
+    }
+
+    private Seguro cursorASeguro(Cursor cursor) {
+        Seguro seguro = new Seguro();
+
+        seguro.setIdPoliza(cursor.getInt(cursor.getColumnIndexOrThrow("ID_POLIZA")));
+        seguro.setDuiPaciente(cursor.getString(cursor.getColumnIndexOrThrow("DUI_PACIENTE")));
+        seguro.setIdAseguradora(cursor.getInt(cursor.getColumnIndexOrThrow("ID_ASEGURADORA")));
+        seguro.setPorcentajeCobertura(cursor.getDouble(cursor.getColumnIndexOrThrow("PORCENTAJE_COBERTURA")));
+        seguro.setTipoAsegurado(cursor.getString(cursor.getColumnIndexOrThrow("TIPO_ASEGURADO")));
+        seguro.setDeductibleMedicina(cursor.getDouble(cursor.getColumnIndexOrThrow("DEDUCTIBLE_MEDICINA")));
+        seguro.setDeductibleOperacion(cursor.getDouble(cursor.getColumnIndexOrThrow("DEDUCTIBLE_OPERACION")));
+
+        return seguro;
+    }
+
+    private boolean existeSeguroParaPaciente(String duiPaciente, int idPolizaExcluir) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(
+                    "SELECT ID_POLIZA FROM SEGURO WHERE DUI_PACIENTE = ? AND ID_POLIZA <> ?",
+                    new String[]{duiPaciente, String.valueOf(idPolizaExcluir)}
+            );
+
+            return cursor.moveToFirst();
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    private void actualizarPolizaPaciente(String duiPaciente, int idPoliza) {
+        ContentValues valores = new ContentValues();
+        valores.put("ID_POLIZA", idPoliza);
+
+        db.update(
+                "PACIENTE",
+                valores,
+                "DUI_PACIENTE = ?",
+                new String[]{duiPaciente}
+        );
+    }
+
+    private void limpiarPolizaPaciente(String duiPaciente, int idPoliza) {
+        ContentValues valores = new ContentValues();
+        valores.putNull("ID_POLIZA");
+
+        db.update(
+                "PACIENTE",
+                valores,
+                "DUI_PACIENTE = ? AND ID_POLIZA = ?",
+                new String[]{duiPaciente, String.valueOf(idPoliza)}
+        );
+    }
+
+// =========================================================
+// CONSULTAS AUXILIARES PARA SPINNERS DE SEGURO
+// =========================================================
+
+    public Cursor consultarPacientesParaSeguroCursor() {
+        return db.rawQuery(
+                "SELECT DUI_PACIENTE, PRIMER_NOMBRE_PACIENTE, PRIMER_APELLIDO_PACIENTE " +
+                        "FROM PACIENTE " +
+                        "ORDER BY PRIMER_APELLIDO_PACIENTE ASC, PRIMER_NOMBRE_PACIENTE ASC",
+                null
+        );
+    }
+
+    public Cursor consultarPacientesSinSeguroCursor() {
+        return db.rawQuery(
+                "SELECT P.DUI_PACIENTE, P.PRIMER_NOMBRE_PACIENTE, P.PRIMER_APELLIDO_PACIENTE " +
+                        "FROM PACIENTE P " +
+                        "LEFT JOIN SEGURO S ON S.DUI_PACIENTE = P.DUI_PACIENTE " +
+                        "WHERE S.ID_POLIZA IS NULL " +
+                        "ORDER BY P.PRIMER_APELLIDO_PACIENTE ASC, P.PRIMER_NOMBRE_PACIENTE ASC",
+                null
+        );
+    }
+
+    public Cursor consultarAseguradorasParaSeguroCursor() {
+        return db.rawQuery(
+                "SELECT ID_ASEGURADORA, NOMBRE_ASEGURADORA, TELEFONO_ASEGURADORA " +
+                        "FROM ASEGURADORA " +
+                        "ORDER BY NOMBRE_ASEGURADORA ASC",
+                null
+        );
+    }
+
 
     // =========================================================
 // CRUD ASEGURADORA

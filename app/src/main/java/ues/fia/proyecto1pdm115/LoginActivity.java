@@ -3,8 +3,10 @@ package ues.fia.proyecto1pdm115;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +15,9 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText edtUsuarioLogin, edtClaveLogin;
     Button btnIniciarSesion;
+    ImageView imgTogglePassword;
+
+    boolean passwordVisible = false;
 
     controlDBHospitalApp helper;
 
@@ -26,8 +31,34 @@ public class LoginActivity extends AppCompatActivity {
         edtUsuarioLogin = findViewById(R.id.edtUsuarioLogin);
         edtClaveLogin = findViewById(R.id.edtClaveLogin);
         btnIniciarSesion = findViewById(R.id.btnIniciarSesion);
+        imgTogglePassword = findViewById(R.id.imgTogglePassword);
 
         btnIniciarSesion.setOnClickListener(v -> iniciarSesion());
+
+        imgTogglePassword.setOnClickListener(v -> {
+            if (passwordVisible) {
+                // Ocultar contraseña
+                edtClaveLogin.setInputType(
+                        InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD
+                );
+
+                imgTogglePassword.setImageResource(R.drawable.ic_eye);
+                imgTogglePassword.setContentDescription("Mostrar contraseña");
+                passwordVisible = false;
+
+            } else {
+                // Mostrar contraseña
+                edtClaveLogin.setInputType(
+                        InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                );
+
+                imgTogglePassword.setImageResource(R.drawable.ic_eye_off);
+                imgTogglePassword.setContentDescription("Ocultar contraseña");
+                passwordVisible = true;
+            }
+
+            edtClaveLogin.setSelection(edtClaveLogin.getText().length());
+        });
     }
 
     private void iniciarSesion() {
