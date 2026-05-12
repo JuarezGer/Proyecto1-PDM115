@@ -1437,6 +1437,41 @@ public class controlDBHospitalApp {
         return lista;
     }
 
+    public HashMap<String,String> consultarHospitalDetalle(int idHospital){
+        Cursor cursor = null;
+        HashMap<String,String> map = null;
+
+        String query = "SELECT h.NOMBRE_HOSPITAL, h.TELEFONO_HOSPITAL, " +
+                "dept.NOMBRE_DPTO || ' - ' || m.NOMBRE_MUNICIPIO AS UBICACION, " +
+                "GROUP_CONCAT(e.NOMBRE_ESPECIALIDAD, ', ') AS ESPECIALIDADES " +
+                "FROM HOSPITAL h " +
+                "INNER JOIN DISTRITO d ON h.COD_DISTRITO = d.COD_DISTRITO " +
+                "INNER JOIN MUNICIPIO m ON d.COD_MUNICIPIO = m.COD_MUNICIPIO " +
+                "INNER JOIN DEPARTAMENTO dept ON m.COD_DPTO = dept.COD_DPTO " +
+                "LEFT JOIN POSEE p ON h.ID_HOSPITAL = p.ID_HOSPITAL " +
+                "LEFT JOIN ESPECIALIDAD e ON p.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD " +
+                "WHERE h.ID_HOSPITAL=? "+
+                "GROUP BY h.ID_HOSPITAL " +
+                "ORDER BY h.NOMBRE_HOSPITAL ASC";
+
+        try{
+            cursor=db.rawQuery(query,new String[]{String.valueOf(idHospital)});
+            if (cursor.moveToFirst()){
+                map = new HashMap<>();
+                map.put("hospital", cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_HOSPITAL")));
+                map.put("telefono", cursor.getString(cursor.getColumnIndexOrThrow("TELEFONO_HOSPITAL")));
+                map.put("ubicacion", cursor.getString(cursor.getColumnIndexOrThrow("UBICACION")));
+                map.put("especialidades", cursor.getString(cursor.getColumnIndexOrThrow("ESPECIALIDADES")));
+            }
+        }catch (Exception e){
+            Log.e("DB_ERROR","FALLO AL CONSULTAR DETALLE: "+e.getMessage());
+
+        } finally{
+            if (cursor!=null) cursor.close();
+        }
+        return map;
+    }
+
     public ArrayList<Hospital> consultarHospitales(){
         ArrayList<Hospital> lista = new ArrayList<>();
         Cursor cursor = null;
@@ -1526,30 +1561,87 @@ public class controlDBHospitalApp {
         return lista;
     }
 
+    public String actualizarHospital(Hospital hospital){
+        try{
+            ContentValues values = new ContentValues();
 
-    public ArrayList<Posee> consultarPosee(Integer idHospi){
-        ArrayList<Posee> lista = new ArrayList<>();
+            values.put("COD_DISTRITO", hospital.getCodDistrito());
+            values.put("NOMBRE_HOSPITAL", hospital.getNombreHospital());
+            values.put("TELEFONO_HOSPITAL", hospital.getTelefonoHospital());
+
+            int control = db.update(
+                    "HOSPITAL",
+                    values,
+                    "ID_HOSPITAL=?",
+                    new String[]{String.valueOf(hospital.getIdHospital())}
+            );
+
+            if(control == 0){
+                return "Hospital no encontrado";
+            }
+
+            return "Hospital actualizado correctamente";
+
+        }catch(Exception e){
+            return "Error al actualizar: " + e.getMessage();
+        }
+    }
+
+    public String eliminarHospital(int idHospital){
+        try{
+
+            db.delete(
+                    "POSEE",
+                    "ID_HOSPITAL=?",
+                    new String[]{String.valueOf(idHospital)}
+            );
+
+            int control = db.delete(
+                    "HOSPITAL",
+                    "ID_HOSPITAL=?",
+                    new String[]{String.valueOf(idHospital)}
+            );
+
+            if(control > 0){
+                return "Hospital eliminado correctamente";
+            }else{
+                return "Hospital no encontrado";
+            }
+
+        }catch (Exception e){
+            return "Error al eliminar: " + e.getMessage();
+        }
+    }
+
+    public Hospital consultarHospital(int idHospital) {
         Cursor cursor = null;
 
-        try{
-            cursor = db.rawQuery("SELECT * FROM POSEE WHERE ID_HOSPITAL =?",
-                    new String[]{String.valueOf(idHospi)});
+        try {
+            cursor = db.rawQuery(
+                    "SELECT * FROM HOSPITAL WHERE ID_HOSPITAL = ?",
+                    new String[]{String.valueOf(idHospital)}
+            );
 
-            if(cursor.moveToFirst()){
-                do {
-                    Posee posee = new Posee();
-                    posee.setIdHospital(cursor.getInt(cursor.getColumnIndexOrThrow("ID_HOSPITAL")));
-                    posee.setIdEspecialidad(cursor.getInt(cursor.getColumnIndexOrThrow("ID_ESPECIALIDAD")));
+            if (cursor.moveToFirst()) {
+                Hospital hospital = new Hospital();
 
-                    lista.add(posee);
-                }while(cursor.moveToNext());
+                hospital.setIdHospital(cursor.getInt(cursor.getColumnIndexOrThrow("ID_HOSPITAL")));
+                hospital.setNombreHospital(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_HOSPITAL")));
+                hospital.setTelefonoHospital(cursor.getString(cursor.getColumnIndexOrThrow("TELEFONO_HOSPITAL")));
+                hospital.setCodDistrito(
+                        cursor.getString(cursor.getColumnIndexOrThrow("COD_DISTRITO"))
+                );
+
+                return hospital;
             }
-        }finally {
-            if (cursor!=null){
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
                 cursor.close();
             }
         }
-        return lista;
     }
 
     // =========================================================

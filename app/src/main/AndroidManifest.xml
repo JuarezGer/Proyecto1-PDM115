@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
         <activity
+            android:name=".hospitales.EliminarHospitalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".hospitales.ActualizarHospitalActivity"
+            android:exported="false" />
+        <activity
             android:name=".hospitales.EliminarPoseeActivity"
             android:exported="false" />
         <activity

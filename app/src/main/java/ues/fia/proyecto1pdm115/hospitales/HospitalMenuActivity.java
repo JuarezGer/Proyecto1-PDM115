@@ -50,11 +50,11 @@ public class HospitalMenuActivity extends AppCompatActivity {
         });
 
         cardModificarHospital.setOnClickListener(v -> {
-            // startActivity(new Intent(this, ModificarPacienteActivity.class));
+             startActivity(new Intent(this, ActualizarHospitalActivity.class));
         });
 
         cardEliminarHospital.setOnClickListener(v -> {
-            // startActivity(new Intent(this, EliminarPacienteActivity.class));
+             startActivity(new Intent(this, EliminarHospitalActivity.class));
         });
     }
 }
