@@ -12,6 +12,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
         <activity
+            android:name=".hospitales.CrearHospitalActivity"
+            android:exported="false" />
+        <activity
+            android:name=".permisos.EliminarPermisoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".permisos.VisualizarPermisosActivity"
+            android:exported="false" />
+        <activity
+            android:name=".permisos.CrearPermisoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".permisos.PermisosMenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".usuarios.EliminarUsuarioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".usuarios.ModificarUsuarioActivity"
+            android:exported="false" />
+        <activity
+            android:name=".usuarios.VisualizarUsuarioActivity"
+            android:exported="false" />
+        <activity
             android:name=".usuarios.UsuariosMenuActivity"
             android:exported="false" />
         <activity
@@ -36,34 +60,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <!-- CRUD De Pacientes -->
+        <activity android:name=".MainActivity" /> <!-- CRUD De Pacientes -->
         <activity android:name=".pacientes.PacienteMenuActivity" />
         <activity android:name=".pacientes.CrearPacienteActivity" />
         <activity android:name=".pacientes.VisualizarPacientesActivity" />
         <activity android:name=".pacientes.ModificarPacienteActivity" />
         <activity android:name=".pacientes.EliminarPacienteActivity" />
-
         <activity android:name=".doctores.DoctorMenuActivity" />
         <activity android:name=".especialidades.EspecialidadMenuActivity" />
         <activity android:name=".especialidades.CrearEspecialidadActivity" />
-        <activity android:name=".hospitales.HospitalMenuActivity" />
-
-        <!-- CRUD De Establecimientos -->
+        <activity android:name=".hospitales.HospitalMenuActivity" /> <!-- CRUD De Establecimientos -->
         <activity android:name=".aseguradoras.AseguradoraMenuActivity" />
         <activity android:name=".aseguradoras.CrearAseguradoraActivity" />
         <activity android:name=".aseguradoras.VisualizarAseguradorasActivity" />
         <activity android:name=".aseguradoras.ActualizarAseguradoraActivity" />
-        <activity android:name=".aseguradoras.EliminarAseguradoraActivity" />
-
-        <!-- CRUD De Establecimientos -->
+        <activity android:name=".aseguradoras.EliminarAseguradoraActivity" /> <!-- CRUD De Establecimientos -->
         <activity android:name=".establecimientos.EstablecimientoMenuActivity" />
         <activity android:name=".establecimientos.CrearEstablecimientoActivity" />
         <activity android:name=".establecimientos.VisualizarEstablecimientosActivity" />
         <activity android:name=".establecimientos.ActualizarEstablecimientoActivity" />
         <activity android:name=".establecimientos.EliminarEstablecimientoActivity" />
-
-
     </application>
 
 </manifest>

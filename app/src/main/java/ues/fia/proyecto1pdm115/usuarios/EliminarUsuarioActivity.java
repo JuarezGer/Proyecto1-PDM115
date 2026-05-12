@@ -1,4 +1,4 @@
-package ues.fia.proyecto1pdm115.especialidades;
+package ues.fia.proyecto1pdm115.usuarios;
 
 import android.os.Bundle;
 import android.widget.Button;
@@ -11,77 +11,76 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ues.fia.proyecto1pdm115.R;
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
-import ues.fia.proyecto1pdm115.modelos.Especialidad;
+import ues.fia.proyecto1pdm115.modelos.Usuario;
 
-public class EliminarEspecialidadActivity
-        extends AppCompatActivity {
+public class EliminarUsuarioActivity extends AppCompatActivity {
 
-    EditText edtIdEspecialidadEliminar;
+    EditText edtIdUsuarioEliminar;
 
-    Button btnBuscarEspecialidadEliminar,
-            btnEliminarEspecialidad,
-            btnRegresarEliminarEspecialidad;
+    Button btnBuscarUsuarioEliminar,
+            btnEliminarUsuario,
+            btnRegresarEliminarUsuario;
 
-    TextView txtEspecialidadEliminar;
+    TextView txtUsuarioEliminar;
 
     controlDBHospitalApp helper;
 
-    int idEncontrado = -1;
+    String idEncontrado = "NO";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(
-                R.layout.activity_eliminar_especialidad
+                R.layout.activity_eliminar_usuario
         );
 
         helper = new controlDBHospitalApp(this);
 
-        edtIdEspecialidadEliminar =
+        edtIdUsuarioEliminar =
                 findViewById(
-                        R.id.edtIdEspecialidadEliminar
+                        R.id.edtIdUsuarioEliminar
                 );
 
-        btnBuscarEspecialidadEliminar =
+        btnBuscarUsuarioEliminar =
                 findViewById(
-                        R.id.btnBuscarEspecialidadEliminar
+                        R.id.btnBuscarUsuarioEliminar
                 );
 
-        btnEliminarEspecialidad =
+        btnEliminarUsuario =
                 findViewById(
-                        R.id.btnEliminarEspecialidad
+                        R.id.btnEliminarUsuario
                 );
 
-        btnRegresarEliminarEspecialidad =
+        btnRegresarEliminarUsuario =
                 findViewById(
-                        R.id.btnRegresarEliminarEspecialidad
+                        R.id.btnRegresarEliminarUsuario
                 );
 
-        txtEspecialidadEliminar =
+        txtUsuarioEliminar =
                 findViewById(
-                        R.id.txtEspecialidadEliminar
+                        R.id.txtUsuarioEliminar
                 );
 
-        btnBuscarEspecialidadEliminar
+        btnBuscarUsuarioEliminar
                 .setOnClickListener(
-                        v -> buscarEspecialidad()
+                        v -> buscarUsuario()
                 );
 
-        btnEliminarEspecialidad
+        btnEliminarUsuario
                 .setOnClickListener(
                         v -> confirmarEliminacion()
                 );
 
-        btnRegresarEliminarEspecialidad
+        btnRegresarEliminarUsuario
                 .setOnClickListener(
                         v -> finish()
                 );
     }
 
-    private void buscarEspecialidad() {
+    private void buscarUsuario() {
 
         String textoId =
-                edtIdEspecialidadEliminar
+                edtIdUsuarioEliminar
                         .getText()
                         .toString()
                         .trim();
@@ -97,49 +96,49 @@ public class EliminarEspecialidadActivity
             return;
         }
 
-        int idEspecialidad =
-                Integer.parseInt(textoId);
+        String idEspecialidad =
+                textoId;
 
         helper.abrir();
 
-        Especialidad especialidad =
-                helper.consultarEspecialidad(
+        Usuario usuario =
+                helper.consultarUsuario(
                         idEspecialidad
                 );
 
         helper.cerrar();
 
-        if (especialidad != null) {
+        if (usuario != null) {
 
             idEncontrado =
-                    especialidad.getIdEspecialidad();
+                    usuario.getIdUsuario();
 
             String datos =
                     "ID: "
-                            + especialidad.getIdEspecialidad()
+                            + usuario.getIdUsuario()
                             + "\n\nNombre: "
-                            + especialidad.getNombreEspecialidad();
+                            + usuario.getNombreUsuario();
 
-            txtEspecialidadEliminar
+            txtUsuarioEliminar
                     .setText(datos);
 
             Toast.makeText(
                     this,
-                    "Especialidad encontrada",
+                    "Usuario encontrado",
                     Toast.LENGTH_SHORT
             ).show();
 
         } else {
 
-            idEncontrado = -1;
+            idEncontrado = "NO";
 
-            txtEspecialidadEliminar.setText(
-                    "Especialidad no encontrada."
+            txtUsuarioEliminar.setText(
+                    "Usuario no encontrado."
             );
 
             Toast.makeText(
                     this,
-                    "Especialidad no encontrada",
+                    "Usuario no encontrado",
                     Toast.LENGTH_SHORT
             ).show();
         }
@@ -147,11 +146,11 @@ public class EliminarEspecialidadActivity
 
     private void confirmarEliminacion() {
 
-        if (idEncontrado == -1) {
+        if (idEncontrado == "NO") {
 
             Toast.makeText(
                     this,
-                    "Primero busque una especialidad válida",
+                    "Primero busque un usuario válido",
                     Toast.LENGTH_SHORT
             ).show();
 
@@ -166,12 +165,12 @@ public class EliminarEspecialidadActivity
         );
 
         builder.setMessage(
-                "¿Desea eliminar esta especialidad?"
+                "¿Desea eliminar este usuario?"
         );
 
         builder.setPositiveButton(
                 "Sí, eliminar",
-                (dialog, which) -> eliminarEspecialidad()
+                (dialog, which) -> eliminarUsuario()
         );
 
         builder.setNegativeButton(
@@ -184,12 +183,12 @@ public class EliminarEspecialidadActivity
         dialog.show();
     }
 
-    private void eliminarEspecialidad() {
+    private void eliminarUsuario() {
 
         helper.abrir();
 
         String mensaje =
-                helper.eliminarEspecialidad(
+                helper.eliminarUsuario(
                         idEncontrado
                 );
 
@@ -201,12 +200,12 @@ public class EliminarEspecialidadActivity
                 Toast.LENGTH_LONG
         ).show();
 
-        edtIdEspecialidadEliminar.setText("");
+        edtIdUsuarioEliminar.setText("");
 
-        txtEspecialidadEliminar.setText(
-                "Datos de especialidad..."
+        txtUsuarioEliminar.setText(
+                "Datos de usuario..."
         );
 
-        idEncontrado = -1;
+        idEncontrado = "NO";
     }
 }

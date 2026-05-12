@@ -33,18 +33,18 @@ public class UsuariosMenuActivity extends AppCompatActivity {
             finish();
         });
 
-        //cardVisualizarEspecialidad.setOnClickListener(v -> {startActivity(new Intent(this, VisualizarEspecialidadesActivity.class));});
+        cardVisualizarUsuario.setOnClickListener(v -> {startActivity(new Intent(this, VisualizarUsuarioActivity.class));});
 
         cardCrearUsuario.setOnClickListener(v -> {
             startActivity(new Intent(this, CrearUsuarioActivity.class));
         });
 
-        //cardModificarEspecialidad.setOnClickListener(v -> {
-        //    startActivity(new Intent(this, ModificarEspecialidadActivity.class));
-        //});
+        cardModificarUsuario.setOnClickListener(v -> {
+            startActivity(new Intent(this, ModificarUsuarioActivity.class));
+        });
 
-        //cardEliminarEspecialidad.setOnClickListener(v -> {
-        //    startActivity(new Intent(this, EliminarEspecialidadActivity.class));
-        //});
+        cardEliminarUsuario.setOnClickListener(v -> {
+            startActivity(new Intent(this, EliminarUsuarioActivity.class));
+        });
     }
 }

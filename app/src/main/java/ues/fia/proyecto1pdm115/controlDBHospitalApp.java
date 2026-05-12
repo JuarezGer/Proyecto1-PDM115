@@ -12,8 +12,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import ues.fia.proyecto1pdm115.modelos.Departamento;
+import ues.fia.proyecto1pdm115.modelos.Distrito;
 import ues.fia.proyecto1pdm115.modelos.Especialidad;
+import ues.fia.proyecto1pdm115.modelos.Hospital;
+import ues.fia.proyecto1pdm115.modelos.Municipio;
+import ues.fia.proyecto1pdm115.modelos.Opcion_crud;
 import ues.fia.proyecto1pdm115.modelos.Paciente;
+import ues.fia.proyecto1pdm115.modelos.Puede_elegir;
 import ues.fia.proyecto1pdm115.modelos.Usuario;
 import ues.fia.proyecto1pdm115.modelos.Establecimiento;
 import ues.fia.proyecto1pdm115.modelos.Aseguradora;
@@ -1192,7 +1198,203 @@ public class controlDBHospitalApp {
 
         return paciente;
     }
+    // =========================================================
+    // MÉTODOS PARA PUEDE_ELEGIR (PERMISOS)
+    // =========================================================
+    public ArrayList<Opcion_crud> consultarPermisos(){
+        ArrayList<Opcion_crud> lista = new ArrayList<>();
+        Cursor cursor = null;
 
+        try{
+            cursor = db.rawQuery("SELECT ID_OPCION,DESCRIPCION_OPC FROM OPCION_CRUD ORDER BY ID_OPCION ASC",
+                    null);
+            if (cursor.moveToFirst()){
+                do {
+                    Opcion_crud opcionCrud = new Opcion_crud();
+
+                    opcionCrud.setIdopcion(cursor.getString(cursor.getColumnIndexOrThrow("ID_OPCION")));
+                    opcionCrud.setDescripcion(cursor.getString(cursor.getColumnIndexOrThrow("DESCRIPCION_OPC")));
+
+                    lista.add(opcionCrud);
+                }while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+
+    public String insertarPermiso(String idUsuario,String idPermiso){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("ID_USUARIO",idUsuario);
+            values.put("ID_OPCION",idPermiso);
+
+            long control = db.insert("PUEDE_ELEGIR",null,values);
+
+            if (control==-1){
+                return "Error al crear permiso";
+            }
+            return "Permiso creado exitosamente";
+        }catch (Exception e){
+            return "Fallo al crear permiso: "+e.getMessage();
+        }
+    }
+
+    public ArrayList<Puede_elegir> consultarPermisos(String idUsuario){
+        ArrayList<Puede_elegir> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try{
+            cursor = db.rawQuery("SELECT * FROM PUEDE_ELEGIR WHERE ID_USUARIO =?",
+                    new String[]{String.valueOf(idUsuario)});
+
+            if(cursor.moveToFirst()){
+                do {
+                    Puede_elegir puedeElegir = new Puede_elegir();
+                    puedeElegir.setId_usuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
+                    puedeElegir.setId_opcion(cursor.getString(cursor.getColumnIndexOrThrow("ID_OPCION")));
+
+                    lista.add(puedeElegir);
+                }while(cursor.moveToNext());
+            }
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+
+    public String eliminarPermiso(String idUsuario,String idOpcion){
+        try{
+            int control = db.delete("PUEDE_ELEGIR","ID_USUARIO=? AND ID_OPCION=?",
+                    new String[]{idUsuario,idOpcion});
+            if (control>0){
+                return "Permiso eliminado";
+            }else {
+                return "Error en eliminacion";
+            }
+        }catch (Exception e){
+            return "No se pudo eliminar el permiso de usuario por: "+e.getMessage();
+        }
+    }
+    // =========================================================
+    // MÉTODOS PARA HOSPITALES
+    // =========================================================
+    public String asignarEspecialidadHospital(Especialidad especialidad,Integer idHospital){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("ID_HOSPITAL",idHospital);
+            values.put("ID_ESPECIALIDAD",especialidad.getIdEspecialidad());
+            long control = db.insert("POSEE",null,values);
+            if (control==-1){
+                return "No se pudo asignar especialidad de hospital";
+            }
+            return "Especialidad de hospital registrada exitosamente";
+        }catch (Exception e){
+            return "Error al asinar especialidad: "+e.getMessage();
+        }
+    }
+
+    public ArrayList<Departamento> consultarDepartamentos(){
+        ArrayList<Departamento> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor=db.rawQuery("SELECT * FROM DEPARTAMENTO",null);
+            if (cursor.moveToFirst()){
+                do {
+                    Departamento departamento = new Departamento();
+
+                    departamento.setCodDepartamento(cursor.getString(cursor.getColumnIndexOrThrow("COD_DPTO")));
+                    departamento.setNombreDepartamento(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DPTO")));
+                    lista.add(departamento);
+                }while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+
+    public ArrayList<Municipio> consultarMunicipios(String codDepartamento){
+        ArrayList<Municipio> lista = new ArrayList<>();
+        Cursor cursor = null;
+        try{
+            cursor = db.rawQuery(
+                    "SELECT * FROM MUNICIPIO WHERE COD_DPTO=?",
+                    new String[]{codDepartamento}
+            );
+            if (cursor.moveToFirst()){
+                do {
+                    Municipio municipio = new Municipio();
+
+                    municipio.setCodMunicipio(cursor.getString(cursor.getColumnIndexOrThrow("COD_MUNICIPIO")));
+                    municipio.setNombreMunicipio(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_MUNICIPIO")));
+                    municipio.setCodDepartamento(cursor.getString(cursor.getColumnIndexOrThrow("COD_DPTO")));
+                    lista.add(municipio);
+                }while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+    public ArrayList<Distrito> consultarDistritos(String codMunicipio){
+        ArrayList<Distrito> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(
+                    "SELECT * FROM DISTRITO WHERE COD_MUNICIPIO = ? ",
+                    new String[]{codMunicipio}
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Distrito distrito = new Distrito();
+
+                    distrito.setCodDistrito(cursor.getString(cursor.getColumnIndexOrThrow("COD_DISTRITO")));
+                    distrito.setNombreDistrito(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DISTRITO")));
+                    distrito.setCodMunicipio(cursor.getString(cursor.getColumnIndexOrThrow("COD_MUNICIPIO")));
+
+                    lista.add(distrito);
+
+                } while (cursor.moveToNext());
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return lista;
+    }
+    public String insertarHospital(Hospital hospital,Especialidad especialidad){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("COD_DISTRITO",hospital.getCodDistrito());
+            values.put("NOMBRE_HOSPITAL",hospital.getNombreHospital());
+            values.put("TELEFONO_HOSPITAL",hospital.getTelefonoHospital());
+
+            long control = db.insert("HOSPITAL",null,values);
+            if (control==-1){
+                return "Error al crear hospital";
+            }
+            String mensajeRelacion = asignarEspecialidadHospital(especialidad, (int) control);
+            return "Hospital creado exitosamente. " + mensajeRelacion;
+        }catch (Exception e){
+            return "Error al crear hospital: "+e.getMessage();
+        }
+    }
     // =========================================================
     // MÉTODOS PARA USUARIOS
     // =========================================================
@@ -1214,6 +1416,92 @@ public class controlDBHospitalApp {
         }
     }
 
+    public ArrayList<Usuario> consultarUsuarios(){
+        ArrayList<Usuario> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try{
+            cursor = db.rawQuery(
+                    "SELECT * FROM USUARIO ORDER BY ID_USUARIO ASC",
+                    null
+            );
+            if (cursor.moveToFirst()){
+                do {
+                    Usuario usuario = new Usuario();
+
+                    usuario.setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
+                    usuario.setNombreUsuario(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_USUARIO")));
+
+                    lista.add(usuario);
+                }while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+
+    public Usuario consultarUsuario(String idUsuario){
+        Cursor cursor = null;
+
+        try{
+            cursor=db.rawQuery(
+                    "SELECT * FROM USUARIO WHERE ID_USUARIO = ?",
+                    new String[]{String.valueOf(idUsuario)}
+            );
+
+            if (cursor.moveToFirst()){
+                Usuario usuario =new Usuario();
+                usuario.setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
+                usuario.setNombreUsuario(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_USUARIO")));
+                usuario.setClave(cursor.getString(cursor.getColumnIndexOrThrow("CLAVE")));
+
+                return usuario;
+            }
+            return null;
+        }finally {
+            {
+                if (cursor!=null){
+                    cursor.close();
+                }
+            }
+        }
+    }
+
+    public String actualizarUsuario(Usuario usuario){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("NOMBRE_USUARIO",usuario.getNombreUsuario());
+            values.put("CLAVE",usuario.getClave());
+            int control = db.update("USUARIO",values,"ID_USUARIO =?",new String[]{
+                    String.valueOf(usuario.getIdUsuario())
+            });
+
+            if (control>0){
+                return "Usuario actualizado correctamente";
+            }else {
+                return "Usuario no encontrado";
+            }
+        }catch (Exception e){
+            return "Error al actualizar usuario";
+        }
+    }
+
+    public String eliminarUsuario(String idUsuario){
+        try{
+            int control = db.delete("USUARIO","ID_USUARIO=?",
+                    new String[]{String.valueOf(idUsuario)});
+            if (control>0){
+                return "Usuario eliminado";
+            }else {
+                return "Usuario no encontrado";
+            }
+        }catch (Exception e){
+            return "No se puede eliminar. \nEl usuario cuenta con permisos existentes.";
+        }
+    }
     // =========================================================
     // MÉTODOS PARA ESPECIALIDAD
     // =========================================================
