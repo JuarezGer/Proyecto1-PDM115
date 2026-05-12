@@ -76,12 +76,17 @@
         <activity android:name=".pagos.ModificarPagoActivity"/>
         <activity android:name=".pagos.EliminarPagoActivity"/>
         <!-- CRUD De Seguros -->
-        <activity android:name=".seguros.SeguroMenuActivity"/>
-        <activity android:name=".seguros.CrearSeguroActivity"/>
-        <activity android:name=".seguros.VisualizarSegurosActivity"/>
-        <activity android:name=".seguros.ModificarSeguroActivity"/>
-        <activity android:name=".seguros.EliminarSeguroActivity"/>
-        
+        <activity android:name=".seguros.SeguroMenuActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".seguros.CrearSeguroActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".seguros.VisualizarSegurosActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".seguros.ModificarSeguroActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+        <activity android:name=".seguros.EliminarSeguroActivity"
+            android:windowSoftInputMode="adjustNothing"/>
+
         <activity android:name=".hospitales.HospitalMenuActivity" /> <!-- CRUD De Establecimientos -->
         <activity android:name=".aseguradoras.AseguradoraMenuActivity" />
         <activity android:name=".aseguradoras.CrearAseguradoraActivity" />

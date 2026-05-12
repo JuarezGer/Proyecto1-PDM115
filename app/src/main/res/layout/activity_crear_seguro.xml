@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:background="@color/background_app">
 
+    <!-- HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="108dp"
@@ -36,14 +37,15 @@
             android:layout_height="38dp"
             android:src="@drawable/ic_user_circle"
             android:scaleType="fitCenter" />
+
     </LinearLayout>
 
-
+    <!-- CONTENIDO -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fillViewport="true">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,24 +54,40 @@
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
             android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+            android:paddingBottom="20dp">
 
-            <TextView
+            <!-- TÍTULO Y DESCRIPCIÓN -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Registrar seguro"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_black"
-                android:layout_marginBottom="8dp" />
+                android:orientation="vertical"
+                android:layout_marginBottom="28dp">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Seleccione el paciente, aseguradora y complete los datos de cobertura."
-                android:textSize="14sp"
-                android:textColor="#666666"
-                android:layout_marginBottom="20dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Registrar Seguro"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_black"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Seleccione el paciente, aseguradora y complete los datos de cobertura."
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_marginBottom="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/card_blue" />
+
+            </LinearLayout>
+
+            <!-- SECCIÓN: DATOS DEL SEGURO -->
 
             <LinearLayout
                 android:layout_width="match_parent"

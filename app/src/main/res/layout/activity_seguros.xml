@@ -9,7 +9,7 @@
     <!-- ENCABEZADO -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="88dp"
+        android:layout_height="108dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingStart="24dp"
@@ -17,8 +17,8 @@
         android:background="@color/header_blue">
 
         <ImageView
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:src="@drawable/ic_hospital_cross"
             android:scaleType="fitCenter" />
 
@@ -27,14 +27,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="Hospital App"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/primary_dark"
-            android:layout_marginStart="12dp" />
+            android:layout_marginStart="14dp" />
 
         <ImageView
-            android:layout_width="34dp"
-            android:layout_height="34dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:src="@drawable/ic_user_circle"
             android:scaleType="fitCenter" />
 
@@ -48,15 +48,15 @@
         android:orientation="vertical"
         android:paddingStart="24dp"
         android:paddingEnd="24dp"
-        android:paddingTop="18dp"
-        android:paddingBottom="18dp">
+        android:paddingTop="28dp"
+        android:paddingBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Seguros"
             android:textColor="@color/text_black"
-            android:textSize="18sp"
+            android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView

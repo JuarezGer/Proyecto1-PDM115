@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:background="@color/background_app">
 
+    <!-- HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="108dp"
@@ -36,14 +37,15 @@
             android:layout_height="38dp"
             android:src="@drawable/ic_user_circle"
             android:scaleType="fitCenter" />
+
     </LinearLayout>
 
-
+    <!-- CONTENIDO -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fillViewport="true">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,103 +54,145 @@
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
             android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+            android:paddingBottom="20dp">
+
+            <!-- TÍTULO Y DESCRIPCIÓN -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="28dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Eliminar Seguro"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_black"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Busque la póliza antes de eliminarla."
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_marginBottom="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/card_blue" />
+
+            </LinearLayout>
+
+            <!-- SECCIÓN: BÚSQUEDA -->
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Eliminar seguro"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:textColor="@color/text_black"
-                android:layout_marginBottom="8dp" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Busque la póliza antes de eliminarla."
+                android:text="Búsqueda de Póliza"
                 android:textSize="14sp"
-                android:textColor="#666666"
-                android:layout_marginBottom="20dp" />
+                android:textStyle="bold"
+                android:textColor="@color/header_blue"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="28dp">
+
+                <EditText
+                    android:id="@+id/edtIdPolizaEliminar"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="ID de la póliza"
+                    android:padding="12dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="#999999"
+                    android:backgroundTint="@color/card_blue"
+                    android:layout_marginEnd="8dp"
+                    android:singleLine="true"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/btnBuscarSeguroEliminar"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:text="Buscar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="@color/card_blue" />
+            </LinearLayout>
+
+            <!-- SECCIÓN: DATOS DEL SEGURO -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Datos del Seguro"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/header_blue"
+                android:layout_marginBottom="12dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="18dp"
-                android:background="@drawable/bg_table_card">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="ID póliza"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_black"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="6dp" />
-
-                    <EditText
-                        android:id="@+id/edtIdPolizaEliminar"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Ejemplo: 1"
-                        android:textSize="15sp"
-                        android:singleLine="true"
-                        android:inputType="number"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp"
-                        android:background="@drawable/bg_table_card"
-                        android:textColor="@color/text_black"
-                        android:textColorHint="@color/text_gray"
-                        android:layout_marginBottom="14dp" />
-
-                    <Button
-                        android:id="@+id/btnBuscarSeguroEliminar"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:text="Buscar seguro"
-                        android:textAllCaps="false"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/primary_dark"
-                        android:backgroundTint="@color/card_blue"
-                        android:layout_marginTop="0dp" />
+                android:background="@drawable/bg_table_card"
+                android:padding="16dp"
+                android:layout_marginBottom="28dp">
 
                 <TextView
                     android:id="@+id/txtDatosSeguroEliminar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Busque una póliza para ver sus datos antes de eliminarla."
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textColor="@color/text_black"
-                    android:padding="14dp"
-                    android:background="@color/background_app"
-                    android:layout_marginTop="14dp"
-                    android:layout_marginBottom="14dp" />
+                    android:lineSpacingExtra="8dp" />
 
-                    <Button
-                        android:id="@+id/btnEliminarSeguro"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:text="Eliminar seguro"
-                        android:textAllCaps="false"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/primary_dark"
-                        android:backgroundTint="#FFCDD2"
-                        android:layout_marginTop="0dp" />
+            </LinearLayout>
 
-                    <Button
-                        android:id="@+id/btnRegresarEliminarSeguro"
-                        android:layout_width="150dp"
-                        android:layout_height="48dp"
-                        android:text="Regresar"
-                        android:textAllCaps="false"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/primary_dark"
-                        android:backgroundTint="@color/card_blue"
-                        android:layout_marginTop="14dp" />
+            <!-- BOTONES -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="12dp">
+
+                <Button
+                    android:id="@+id/btnRegresarEliminarSeguro"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Regresar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="#E8E8E8"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnEliminarSeguro"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Eliminar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#D9534F"
+                    android:layout_marginStart="8dp" />
 
             </LinearLayout>
         </LinearLayout>

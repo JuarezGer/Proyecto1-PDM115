@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:background="@color/background_app">
 
+    <!-- HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="108dp"
@@ -36,9 +37,10 @@
             android:layout_height="38dp"
             android:src="@drawable/ic_user_circle"
             android:scaleType="fitCenter" />
+
     </LinearLayout>
 
-
+    <!-- CONTENIDO -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -49,22 +51,36 @@
         android:paddingTop="28dp"
         android:paddingBottom="20dp">
 
-        <TextView
+        <!-- TÍTULO Y DESCRIPCIÓN -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Listado de seguros"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:textColor="@color/text_black"
-            android:layout_marginBottom="8dp" />
+            android:orientation="vertical"
+            android:layout_marginBottom="28dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Toca una fila para ver todos los datos"
-            android:textSize="14sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="22dp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Listado de Seguros"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_black"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Toca una fila para ver todos los datos"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="20dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/card_blue" />
+
+        </LinearLayout>
 
         <HorizontalScrollView
             android:layout_width="match_parent"

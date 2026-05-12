@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:background="@color/background_app">
 
+    <!-- HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="108dp"
@@ -36,14 +37,15 @@
             android:layout_height="38dp"
             android:src="@drawable/ic_user_circle"
             android:scaleType="fitCenter" />
+
     </LinearLayout>
 
-
+    <!-- CONTENIDO -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:fillViewport="true">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,24 +54,93 @@
             android:paddingStart="24dp"
             android:paddingEnd="24dp"
             android:paddingTop="28dp"
-            android:paddingBottom="24dp">
+            android:paddingBottom="20dp">
+
+            <!-- TÍTULO Y DESCRIPCIÓN -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="28dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Modificar Seguro"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_black"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ingrese el ID de la póliza, busque el registro y modifique los datos."
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_marginBottom="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/card_blue" />
+
+            </LinearLayout>
+
+            <!-- SECCIÓN: BÚSQUEDA -->
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Modificar seguro"
-                android:textColor="@color/text_black"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ingrese el ID de la póliza, busque el registro y modifique los datos."
+                android:text="Búsqueda de Póliza"
                 android:textSize="14sp"
-                android:textColor="#666666"
-                android:layout_marginBottom="20dp" />
+                android:textStyle="bold"
+                android:textColor="@color/header_blue"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="28dp">
+
+                <EditText
+                    android:id="@+id/edtIdPolizaActualizar"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="ID de la póliza"
+                    android:padding="12dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="#999999"
+                    android:backgroundTint="@color/card_blue"
+                    android:layout_marginEnd="8dp"
+                    android:singleLine="true"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/btnBuscarSeguroActualizar"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:text="Buscar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="@color/card_blue" />
+            </LinearLayout>
+
+            <!-- SECCIÓN: DATOS DEL SEGURO -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Datos del Seguro"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/header_blue"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="12dp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,197 +149,172 @@
                 android:padding="18dp"
                 android:background="@drawable/bg_table_card">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="ID póliza"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_black"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="6dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Paciente"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_black"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
 
-                    <EditText
-                        android:id="@+id/edtIdPolizaActualizar"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Ejemplo: 1"
-                        android:textSize="15sp"
-                        android:singleLine="true"
-                        android:inputType="number"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp"
-                        android:background="@drawable/bg_table_card"
-                        android:textColor="@color/text_black"
-                        android:textColorHint="@color/text_gray"
-                        android:layout_marginBottom="14dp" />
+                <Spinner
+                    android:id="@+id/spnPacienteSeguroActualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:background="@drawable/bg_table_card"
+                    android:layout_marginBottom="14dp" />
 
-                    <Button
-                        android:id="@+id/btnBuscarSeguroActualizar"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:text="Buscar seguro"
-                        android:textAllCaps="false"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/primary_dark"
-                        android:backgroundTint="@color/card_blue"
-                        android:layout_marginTop="0dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Aseguradora"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_black"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Paciente"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_black"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="6dp" />
+                <Spinner
+                    android:id="@+id/spnAseguradoraSeguroActualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp"
+                    android:background="@drawable/bg_table_card"
+                    android:layout_marginBottom="14dp" />
 
-                    <Spinner
-                        android:id="@+id/spnPacienteSeguroActualizar"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="@drawable/bg_table_card"
-                        android:layout_marginBottom="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Porcentaje de cobertura"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_black"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Aseguradora"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_black"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="6dp" />
+                <EditText
+                    android:id="@+id/edtPorcentajeCoberturaActualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Ejemplo: 80"
+                    android:textSize="15sp"
+                    android:singleLine="true"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/bg_table_card"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="@color/text_gray"
+                    android:layout_marginBottom="14dp" />
 
-                    <Spinner
-                        android:id="@+id/spnAseguradoraSeguroActualizar"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:paddingStart="8dp"
-                        android:paddingEnd="8dp"
-                        android:background="@drawable/bg_table_card"
-                        android:layout_marginBottom="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Tipo de asegurado"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_black"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Porcentaje de cobertura"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_black"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="6dp" />
+                <EditText
+                    android:id="@+id/edtTipoAseguradoActualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Ejemplo: Titular o Beneficiario"
+                    android:textSize="15sp"
+                    android:singleLine="true"
+                    android:inputType="text"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/bg_table_card"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="@color/text_gray"
+                    android:layout_marginBottom="14dp" />
 
-                    <EditText
-                        android:id="@+id/edtPorcentajeCoberturaActualizar"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Ejemplo: 80"
-                        android:textSize="15sp"
-                        android:singleLine="true"
-                        android:inputType="numberDecimal"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp"
-                        android:background="@drawable/bg_table_card"
-                        android:textColor="@color/text_black"
-                        android:textColorHint="@color/text_gray"
-                        android:layout_marginBottom="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Deductible medicina"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_black"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Tipo de asegurado"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_black"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="6dp" />
+                <EditText
+                    android:id="@+id/edtDeductibleMedicinaActualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Ejemplo: 25.00"
+                    android:textSize="15sp"
+                    android:singleLine="true"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/bg_table_card"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="@color/text_gray"
+                    android:layout_marginBottom="14dp" />
 
-                    <EditText
-                        android:id="@+id/edtTipoAseguradoActualizar"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Ejemplo: Titular o Beneficiario"
-                        android:textSize="15sp"
-                        android:singleLine="true"
-                        android:inputType="text"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp"
-                        android:background="@drawable/bg_table_card"
-                        android:textColor="@color/text_black"
-                        android:textColorHint="@color/text_gray"
-                        android:layout_marginBottom="14dp" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Deductible operación"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_black"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="6dp" />
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Deductible medicina"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_black"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="6dp" />
+                <EditText
+                    android:id="@+id/edtDeductibleOperacionActualizar"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:hint="Ejemplo: 50.00"
+                    android:textSize="15sp"
+                    android:singleLine="true"
+                    android:inputType="numberDecimal"
+                    android:paddingStart="14dp"
+                    android:paddingEnd="14dp"
+                    android:background="@drawable/bg_table_card"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="@color/text_gray"
+                    android:layout_marginBottom="14dp" />
 
-                    <EditText
-                        android:id="@+id/edtDeductibleMedicinaActualizar"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Ejemplo: 25.00"
-                        android:textSize="15sp"
-                        android:singleLine="true"
-                        android:inputType="numberDecimal"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp"
-                        android:background="@drawable/bg_table_card"
-                        android:textColor="@color/text_black"
-                        android:textColorHint="@color/text_gray"
-                        android:layout_marginBottom="14dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Deductible operación"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_black"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="6dp" />
-
-                    <EditText
-                        android:id="@+id/edtDeductibleOperacionActualizar"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Ejemplo: 50.00"
-                        android:textSize="15sp"
-                        android:singleLine="true"
-                        android:inputType="numberDecimal"
-                        android:paddingStart="14dp"
-                        android:paddingEnd="14dp"
-                        android:background="@drawable/bg_table_card"
-                        android:textColor="@color/text_black"
-                        android:textColorHint="@color/text_gray"
-                        android:layout_marginBottom="14dp" />
-
-                    <Button
-                        android:id="@+id/btnActualizarSeguro"
-                        android:layout_width="match_parent"
-                        android:layout_height="48dp"
-                        android:text="Actualizar seguro"
-                        android:textAllCaps="false"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
-                        android:textColor="@color/primary_dark"
-                        android:backgroundTint="@color/card_blue"
-                        android:layout_marginTop="8dp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="12dp">
 
                     <Button
                         android:id="@+id/btnRegresarActualizarSeguro"
-                        android:layout_width="150dp"
+                        android:layout_width="0dp"
                         android:layout_height="48dp"
+                        android:layout_weight="1"
                         android:text="Regresar"
                         android:textAllCaps="false"
                         android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:textSize="15sp"
+                        android:textColor="@color/primary_dark"
+                        android:backgroundTint="#E8E8E8"
+                        android:layout_marginEnd="8dp" />
+
+                    <Button
+                        android:id="@+id/btnActualizarSeguro"
+                        android:layout_width="0dp"
+                        android:layout_height="48dp"
+                        android:layout_weight="1"
+                        android:text="Actualizar"
+                        android:textAllCaps="false"
+                        android:textStyle="bold"
+                        android:textSize="15sp"
                         android:textColor="@color/primary_dark"
                         android:backgroundTint="@color/card_blue"
-                        android:layout_marginTop="14dp" />
+                        android:layout_marginStart="8dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
         </LinearLayout>

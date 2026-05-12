@@ -105,7 +105,6 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:hint="Correo electrónico"
-                        android:inputType="textEmailAddress"
                         android:singleLine="true"
                         android:textSize="16sp"
                         android:textColor="@color/text_black"
@@ -156,6 +155,8 @@
                         android:src="@drawable/ic_eye"
                         android:scaleType="fitCenter"
                         android:contentDescription="Mostrar contraseña"
+                        android:clickable="true"
+                        android:focusable="true"
                         app:tint="@color/header_blue"
                         android:layout_marginStart="8dp" />
 
