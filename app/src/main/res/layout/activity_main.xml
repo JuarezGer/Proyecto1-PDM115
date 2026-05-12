@@ -400,13 +400,13 @@
 
             <!-- FILA 6 -->
             <LinearLayout
-                android:id="@+id/cardPagos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="24dp">
 
                 <LinearLayout
+                    android:id="@+id/cardPagos"
                     android:layout_width="0dp"
                     android:layout_height="124dp"
                     android:layout_weight="1"
@@ -464,7 +464,6 @@
 
             <!-- FILA 7 -->
             <LinearLayout
-                android:id="@+id/cardSeguros"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"

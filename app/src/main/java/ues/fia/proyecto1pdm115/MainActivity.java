@@ -21,10 +21,13 @@ import ues.fia.proyecto1pdm115.pacientes.*;
 import ues.fia.proyecto1pdm115.doctores.*;
 import ues.fia.proyecto1pdm115.especialidades.*;
 import ues.fia.proyecto1pdm115.hospitales.*;
+import ues.fia.proyecto1pdm115.pagos.PagoMenuActivity;
 import ues.fia.proyecto1pdm115.permisos.PermisosMenuActivity;
 import ues.fia.proyecto1pdm115.usuarios.*;
 import ues.fia.proyecto1pdm115.establecimientos.*;
 import ues.fia.proyecto1pdm115.aseguradoras.*;
+import ues.fia.proyecto1pdm115.pagos.*;
+import ues.fia.proyecto1pdm115.seguros.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -123,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
         configurarClick("cardUsuarios", UsuariosMenuActivity.class);
         configurarClick("cardUsuariosAdmin", UsuariosMenuActivity.class);
         configurarClick("cardPermisos", PermisosMenuActivity.class);
+        configurarClick("cardPagos", PagoMenuActivity.class);
+        configurarClick("cardSeguros",SeguroMenuActivity.class);
 
         //View cardPermisos = buscarVista("cardPermisos");
         //if (cardPermisos != null) {
