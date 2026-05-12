@@ -8,6 +8,11 @@ public class Especialidad {
     public Especialidad() {
     }
 
+    public Especialidad(Integer idEspecialidad,String nombreEspecialidad){
+        this.idEspecialidad=idEspecialidad;
+        this.nombreEspecialidad=nombreEspecialidad;
+    }
+
     public Integer getIdEspecialidad() {
         return idEspecialidad;
     }
@@ -22,5 +27,9 @@ public class Especialidad {
 
     public void setNombreEspecialidad(String nombreEspecialidad) {
         this.nombreEspecialidad = nombreEspecialidad;
+    }
+    @Override
+    public String toString(){
+        return idEspecialidad+" - "+nombreEspecialidad;
     }
 }

@@ -43,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
         boolean loginValido = helper.validarLogin(usuario, clave);
         String nombreUsuario = helper.obtenerNombreUsuario(usuario);
+        String idUsuarioReal = helper.obtenerIdUsuario(usuario);
 
         helper.cerrar();
 
@@ -52,10 +53,14 @@ public class LoginActivity extends AppCompatActivity {
                 nombreUsuario = usuario;
             }
 
+            if (idUsuarioReal == null || idUsuarioReal.isEmpty()) {
+                idUsuarioReal = usuario;
+            }
+
             SharedPreferences preferences = getSharedPreferences("sesion_usuario", MODE_PRIVATE);
             SharedPreferences.Editor editor = preferences.edit();
 
-            editor.putString("idUsuario", usuario);
+            editor.putString("idUsuario", idUsuarioReal);
             editor.putString("nombreUsuario", nombreUsuario);
             editor.putBoolean("sesionActiva", true);
 
@@ -64,7 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             Toast.makeText(this, "Bienvenido " + nombreUsuario, Toast.LENGTH_SHORT).show();
 
             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            intent.putExtra("idUsuario", usuario);
+            intent.putExtra("idUsuario", idUsuarioReal);
             intent.putExtra("nombreUsuario", nombreUsuario);
             startActivity(intent);
 
