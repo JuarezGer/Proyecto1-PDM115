@@ -1,0 +1,63 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Seleccionar departamento de hospital:"
+        android:layout_marginTop="8dp"/>
+    <Spinner android:id="@+id/spinnerHospitalDepartamentoCrear"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Seleccionar municipio de hospital:"
+        android:layout_marginTop="8dp"/>
+    <Spinner android:id="@+id/spinnerHospitalMunicipioCrear"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Seleccionar distrito de hospital:"
+        android:layout_marginTop="8dp"/>
+    <Spinner android:id="@+id/spinnerHospitalDistritoCrear"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+    <EditText
+        android:id="@+id/edtNombreHospitalCrear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Nombre Hospital"
+        android:maxLength="50"/>
+
+    <EditText
+        android:id="@+id/edtTelefonoHospitalCrear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Telefono Hospital"
+        android:maxLength="20"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Seleccionar Especialidad:"
+        android:layout_marginTop="8dp"/>
+    <Spinner android:id="@+id/spinnerHospitalEspecialidadCrear"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <Button android:id="@+id/btnRegresarHospitalCrear"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Regresar" />
+    <Button android:id="@+id/btnGuardarHospitalCrear"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Guardar" />
+</LinearLayout>

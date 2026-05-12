@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
         <activity
+            android:name=".hospitales.CrearHospitalActivity"
+            android:exported="false" />
+        <activity
             android:name=".permisos.EliminarPermisoActivity"
             android:exported="false" />
         <activity

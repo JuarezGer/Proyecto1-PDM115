@@ -1,5 +1,6 @@
 package ues.fia.proyecto1pdm115.hospitales;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -33,7 +34,7 @@ public class HospitalMenuActivity extends AppCompatActivity {
         });
 
         cardCrearHospital.setOnClickListener(v -> {
-            // startActivity(new Intent(this, CrearPacienteActivity.class));
+             startActivity(new Intent(this, CrearHospitalActivity.class));
         });
 
         cardModificarHospital.setOnClickListener(v -> {
