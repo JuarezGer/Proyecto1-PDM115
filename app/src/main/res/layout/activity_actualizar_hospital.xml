@@ -1,0 +1,82 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="18dp">
+
+        <EditText
+            android:id="@+id/edtIdHospitalModificar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="ID Hospital"
+            android:inputType="number"
+            android:layout_marginEnd="8dp"/>
+
+        <Button
+            android:id="@+id/btnBuscarModificarHospital"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:text="Buscar"/>
+    </LinearLayout>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:id="@+id/tvMostrarDistritoActual"
+        android:layout_marginTop="8dp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Seleccionar nuevo departamento de hospital:"
+        android:layout_marginTop="8dp"/>
+    <Spinner android:id="@+id/spinnerHospitalDepartamentoActualizar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Seleccionar nuevo municipio de hospital:"
+        android:layout_marginTop="8dp"/>
+    <Spinner android:id="@+id/spinnerHospitalMunicipioActualizar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Seleccionar nuevo distrito de hospital:"
+        android:layout_marginTop="8dp"/>
+    <Spinner android:id="@+id/spinnerHospitalDistritoActualizar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+    <EditText
+        android:id="@+id/edtNombreHospitalActualizar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Nombre Hospital"
+        android:maxLength="50"/>
+
+    <EditText
+        android:id="@+id/edtTelefonoHospitalActualizar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Telefono Hospital"
+        android:maxLength="20"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <Button android:id="@+id/btnRegresarHospitalActualizar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Regresar" />
+    <Button android:id="@+id/btnGuardarHospitalActualizar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Guardar" />
+</LinearLayout>

@@ -11,7 +11,7 @@
         android:id="@+id/edtIdUsuarioEliminar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="ID Especialidad"
+        android:hint="ID Usuario"
         android:inputType="text"/>
 
     <Button
@@ -24,7 +24,7 @@
         android:id="@+id/txtUsuarioEliminar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Datos de especialidad..."
+        android:text="Datos de usuario..."
         android:textSize="16sp"
         android:padding="20dp"/>
 

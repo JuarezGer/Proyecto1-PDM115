@@ -6,6 +6,11 @@ public class Hospital {
 
     public Hospital(){}
 
+    public Hospital(Integer idHospital, String nombreHospital){
+        this.idHospital=idHospital;
+        this.nombreHospital=nombreHospital;
+    }
+
     public Integer getIdHospital() {
         return idHospital;
     }
@@ -36,5 +41,10 @@ public class Hospital {
 
     public void setTelefonoHospital(String telefonoHospital) {
         this.telefonoHospital = telefonoHospital;
+    }
+
+    @Override
+    public String toString(){
+        return idHospital+" - "+nombreHospital;
     }
 }

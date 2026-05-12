@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/edtIdHospitalEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID Hospital"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/btnBuscarHospitalEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buscar"/>
+
+    <TextView
+        android:id="@+id/txtSubtituloHospital"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Datos de hospital..."
+        android:textSize="16sp"
+        android:padding="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre Hospital"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtNombreHospitalEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:padding="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Telefono Hospital"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtTelefonoHospitalEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:padding="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ubicacion Hospital"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtUbicacionHospitalEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:padding="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Especialidades Hospital"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtEspecialidadesHospitalEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:padding="20dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btnEliminarHospital"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Eliminar"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnRegresarEliminarHospital"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Regresar"/>
+
+</LinearLayout>
