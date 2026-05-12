@@ -1,23 +1,17 @@
 package ues.fia.proyecto1pdm115.permisos;
 
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
-import ues.fia.proyecto1pdm115.modelos.Opcion_crud;
 import ues.fia.proyecto1pdm115.modelos.Puede_elegir;
 import ues.fia.proyecto1pdm115.R;
 import ues.fia.proyecto1pdm115.modelos.Usuario;
