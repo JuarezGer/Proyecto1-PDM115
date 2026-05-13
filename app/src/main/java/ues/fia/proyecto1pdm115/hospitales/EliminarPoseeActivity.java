@@ -15,11 +15,6 @@ import java.util.List;
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
 import ues.fia.proyecto1pdm115.modelos.Especialidad;
 import ues.fia.proyecto1pdm115.modelos.Hospital;
-import ues.fia.proyecto1pdm115.modelos.Posee;
-import ues.fia.proyecto1pdm115.modelos.Puede_elegir;
-import ues.fia.proyecto1pdm115.R;
-import ues.fia.proyecto1pdm115.modelos.Usuario;
-
 import ues.fia.proyecto1pdm115.R;
 
 public class EliminarPoseeActivity extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package ues.fia.proyecto1pdm115.hospitales;
+package ues.fia.proyecto1pdm115.doctores;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -18,55 +18,60 @@ import ues.fia.proyecto1pdm115.Navegador;
 import ues.fia.proyecto1pdm115.R;
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
 
-public class VisualizarHospitalesActivity extends AppCompatActivity {
-    TableLayout tableHospitales;
+public class VisualizarDoctorActivity extends AppCompatActivity {
+    TableLayout tableDoctores;
 
-    Button btnRegresarVisualizarHospitales;
+    Button btnRegresarVisualizarDoctor;
 
     controlDBHospitalApp helper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_visualizar_hospitales);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_visualizar_doctor);
 
         Navegador.configurarBarra(this);
-        tableHospitales = findViewById(R.id.tableHospitales);
-        btnRegresarVisualizarHospitales=findViewById(R.id.btnRegresarVisualizarHospitales);
+        tableDoctores=findViewById(R.id.tableDoctores);
+        btnRegresarVisualizarDoctor=findViewById(R.id.btnRegresarVisualizarDoctor);
         helper=new controlDBHospitalApp(this);
-        cargarHospitales();
-        btnRegresarVisualizarHospitales.setOnClickListener(v -> finish());
+        cargarDoctores();
+        btnRegresarVisualizarDoctor.setOnClickListener(v -> finish());
+
     }
 
-    private void cargarHospitales() {
+    private void cargarDoctores() {
         helper.abrir();
-        ArrayList<HashMap<String, String>> datos = helper.consultarHospitalesDetalle();
+        ArrayList<HashMap<String, String>> datos = helper.consultarDoctoresDetalle();
         helper.cerrar();
 
-        tableHospitales.removeAllViews();
+        tableDoctores.removeAllViews();
         TableRow encabezado = new TableRow(this);
         encabezado.setBackgroundColor(Color.LTGRAY);
-        encabezado.addView(crearCelda("Nombre Hospital"));
-        encabezado.addView(crearCelda("Telefono Hospital"));
-        encabezado.addView(crearCelda("Ubicacion Hospital"));
-        encabezado.addView(crearCelda("Especialidades Hospital"));
+        encabezado.addView(crearCelda("DUI Doctor"));
+        encabezado.addView(crearCelda("Nombre Doctor"));
+        encabezado.addView(crearCelda("Apellido Doctor"));
+        encabezado.addView(crearCelda("Datos Hospital Asignado"));
+        encabezado.addView(crearCelda("Datos Usuario Asignado"));
+        encabezado.addView(crearCelda("Especialidades De Doctor"));
 
-        tableHospitales.addView(encabezado);
+        tableDoctores.addView(encabezado);
 
         for (HashMap<String, String> fila : datos) {
             TableRow tr = new TableRow(this);
 
             // Creamos celdas (TextViews)
+            tr.addView(crearCelda(fila.get("dui")));
+            tr.addView(crearCelda(fila.get("nombre")));
+            tr.addView(crearCelda(fila.get("apellido")));
             tr.addView(crearCelda(fila.get("hospital")));
-            tr.addView(crearCelda(fila.get("telefono")));
-            tr.addView(crearCelda(fila.get("ubicacion")));
+            tr.addView(crearCelda(fila.get("usuario")));
             tr.addView(crearCelda(fila.get("especialidades")));
 
-            tableHospitales.addView(tr);
+
+            tableDoctores.addView(tr);
         }
     }
-
-    // Método auxiliar para no repetir código de diseño de celdas
     private TextView crearCelda(String texto) {
         TextView tv = new TextView(this);
         tv.setText(texto != null ? texto : "N/A"); // Evita el null

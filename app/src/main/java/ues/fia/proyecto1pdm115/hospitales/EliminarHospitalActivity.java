@@ -1,25 +1,18 @@
 package ues.fia.proyecto1pdm115.hospitales;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
-import ues.fia.proyecto1pdm115.modelos.Hospital;
 import ues.fia.proyecto1pdm115.R;
 
-import ues.fia.proyecto1pdm115.R;
-import ues.fia.proyecto1pdm115.modelos.Usuario;
 
 public class EliminarHospitalActivity extends AppCompatActivity {
     EditText edtIdHospitalEliminar;

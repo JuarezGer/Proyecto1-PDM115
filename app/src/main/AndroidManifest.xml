@@ -12,6 +12,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
         <activity
+            android:name=".doctores.EliminarCuentaConActivity"
+            android:exported="false" />
+        <activity
+            android:name=".doctores.CrearCuentaConActivity"
+            android:exported="false" />
+        <activity
+            android:name=".doctores.EliminarDoctorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".doctores.VisualizarDoctorActivity"
+            android:exported="false" />
+        <activity
             android:name=".doctores.ActualizarDoctorActivity"
             android:exported="false" />
         <activity
