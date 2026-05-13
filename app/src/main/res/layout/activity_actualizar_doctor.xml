@@ -1,0 +1,84 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="18dp">
+
+        <EditText
+            android:id="@+id/edtDuiDoctorActualizar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="10dp"
+            android:hint="Dui doctor"
+            android:inputType="number"
+            android:maxLength="9"/>
+
+        <Button
+            android:id="@+id/btnBuscarModificarDoctor"
+            android:layout_width="115dp"
+            android:layout_height="wrap_content"
+            android:text="Buscar"/>
+    </LinearLayout>
+
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="El doctor se encuentra asociado al usuario: "/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:id="@+id/tvUsuarioActualDoctor"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Volver a seleccionar usuario para doctor:"
+        android:layout_marginTop="8dp"/>
+    <Spinner android:id="@+id/spinnerUsuarioDoctorActualizar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Asignar hospital para doctor:"
+        android:layout_marginTop="8dp"/>
+    <Spinner android:id="@+id/spinnerHospitalDoctorActualizar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+
+
+    <EditText
+        android:id="@+id/edtNombreDoctorActualizar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Nombre doctor"
+        android:maxLength="15"/>
+
+    <EditText
+        android:id="@+id/edtApellidoDoctorActualizar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Apellido doctor"
+        android:maxLength="15"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <Button android:id="@+id/btnRegresarDoctorActualiizar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Regresar" />
+    <Button android:id="@+id/btnGuardarDoctorActualizar"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Guardar" />
+</LinearLayout>
