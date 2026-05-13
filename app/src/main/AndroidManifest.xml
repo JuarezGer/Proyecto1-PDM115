@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
         <activity
+            android:name=".doctores.ActualizarDoctorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".doctores.CrearDoctorActivity"
+            android:exported="false" />
+        <activity
             android:name=".hospitales.EliminarHospitalActivity"
             android:exported="false" />
         <activity
@@ -83,25 +89,27 @@
         <activity android:name=".pacientes.EliminarPacienteActivity" />
         <activity android:name=".doctores.DoctorMenuActivity" />
         <activity android:name=".especialidades.EspecialidadMenuActivity" />
-        <activity android:name=".especialidades.CrearEspecialidadActivity" />
-        <!-- CRUD De Pagos -->
-        <activity android:name=".pagos.PagoMenuActivity"/>
-        <activity android:name=".pagos.CrearPagoActivity"/>
-        <activity android:name=".pagos.VisualizarPagosActivity"/>
-        <activity android:name=".pagos.ModificarPagoActivity"/>
-        <activity android:name=".pagos.EliminarPagoActivity"/>
-        <!-- CRUD De Seguros -->
-        <activity android:name=".seguros.SeguroMenuActivity"
-            android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".seguros.CrearSeguroActivity"
-            android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".seguros.VisualizarSegurosActivity"
-            android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".seguros.ModificarSeguroActivity"
-            android:windowSoftInputMode="adjustNothing"/>
-        <activity android:name=".seguros.EliminarSeguroActivity"
-            android:windowSoftInputMode="adjustNothing"/>
-
+        <activity android:name=".especialidades.CrearEspecialidadActivity" /> <!-- CRUD De Pagos -->
+        <activity android:name=".pagos.PagoMenuActivity" />
+        <activity android:name=".pagos.CrearPagoActivity" />
+        <activity android:name=".pagos.VisualizarPagosActivity" />
+        <activity android:name=".pagos.ModificarPagoActivity" />
+        <activity android:name=".pagos.EliminarPagoActivity" /> <!-- CRUD De Seguros -->
+        <activity
+            android:name=".seguros.SeguroMenuActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".seguros.CrearSeguroActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".seguros.VisualizarSegurosActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".seguros.ModificarSeguroActivity"
+            android:windowSoftInputMode="adjustNothing" />
+        <activity
+            android:name=".seguros.EliminarSeguroActivity"
+            android:windowSoftInputMode="adjustNothing" />
         <activity android:name=".hospitales.HospitalMenuActivity" /> <!-- CRUD De Establecimientos -->
         <activity android:name=".aseguradoras.AseguradoraMenuActivity" />
         <activity android:name=".aseguradoras.CrearAseguradoraActivity" />
@@ -113,7 +121,6 @@
         <activity android:name=".establecimientos.VisualizarEstablecimientosActivity" />
         <activity android:name=".establecimientos.ActualizarEstablecimientoActivity" />
         <activity android:name=".establecimientos.EliminarEstablecimientoActivity" />
-
     </application>
 
 </manifest>

@@ -16,6 +16,7 @@ import java.util.Set;
 
 import ues.fia.proyecto1pdm115.modelos.Departamento;
 import ues.fia.proyecto1pdm115.modelos.Distrito;
+import ues.fia.proyecto1pdm115.modelos.Doctor;
 import ues.fia.proyecto1pdm115.modelos.Especialidad;
 import ues.fia.proyecto1pdm115.modelos.Hospital;
 import ues.fia.proyecto1pdm115.modelos.Municipio;
@@ -104,7 +105,6 @@ public class controlDBHospitalApp {
             }
         }
     }
-
 
 
     public String obtenerIdUsuario(String usuario) {
@@ -277,7 +277,7 @@ public class controlDBHospitalApp {
 
             db.execSQL("CREATE TABLE DOCTOR (" +
                     "DUI_DOCTOR TEXT PRIMARY KEY, " +
-                    "ID_HOSPITAL INTEGER NOT NULL, " +
+                    "ID_HOSPITAL INTEGER, " +
                     "ID_USUARIO TEXT NOT NULL, " +
                     "NOMBRE_DOCTOR TEXT NOT NULL, " +
                     "APELLIDO_DOCTOR TEXT NOT NULL, " +
@@ -692,10 +692,10 @@ public class controlDBHospitalApp {
             // ============================
             // PUEDE_ELEGIR
             // ============================
-            insertarPuedeElegir(db,"U1","ADM");
-            insertarPuedeElegir(db,"U1","FAC");
-            insertarPuedeElegir(db,"U1","PAC");
-            insertarPuedeElegir(db,"U2","FAC");
+            insertarPuedeElegir(db, "U1", "ADM");
+            insertarPuedeElegir(db, "U1", "FAC");
+            insertarPuedeElegir(db, "U1", "PAC");
+            insertarPuedeElegir(db, "U2", "FAC");
 
             // ============================
             // MUNICIPIO
@@ -911,12 +911,13 @@ public class controlDBHospitalApp {
             db.insertWithOnConflict("OPCION_CRUD", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
         }
 
-        private void insertarPuedeElegir(SQLiteDatabase db, String idUsuario, String idOpcion){
-            ContentValues valores= new ContentValues();
-            valores.put("ID_USUARIO",idUsuario);
-            valores.put("ID_OPCION",idOpcion);
-            db.insertWithOnConflict("PUEDE_ELEGIR",null,valores,SQLiteDatabase.CONFLICT_IGNORE);
+        private void insertarPuedeElegir(SQLiteDatabase db, String idUsuario, String idOpcion) {
+            ContentValues valores = new ContentValues();
+            valores.put("ID_USUARIO", idUsuario);
+            valores.put("ID_OPCION", idOpcion);
+            db.insertWithOnConflict("PUEDE_ELEGIR", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
         }
+
         private void insertarMunicipio(SQLiteDatabase db, String codMunicipio, String codDpto, String nombreMunicipio) {
             ContentValues valores = new ContentValues();
             valores.put("COD_MUNICIPIO", codMunicipio);
@@ -1203,17 +1204,18 @@ public class controlDBHospitalApp {
 
         return paciente;
     }
+
     // =========================================================
     // MÉTODOS PARA PUEDE_ELEGIR (PERMISOS)
     // =========================================================
-    public ArrayList<Opcion_crud> consultarPermisos(){
+    public ArrayList<Opcion_crud> consultarPermisos() {
         ArrayList<Opcion_crud> lista = new ArrayList<>();
         Cursor cursor = null;
 
-        try{
+        try {
             cursor = db.rawQuery("SELECT ID_OPCION,DESCRIPCION_OPC FROM OPCION_CRUD ORDER BY ID_OPCION ASC",
                     null);
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 do {
                     Opcion_crud opcionCrud = new Opcion_crud();
 
@@ -1221,71 +1223,174 @@ public class controlDBHospitalApp {
                     opcionCrud.setDescripcion(cursor.getString(cursor.getColumnIndexOrThrow("DESCRIPCION_OPC")));
 
                     lista.add(opcionCrud);
-                }while (cursor.moveToNext());
+                } while (cursor.moveToNext());
             }
-        }finally {
-            if (cursor!=null){
+        } finally {
+            if (cursor != null) {
                 cursor.close();
             }
         }
         return lista;
     }
 
-    public String insertarPermiso(String idUsuario,String idPermiso){
-        try{
+    public String insertarPermiso(String idUsuario, String idPermiso) {
+        try {
             ContentValues values = new ContentValues();
-            values.put("ID_USUARIO",idUsuario);
-            values.put("ID_OPCION",idPermiso);
+            values.put("ID_USUARIO", idUsuario);
+            values.put("ID_OPCION", idPermiso);
 
-            long control = db.insert("PUEDE_ELEGIR",null,values);
+            long control = db.insert("PUEDE_ELEGIR", null, values);
 
-            if (control==-1){
+            if (control == -1) {
                 return "Error al crear permiso";
             }
             return "Permiso creado exitosamente";
-        }catch (Exception e){
-            return "Fallo al crear permiso: "+e.getMessage();
+        } catch (Exception e) {
+            return "Fallo al crear permiso: " + e.getMessage();
         }
     }
 
-    public ArrayList<Puede_elegir> consultarPermisos(String idUsuario){
+    public ArrayList<Puede_elegir> consultarPermisos(String idUsuario) {
         ArrayList<Puede_elegir> lista = new ArrayList<>();
         Cursor cursor = null;
 
-        try{
+        try {
             cursor = db.rawQuery("SELECT * FROM PUEDE_ELEGIR WHERE ID_USUARIO =?",
                     new String[]{String.valueOf(idUsuario)});
 
-            if(cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 do {
                     Puede_elegir puedeElegir = new Puede_elegir();
                     puedeElegir.setId_usuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
                     puedeElegir.setId_opcion(cursor.getString(cursor.getColumnIndexOrThrow("ID_OPCION")));
 
                     lista.add(puedeElegir);
-                }while(cursor.moveToNext());
+                } while (cursor.moveToNext());
             }
-        }finally {
-            if (cursor!=null){
+        } finally {
+            if (cursor != null) {
                 cursor.close();
             }
         }
         return lista;
     }
 
-    public String eliminarPermiso(String idUsuario,String idOpcion){
-        try{
-            int control = db.delete("PUEDE_ELEGIR","ID_USUARIO=? AND ID_OPCION=?",
-                    new String[]{idUsuario,idOpcion});
-            if (control>0){
+    public String eliminarPermiso(String idUsuario, String idOpcion) {
+        try {
+            int control = db.delete("PUEDE_ELEGIR", "ID_USUARIO=? AND ID_OPCION=?",
+                    new String[]{idUsuario, idOpcion});
+            if (control > 0) {
                 return "Permiso eliminado";
-            }else {
+            } else {
                 return "Error en eliminacion";
             }
-        }catch (Exception e){
-            return "No se pudo eliminar el permiso de usuario por: "+e.getMessage();
+        } catch (Exception e) {
+            return "No se pudo eliminar el permiso de usuario por: " + e.getMessage();
         }
     }
+    // =========================================================
+    // MÉTODOS PARA DOCTORES
+    // =========================================================
+    public String insertarDoctor(Doctor doctor){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("DUI_DOCTOR",doctor.getDuiDoctor());
+            values.put("ID_USUARIO",doctor.getIdUsuario());
+            values.put("NOMBRE_DOCTOR",doctor.getNombreDoctor());
+            values.put("APELLIDO_DOCTOR",doctor.getApellidoDoctor());
+
+            long control = db.insert("DOCTOR",null,values);
+            if (control==-1){
+                return "Error al crear doctor";
+            }
+            return "Doctor creado exitosamente. ";
+        }catch (Exception e){
+            return "Error al crear doctor: "+e.getMessage();
+        }
+    }
+
+    public Doctor consultarDoctor(String dui) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(
+                    "SELECT * FROM DOCTOR WHERE DUI_DOCTOR = ?",
+                    new String[]{String.valueOf(dui)}
+            );
+
+            if (cursor.moveToFirst()) {
+                Doctor doctor = new Doctor();
+
+                doctor.setDuiDoctor(cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+                doctor.setNombreDoctor(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR")));
+                doctor.setApellidoDoctor(cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO_DOCTOR")));
+                doctor.setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
+
+                return doctor;
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+    public Doctor consultarDoctorUsuario(String idUsuario) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(
+                    "SELECT * FROM DOCTOR WHERE ID_USUARIO = ?",
+                    new String[]{String.valueOf(idUsuario)}
+            );
+
+            if (cursor.moveToFirst()) {
+                Doctor doctor = new Doctor();
+
+                doctor.setDuiDoctor(cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+
+                return doctor;
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public String actualizarDoctor(Doctor doctor){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("DUI_DOCTOR",doctor.getDuiDoctor());
+            values.put("ID_USUARIO",doctor.getIdUsuario());
+            values.put("NOMBRE_DOCTOR",doctor.getNombreDoctor());
+            values.put("APELLIDO_DOCTOR",doctor.getApellidoDoctor());
+            values.put("ID_HOSPITAL",doctor.getIdHospital());
+
+            int control = db.update(
+                    "DOCTOR",
+                    values,
+                    "DUI_DOCTOR=?",
+                    new String[]{String.valueOf(doctor.getDuiDoctor())}
+            );
+
+            if(control == 0){
+                return "Doctor no encontrado";
+            }
+
+            return "Doctor actualizado correctamente";
+
+        }catch(Exception e){
+            return "Error al actualizar: " + e.getMessage();
+        }
+    }
+
+
     // =========================================================
     // MÉTODOS PARA HOSPITALES
     // =========================================================

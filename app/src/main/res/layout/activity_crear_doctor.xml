@@ -1,0 +1,56 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <EditText
+        android:id="@+id/edtDuiDoctorCrear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Dui doctor"
+        android:inputType="number"
+        android:maxLength="9"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+        android:text="Seleccionar usuario para doctor:"
+        android:layout_marginTop="8dp"/>
+    <Spinner android:id="@+id/spinnerUsuarioDoctorCrear"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp" />
+
+
+    <EditText
+        android:id="@+id/edtNombreDoctorCrear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Nombre doctor"
+        android:maxLength="15"/>
+
+    <EditText
+        android:id="@+id/edtApellidoDoctorCrear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="10dp"
+        android:hint="Apellido doctor"
+        android:maxLength="15"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+    <Button android:id="@+id/btnRegresarDoctorCrear"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:text="Regresar" />
+    <Button android:id="@+id/btnGuardarDoctorCrear"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Guardar" />
+</LinearLayout>
