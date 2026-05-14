@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activityModificarConsulta"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_app">
+
+    <!-- HEADER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="108dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:background="@color/header_blue">
+
+        <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_hospital_cross"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hospital App"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary_dark"
+            android:layout_marginStart="14dp" />
+
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@drawable/ic_user_circle"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
+    <!-- CONTENIDO -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            android:paddingTop="28dp"
+            android:paddingBottom="20dp">
+
+            <!-- TÍTULO Y DESCRIPCIÓN -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="28dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Modificar Consulta"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/text_black"
+                    android:layout_marginBottom="4dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Ingrese el ID para buscar y editar la consulta"
+                    android:textSize="14sp"
+                    android:textColor="#666666"
+                    android:layout_marginBottom="20dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:background="@color/card_blue" />
+            </LinearLayout>
+
+            <!-- SECCIÓN: BÚSQUEDA POR ID -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Búsqueda por Identificador"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/header_blue"
+                android:layout_marginBottom="12dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="28dp">
+
+                <EditText
+                    android:id="@+id/edtIdConsultaMod"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="ID Consulta"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:textSize="15sp"
+                    android:textColor="@color/text_black"
+                    android:textColorHint="#999999"
+                    android:backgroundTint="@color/card_blue"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnBuscarModificar"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:text="Buscar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="@color/card_blue" />
+            </LinearLayout>
+
+            <!-- SECCIÓN: REFERENCIAS (LLAVES FORÁNEAS) -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Personal y Paciente Relacionado"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/header_blue"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/edtDuiPacienteMod"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="DUI Paciente"
+                android:padding="12dp"
+                android:textSize="15sp"
+                android:textColor="@color/text_black"
+                android:textColorHint="#999999"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/edtDuiDoctorMod"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="DUI Doctor"
+                android:padding="12dp"
+                android:textSize="15sp"
+                android:textColor="@color/text_black"
+                android:textColorHint="#999999"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="20dp" />
+
+            <!-- SECCIÓN: DETALLES DE ATENCIÓN -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Detalles de la Consulta"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/header_blue"
+                android:layout_marginBottom="12dp" />
+
+            <Spinner
+                android:id="@+id/spnEmergenciaMod"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/edtFechaConsultaMod"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Fecha (YYYY-MM-DD)"
+                android:padding="12dp"
+                android:textSize="15sp"
+                android:textColor="@color/text_black"
+                android:textColorHint="#999999"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/edtDiagnosticoMod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="100dp"
+                android:hint="Diagnóstico médico"
+                android:gravity="top"
+                android:padding="12dp"
+                android:textSize="15sp"
+                android:textColor="@color/text_black"
+                android:textColorHint="#999999"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="20dp" />
+
+            <!-- SECCIÓN: COBROS -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Información de Pago"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/header_blue"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/edtCargoTotalMod"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Cargo Total ($)"
+                android:inputType="numberDecimal"
+                android:padding="12dp"
+                android:textSize="15sp"
+                android:textColor="@color/text_black"
+                android:textColorHint="#999999"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="12dp" />
+
+            <Spinner
+                android:id="@+id/spnPagaMedMod"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="28dp" />
+
+            <!-- BOTONES -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnRegresarModificar"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Regresar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="#E8E8E8"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnActualizarConsulta"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Actualizar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="@color/card_blue"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- BARRA INFERIOR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/bottom_nav"
+        android:elevation="8dp">
+
+        <!-- INICIO -->
+        <LinearLayout
+            android:id="@+id/navInicio"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_home"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Inicio"
+                android:textColor="@color/text_gray"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <!-- PERFIL -->
+        <LinearLayout
+            android:id="@+id/navPerfil"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_profile"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Perfil"
+                android:textColor="@color/text_gray"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <!-- SALIR -->
+        <LinearLayout
+            android:id="@+id/navSalir"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/ic_logout"
+                android:scaleType="fitCenter" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Salir"
+                android:textColor="@color/text_gray"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
