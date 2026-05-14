@@ -11,6 +11,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
+        <activity android:name=".consultas.ConsultaMenuActivity" android:exported="false"/>
+        <activity android:name=".consultas.EliminarConsultaActivity" android:exported="false"/>
+        <activity android:name=".consultas.ModificarConsultaActivity" android:exported="false"/>
+        <activity android:name=".consultas.VisualizarConsultasActivity" android:exported="false"/>
+        <activity android:name=".consultas.CrearConsultaActivity" android:exported="false"/>
         <activity
             android:name=".doctores.ActualizarDoctorActivity"
             android:exported="false" />

@@ -28,7 +28,7 @@ import ues.fia.proyecto1pdm115.establecimientos.*;
 import ues.fia.proyecto1pdm115.aseguradoras.*;
 import ues.fia.proyecto1pdm115.pagos.*;
 import ues.fia.proyecto1pdm115.seguros.*;
-
+import ues.fia.proyecto1pdm115.consultas.*;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
         configurarClick("cardPermisos", PermisosMenuActivity.class);
         configurarClick("cardPagos", PagoMenuActivity.class);
         configurarClick("cardSeguros",SeguroMenuActivity.class);
+        configurarClick("cardConsultas", ConsultaMenuActivity.class);
     }
 
     private void configurarClick(String nombreId, Class<?> activityDestino) {

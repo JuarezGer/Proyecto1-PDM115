@@ -29,7 +29,7 @@ import ues.fia.proyecto1pdm115.modelos.Establecimiento;
 import ues.fia.proyecto1pdm115.modelos.Aseguradora;
 import ues.fia.proyecto1pdm115.modelos.Pago;
 import ues.fia.proyecto1pdm115.modelos.Seguro;
-
+import ues.fia.proyecto1pdm115.modelos.Consulta;
 public class controlDBHospitalApp {
 
     private static final String BASE_DATOS = "hospital_app.db";
@@ -1204,7 +1204,169 @@ public class controlDBHospitalApp {
 
         return paciente;
     }
+// =========================================================
+    // CRUD CONSULTA
+    // =========================================================
 
+    public String insertarConsulta(Consulta consulta) {
+        try {
+            ContentValues valores = new ContentValues();
+
+            // El ID_CONSULTA suele ser autoincrementable o manejado manualmente según tu diseño
+            valores.put("ID_CONSULTA", consulta.getIdConsulta());
+            valores.put("DUI_PACIENTE", consulta.getDuiPaciente());
+            valores.put("DUI_DOCTOR", consulta.getDuiDoctor());
+            valores.put("COD_EMERGENCIA", consulta.getCodEmergencia());
+            valores.put("FECHA_CONSULTA", consulta.getFechaConsulta());
+            valores.put("DIAGNOSTICO", consulta.getDiagnostico());
+            valores.put("CARGO_TOTAL_CONSULTA", consulta.getCargoTotalConsulta());
+            valores.put("PAGA_MEDICAMENTO", consulta.getPagaMedicamento());
+
+            long resultado = db.insertOrThrow("CONSULTA", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar consulta.";
+            }
+
+            return "Consulta insertada correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: Verifique que el DUI del paciente y doctor existan.";
+        } catch (Exception e) {
+            return "Error al insertar consulta: " + e.getMessage();
+        }
+    }
+
+    public Consulta consultarConsulta(int idConsulta) {
+        Cursor cursor = null;
+        try {
+            cursor = db.query(
+                    "CONSULTA",
+                    null,
+                    "ID_CONSULTA = ?",
+                    new String[]{String.valueOf(idConsulta)},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorAConsulta(cursor);
+            }
+            return null;
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+    }
+
+    public ArrayList<Consulta> consultarTodasConsultas() {
+        ArrayList<Consulta> listaConsultas = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = db.query(
+                    "CONSULTA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "FECHA_CONSULTA DESC" // Ordenamos por la más reciente
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    listaConsultas.add(cursorAConsulta(cursor));
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return listaConsultas;
+    }
+
+    public String actualizarConsulta(Consulta consulta) {
+        try {
+            ContentValues valores = new ContentValues();
+
+            valores.put("DUI_PACIENTE", consulta.getDuiPaciente());
+            valores.put("DUI_DOCTOR", consulta.getDuiDoctor());
+            valores.put("COD_EMERGENCIA", consulta.getCodEmergencia());
+            valores.put("FECHA_CONSULTA", consulta.getFechaConsulta());
+            valores.put("DIAGNOSTICO", consulta.getDiagnostico());
+            valores.put("CARGO_TOTAL_CONSULTA", consulta.getCargoTotalConsulta());
+            valores.put("PAGA_MEDICAMENTO", consulta.getPagaMedicamento());
+
+            int filas = db.update(
+                    "CONSULTA",
+                    valores,
+                    "ID_CONSULTA = ?",
+                    new String[]{String.valueOf(consulta.getIdConsulta())}
+            );
+
+            if (filas > 0) {
+                return "Consulta actualizada correctamente.";
+            } else {
+                return "No se encontró la consulta.";
+            }
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al actualizar consulta: " + e.getMessage();
+        }
+    }
+
+    public String eliminarConsulta(int idConsulta) {
+        try {
+            int filas = db.delete(
+                    "CONSULTA",
+                    "ID_CONSULTA = ?",
+                    new String[]{String.valueOf(idConsulta)}
+            );
+
+            if (filas > 0) {
+                return "Consulta eliminada correctamente.";
+            } else {
+                return "No se encontró la consulta.";
+            }
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar la consulta porque tiene recetas o pagos relacionados.";
+        } catch (Exception e) {
+            return "Error al eliminar consulta: " + e.getMessage();
+        }
+    }
+
+    private Consulta cursorAConsulta(Cursor cursor) {
+        Consulta consulta = new Consulta();
+
+        consulta.setIdConsulta(cursor.getInt(cursor.getColumnIndexOrThrow("ID_CONSULTA")));
+        consulta.setDuiPaciente(cursor.getString(cursor.getColumnIndexOrThrow("DUI_PACIENTE")));
+        consulta.setDuiDoctor(cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+        consulta.setCodEmergencia(cursor.getString(cursor.getColumnIndexOrThrow("COD_EMERGENCIA")));
+        consulta.setFechaConsulta(cursor.getString(cursor.getColumnIndexOrThrow("FECHA_CONSULTA")));
+        consulta.setDiagnostico(cursor.getString(cursor.getColumnIndexOrThrow("DIAGNOSTICO")));
+        consulta.setCargoTotalConsulta(cursor.getFloat(cursor.getColumnIndexOrThrow("CARGO_TOTAL_CONSULTA")));
+        consulta.setPagaMedicamento(cursor.getInt(cursor.getColumnIndexOrThrow("PAGA_MEDICAMENTO")));
+
+        return consulta;
+    }
+
+    // =========================================================
+    // CRUD TIPO_EMERGENCIA
+    // =========================================================
+    public Cursor consultarEmergenciasCursor() {
+        try {
+
+            return db.query("TIPO_EMERGENCIA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "PRIORIDAD ASC");
+        } catch (Exception e) {
+            return null;
+        }
+    }
     // =========================================================
     // MÉTODOS PARA PUEDE_ELEGIR (PERMISOS)
     // =========================================================
