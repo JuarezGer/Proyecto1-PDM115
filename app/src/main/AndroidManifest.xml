@@ -12,6 +12,34 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Proyecto1PDM115">
         <activity
+            android:name=".tipo_emergencia.EliminarTipoEmergenciaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".tipo_emergencia.ModificarTipoEmergenciaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".tipo_emergencia.VisualizarTipoEmergenciaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".tipo_emergencia.CrearTipoEmergenciaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".tipo_emergencia.TipoEmergenciaMenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".consultas.ConsultaMenuActivity"
+            android:exported="false" />
+        <activity
+            android:name=".consultas.EliminarConsultaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".consultas.ModificarConsultaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".consultas.VisualizarConsultasActivity"
+            android:exported="false" />
+        <activity
+            android:name=".consultas.CrearConsultaActivity"
             android:name=".doctores.EliminarCuentaConActivity"
             android:exported="false" />
         <activity
