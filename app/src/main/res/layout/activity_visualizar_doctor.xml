@@ -10,7 +10,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hospitales registrados"
+        android:text="Doctores registrados"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginBottom="10dp"/>
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <TableLayout
-                android:id="@+id/tableHospitales"
+                android:id="@+id/tableDoctores"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -39,7 +39,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/btnRegresarVisualizarHospitales"
+        android:id="@+id/btnRegresarVisualizarDoctor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Regresar"

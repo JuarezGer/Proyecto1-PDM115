@@ -40,6 +40,16 @@
             android:exported="false" />
         <activity
             android:name=".consultas.CrearConsultaActivity"
+            android:name=".doctores.EliminarCuentaConActivity"
+            android:exported="false" />
+        <activity
+            android:name=".doctores.CrearCuentaConActivity"
+            android:exported="false" />
+        <activity
+            android:name=".doctores.EliminarDoctorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".doctores.VisualizarDoctorActivity"
             android:exported="false" />
         <activity
             android:name=".doctores.ActualizarDoctorActivity"
