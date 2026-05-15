@@ -1,9 +1,9 @@
 package ues.fia.proyecto1pdm115.consultas;
 
+import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.database.Cursor;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -25,15 +25,17 @@ import ues.fia.proyecto1pdm115.modelos.Consulta;
 
 public class ModificarConsultaActivity extends AppCompatActivity {
 
-    EditText edtIdConsultaMod, edtDuiPacienteMod, edtDuiDoctorMod,
+    EditText edtIdConsultaMod, edtDuiPacienteMod,
             edtFechaConsultaMod, edtDiagnosticoMod, edtCargoTotalMod;
 
-    Spinner spnEmergenciaMod, spnPagaMedMod;
+    Spinner spnDoctorMod, spnEmergenciaMod, spnPagaMedMod;
 
     Button btnBuscarModificar, btnActualizarConsulta, btnRegresarModificar;
     controlDBHospitalApp helper;
 
-    // Listas para Spinners
+    ArrayList<String> duisDoctor = new ArrayList<>();
+    ArrayList<String> nombresDoctor = new ArrayList<>();
+
     ArrayList<String> codigosEmergencia = new ArrayList<>();
     ArrayList<String> nombresEmergencia = new ArrayList<>();
     String[] opcionesPago = {"¿Paga Medicamento?", "No", "Sí"};
@@ -48,10 +50,9 @@ public class ModificarConsultaActivity extends AppCompatActivity {
 
         helper = new controlDBHospitalApp(this);
 
-        // Enlace de vistas
         edtIdConsultaMod = findViewById(R.id.edtIdConsultaMod);
         edtDuiPacienteMod = findViewById(R.id.edtDuiPacienteMod);
-        edtDuiDoctorMod = findViewById(R.id.edtDuiDoctorMod);
+        spnDoctorMod = findViewById(R.id.spnDoctorMod);
         edtFechaConsultaMod = findViewById(R.id.edtFechaConsultaMod);
         edtDiagnosticoMod = findViewById(R.id.edtDiagnosticoMod);
         edtCargoTotalMod = findViewById(R.id.edtCargoTotalMod);
@@ -63,13 +64,42 @@ public class ModificarConsultaActivity extends AppCompatActivity {
         btnActualizarConsulta = findViewById(R.id.btnActualizarConsulta);
         btnRegresarModificar = findViewById(R.id.btnRegresarModificar);
 
+        cargarDoctores();
         cargarEmergencias();
-
         configurarEstiloSpinner(spnPagaMedMod, opcionesPago);
 
         btnBuscarModificar.setOnClickListener(v -> buscarConsulta());
         btnActualizarConsulta.setOnClickListener(v -> actualizarConsulta());
         btnRegresarModificar.setOnClickListener(v -> finish());
+    }
+
+    private void cargarDoctores() {
+        duisDoctor.clear();
+        nombresDoctor.clear();
+        duisDoctor.add("");
+        nombresDoctor.add("Seleccione doctor");
+
+        Cursor cursor = null;
+        try {
+            helper.abrir();
+            cursor = helper.consultarDoctoresCursor();
+            if (cursor.moveToFirst()) {
+                do {
+                    String dui = cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR"));
+                    String nombre = cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR"));
+
+                    duisDoctor.add(dui);
+                    nombresDoctor.add(nombre + " - " + dui);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Error al cargar doctores: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        } finally {
+            if (cursor != null) cursor.close();
+            helper.cerrar();
+        }
+
+        configurarEstiloSpinner(spnDoctorMod, nombresDoctor.toArray(new String[0]));
     }
 
     private void cargarEmergencias() {
@@ -97,9 +127,9 @@ public class ModificarConsultaActivity extends AppCompatActivity {
             helper.cerrar();
         }
 
-
         configurarEstiloSpinner(spnEmergenciaMod, nombresEmergencia.toArray(new String[0]));
     }
+
     private void buscarConsulta() {
         String idStr = edtIdConsultaMod.getText().toString().trim();
         if (idStr.isEmpty()) {
@@ -113,14 +143,13 @@ public class ModificarConsultaActivity extends AppCompatActivity {
 
         if (consulta != null) {
             edtDuiPacienteMod.setText(consulta.getDuiPaciente());
-            edtDuiDoctorMod.setText(consulta.getDuiDoctor());
+            seleccionarDoctorEnSpinner(consulta.getDuiDoctor());
             edtFechaConsultaMod.setText(consulta.getFechaConsulta());
             edtDiagnosticoMod.setText(consulta.getDiagnostico());
             edtCargoTotalMod.setText(String.valueOf(consulta.getCargoTotalConsulta()));
 
-            // Setear Spinners (Basado en lógica simple de posición o mapeo)
-            seleccionarEnSpinner(spnEmergenciaMod, consulta.getCodEmergencia());
-            spnPagaMedMod.setSelection(consulta.getPagaMedicamento() + 1);
+            seleccionarEmergenciaEnSpinner(consulta.getCodEmergencia());
+            spnPagaMedMod.setSelection(consulta.getPagaMedicamento() == 1 ? 2 : 1);
 
             Toast.makeText(this, "Consulta encontrada", Toast.LENGTH_SHORT).show();
         } else {
@@ -128,6 +157,7 @@ public class ModificarConsultaActivity extends AppCompatActivity {
             Toast.makeText(this, "Consulta no encontrada", Toast.LENGTH_SHORT).show();
         }
     }
+
     private void configurarEstiloSpinner(Spinner spinner, String[] datos) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, datos) {
             @Override
@@ -158,6 +188,7 @@ public class ModificarConsultaActivity extends AppCompatActivity {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
+
     private void actualizarConsulta() {
         String idStr = edtIdConsultaMod.getText().toString().trim();
         if (idStr.isEmpty() || camposObligatoriosVacios()) {
@@ -168,23 +199,14 @@ public class ModificarConsultaActivity extends AppCompatActivity {
         Consulta consulta = new Consulta();
         consulta.setIdConsulta(Integer.parseInt(idStr));
         consulta.setDuiPaciente(edtDuiPacienteMod.getText().toString().trim());
-        consulta.setDuiDoctor(edtDuiDoctorMod.getText().toString().trim());
-        consulta.setCodEmergencia(spnEmergenciaMod.getSelectedItem().toString());
-        consulta.setFechaConsulta(edtFechaConsultaMod.getText().toString().trim());
-        consulta.setDiagnostico(edtDiagnosticoMod.getText().toString().trim());
-        consulta.setCargoTotalConsulta(Float.parseFloat(edtCargoTotalMod.getText().toString()));
-        consulta.setPagaMedicamento(spnPagaMedMod.getSelectedItemPosition() - 1);
-
-        int posSeleccionada = spnEmergenciaMod.getSelectedItemPosition();
-        consulta.setCodEmergencia(codigosEmergencia.get(posSeleccionada));
-
+        consulta.setDuiDoctor(duisDoctor.get(spnDoctorMod.getSelectedItemPosition()));
+        consulta.setCodEmergencia(codigosEmergencia.get(spnEmergenciaMod.getSelectedItemPosition()));
         consulta.setFechaConsulta(edtFechaConsultaMod.getText().toString().trim());
         consulta.setDiagnostico(edtDiagnosticoMod.getText().toString().trim());
 
-        // Asegúrate de usar Float.parseFloat como lo corregimos antes
-        consulta.setCargoTotalConsulta(Float.parseFloat(edtCargoTotalMod.getText().toString()));
+        String cargoStr = edtCargoTotalMod.getText().toString().trim();
+        consulta.setCargoTotalConsulta(cargoStr.isEmpty() ? 0.0f : Float.parseFloat(cargoStr));
 
-        // Ajuste para el pago de medicamento
         consulta.setPagaMedicamento(spnPagaMedMod.getSelectedItemPosition() == 2 ? 1 : 0);
 
         helper.abrir();
@@ -196,25 +218,24 @@ public class ModificarConsultaActivity extends AppCompatActivity {
 
     private boolean camposObligatoriosVacios() {
         return edtDuiPacienteMod.getText().toString().isEmpty() ||
-                edtDuiDoctorMod.getText().toString().isEmpty() ||
+                spnDoctorMod.getSelectedItemPosition() == 0 ||
                 spnEmergenciaMod.getSelectedItemPosition() == 0 ||
                 spnPagaMedMod.getSelectedItemPosition() == 0;
     }
 
-    private void seleccionarEnSpinner(Spinner spinner, String valorCodigo) {
+    private void seleccionarDoctorEnSpinner(String duiDoctor) {
+        int posicion = duisDoctor.indexOf(duiDoctor);
+        spnDoctorMod.setSelection(posicion != -1 ? posicion : 0);
+    }
 
+    private void seleccionarEmergenciaEnSpinner(String valorCodigo) {
         int posicion = codigosEmergencia.indexOf(valorCodigo);
-
-        if (posicion != -1) {
-            spinner.setSelection(posicion);
-        } else {
-            spinner.setSelection(0);
-        }
+        spnEmergenciaMod.setSelection(posicion != -1 ? posicion : 0);
     }
 
     private void limpiarCamposSinId() {
         edtDuiPacienteMod.setText("");
-        edtDuiDoctorMod.setText("");
+        spnDoctorMod.setSelection(0);
         edtFechaConsultaMod.setText("");
         edtDiagnosticoMod.setText("");
         edtCargoTotalMod.setText("");

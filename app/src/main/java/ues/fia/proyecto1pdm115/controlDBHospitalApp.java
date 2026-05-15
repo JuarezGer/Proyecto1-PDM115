@@ -1829,6 +1829,15 @@ public class controlDBHospitalApp {
         }
         return lista;
     }
+
+    public Cursor consultarDoctoresCursor() {
+        return db.rawQuery(
+                "SELECT DUI_DOCTOR, NOMBRE_DOCTOR, APELLIDO_DOCTOR " +
+                        "FROM DOCTOR " +
+                        "ORDER BY NOMBRE_DOCTOR ASC, APELLIDO_DOCTOR ASC",
+                null
+        );
+    }
     public String insertarCuentaCon(String dui,Integer idEspe){
         try{
             ContentValues values = new ContentValues();

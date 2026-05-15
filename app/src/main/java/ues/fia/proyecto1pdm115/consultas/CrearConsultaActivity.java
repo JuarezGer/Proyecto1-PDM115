@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -26,13 +25,16 @@ import ues.fia.proyecto1pdm115.modelos.Consulta;
 
 public class CrearConsultaActivity extends AppCompatActivity {
 
-    EditText edtIdConsulta, edtDuiPacienteCons, edtDuiDoctorCons,
+    EditText edtIdConsulta, edtDuiPacienteCons,
             edtFechaConsulta, edtDiagnostico, edtCargoTotal;
 
-    Spinner spnEmergencia, spnPagaMedicamento;
+    Spinner spnDoctorCons, spnEmergencia, spnPagaMedicamento;
 
     Button btnGuardarConsulta, btnRegresarCrear;
     controlDBHospitalApp helper;
+
+    ArrayList<String> duisDoctor = new ArrayList<>();
+    ArrayList<String> nombresDoctor = new ArrayList<>();
 
     ArrayList<String> codigosEmergencia = new ArrayList<>();
     ArrayList<String> nombresEmergencia = new ArrayList<>();
@@ -49,7 +51,7 @@ public class CrearConsultaActivity extends AppCompatActivity {
 
         edtIdConsulta = findViewById(R.id.edtIdConsulta);
         edtDuiPacienteCons = findViewById(R.id.edtDuiPacienteCons);
-        edtDuiDoctorCons = findViewById(R.id.edtDuiDoctorCons);
+        spnDoctorCons = findViewById(R.id.spnDoctorCons);
         spnEmergencia = findViewById(R.id.spnEmergencia);
         edtFechaConsulta = findViewById(R.id.edtFechaConsulta);
         edtDiagnostico = findViewById(R.id.edtDiagnostico);
@@ -59,11 +61,42 @@ public class CrearConsultaActivity extends AppCompatActivity {
         btnGuardarConsulta = findViewById(R.id.btnGuardarConsulta);
         btnRegresarCrear = findViewById(R.id.btnRegresarCrear);
 
+        cargarDoctores();
         cargarEmergencias();
         configurarSpinnerMedicamento();
 
         btnGuardarConsulta.setOnClickListener(v -> guardarConsulta());
         btnRegresarCrear.setOnClickListener(v -> finish());
+    }
+
+    private void cargarDoctores() {
+        duisDoctor.clear();
+        nombresDoctor.clear();
+        duisDoctor.add("");
+        nombresDoctor.add("Seleccione doctor");
+
+        Cursor cursor = null;
+        try {
+            helper.abrir();
+            cursor = helper.consultarDoctoresCursor();
+            if (cursor.moveToFirst()) {
+                do {
+                    String dui = cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR"));
+                    String nombre = cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR"));
+
+                    duisDoctor.add(dui);
+                    nombresDoctor.add(nombre + " - " + dui);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Error al cargar doctores: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        } finally {
+            if (cursor != null) cursor.close();
+            helper.cerrar();
+        }
+
+        ArrayAdapter<String> adapter = crearAdaptadorPersonalizado(nombresDoctor);
+        spnDoctorCons.setAdapter(adapter);
     }
 
     private void cargarEmergencias() {
@@ -114,31 +147,28 @@ public class CrearConsultaActivity extends AppCompatActivity {
         Consulta consulta = new Consulta();
         consulta.setIdConsulta(Integer.parseInt(edtIdConsulta.getText().toString()));
         consulta.setDuiPaciente(edtDuiPacienteCons.getText().toString().trim());
-        consulta.setDuiDoctor(edtDuiDoctorCons.getText().toString().trim());
+        consulta.setDuiDoctor(duisDoctor.get(spnDoctorCons.getSelectedItemPosition()));
         consulta.setCodEmergencia(codigosEmergencia.get(spnEmergencia.getSelectedItemPosition()));
         consulta.setFechaConsulta(edtFechaConsulta.getText().toString().trim());
         consulta.setDiagnostico(edtDiagnostico.getText().toString().trim());
 
-
         String cargoStr = edtCargoTotal.getText().toString().trim();
-        // Agregamos 'f' al 0.0 y (float) antes de Double.parseDouble
         consulta.setCargoTotalConsulta(cargoStr.isEmpty() ? 0.0f : (float) Double.parseDouble(cargoStr));
-
 
         consulta.setPagaMedicamento(spnPagaMedicamento.getSelectedItemPosition() == 1 ? 1 : 0);
 
         helper.abrir();
-        String mensaje = helper.insertarConsulta(consulta); // Debes crear este método en el Helper
+        String mensaje = helper.insertarConsulta(consulta);
         helper.cerrar();
 
         Toast.makeText(this, mensaje, Toast.LENGTH_LONG).show();
-        if(!mensaje.contains("Error")) limpiarCampos();
+        if (!mensaje.contains("Error")) limpiarCampos();
     }
 
     private boolean camposObligatoriosVacios() {
         return edtIdConsulta.getText().toString().isEmpty() ||
                 edtDuiPacienteCons.getText().toString().isEmpty() ||
-                edtDuiDoctorCons.getText().toString().isEmpty() ||
+                spnDoctorCons.getSelectedItemPosition() == 0 ||
                 spnEmergencia.getSelectedItemPosition() == 0 ||
                 edtDiagnostico.getText().toString().isEmpty() ||
                 spnPagaMedicamento.getSelectedItemPosition() == 0;
@@ -147,7 +177,7 @@ public class CrearConsultaActivity extends AppCompatActivity {
     private void limpiarCampos() {
         edtIdConsulta.setText("");
         edtDuiPacienteCons.setText("");
-        edtDuiDoctorCons.setText("");
+        spnDoctorCons.setSelection(0);
         spnEmergencia.setSelection(0);
         edtDiagnostico.setText("");
         edtFechaConsulta.setText("");
@@ -155,9 +185,8 @@ public class CrearConsultaActivity extends AppCompatActivity {
         spnPagaMedicamento.setSelection(0);
     }
 
-
     private ArrayAdapter<String> crearAdaptadorPersonalizado(ArrayList<String> datos) {
-        return new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, datos) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, datos) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
                 TextView view = (TextView) super.getView(position, convertView, parent);
@@ -166,6 +195,7 @@ public class CrearConsultaActivity extends AppCompatActivity {
                         ContextCompat.getColor(getContext(), R.color.text_black));
                 return view;
             }
+
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent) {
                 TextView view = (TextView) super.getDropDownView(position, convertView, parent);
@@ -174,5 +204,7 @@ public class CrearConsultaActivity extends AppCompatActivity {
                 return view;
             }
         };
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        return adapter;
     }
 }
