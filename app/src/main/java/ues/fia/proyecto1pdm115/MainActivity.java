@@ -29,6 +29,7 @@ import ues.fia.proyecto1pdm115.aseguradoras.*;
 import ues.fia.proyecto1pdm115.pagos.*;
 import ues.fia.proyecto1pdm115.seguros.*;
 import ues.fia.proyecto1pdm115.consultas.*;
+import ues.fia.proyecto1pdm115.tipo_emergencia.*;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
         configurarClick("cardPagos", PagoMenuActivity.class);
         configurarClick("cardSeguros",SeguroMenuActivity.class);
         configurarClick("cardConsultas", ConsultaMenuActivity.class);
+        configurarClick("cardTipoEmergencia", TipoEmergenciaMenuActivity.class);
     }
 
     private void configurarClick(String nombreId, Class<?> activityDestino) {

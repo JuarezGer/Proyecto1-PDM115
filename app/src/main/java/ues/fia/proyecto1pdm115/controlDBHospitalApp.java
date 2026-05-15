@@ -30,6 +30,7 @@ import ues.fia.proyecto1pdm115.modelos.Aseguradora;
 import ues.fia.proyecto1pdm115.modelos.Pago;
 import ues.fia.proyecto1pdm115.modelos.Seguro;
 import ues.fia.proyecto1pdm115.modelos.Consulta;
+import ues.fia.proyecto1pdm115.modelos.Tipo_emergencia;
 public class controlDBHospitalApp {
 
     private static final String BASE_DATOS = "hospital_app.db";
@@ -1353,6 +1354,127 @@ public class controlDBHospitalApp {
     // =========================================================
     // CRUD TIPO_EMERGENCIA
     // =========================================================
+    public String insertarTipoEmergencia(Tipo_emergencia tipo) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("COD_EMERGENCIA", tipo.getCod_emergencia());
+            valores.put("PRIORIDAD", tipo.getPrioridad());
+            valores.put("COSTO_EMERGENCIA", tipo.getCosto_emergencia());
+
+            long resultado = db.insertOrThrow("TIPO_EMERGENCIA", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar tipo de emergencia.";
+            }
+            return "Tipo de emergencia insertado correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error: El código " + tipo.getCod_emergencia() + " ya existe.";
+        } catch (Exception e) {
+            return "Error al insertar: " + e.getMessage();
+        }
+    }
+
+    public Tipo_emergencia consultarTipoEmergencia(String codEmergencia) {
+        Cursor cursor = null;
+        try {
+            cursor = db.query(
+                    "TIPO_EMERGENCIA",
+                    null,
+                    "COD_EMERGENCIA = ?",
+                    new String[]{codEmergencia},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorATipoEmergencia(cursor);
+            }
+            return null;
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+    }
+
+    public String actualizarTipoEmergencia(Tipo_emergencia tipo) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("PRIORIDAD", tipo.getPrioridad());
+            valores.put("COSTO_EMERGENCIA", tipo.getCosto_emergencia());
+
+            int filas = db.update(
+                    "TIPO_EMERGENCIA",
+                    valores,
+                    "COD_EMERGENCIA = ?",
+                    new String[]{tipo.getCod_emergencia()}
+            );
+
+            if (filas > 0) {
+                return "Registro actualizado correctamente.";
+            } else {
+                return "No se encontró el código para actualizar.";
+            }
+        } catch (Exception e) {
+            return "Error al actualizar: " + e.getMessage();
+        }
+    }
+
+    public String eliminarTipoEmergencia(String codEmergencia) {
+        try {
+            int filas = db.delete(
+                    "TIPO_EMERGENCIA",
+                    "COD_EMERGENCIA = ?",
+                    new String[]{codEmergencia}
+            );
+
+            if (filas > 0) {
+                return "Registro eliminado correctamente.";
+            } else {
+                return "No se encontró el registro.";
+            }
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar: Este tipo de emergencia está siendo utilizado en consultas médicas.";
+        } catch (Exception e) {
+            return "Error al eliminar: " + e.getMessage();
+        }
+    }
+    private Tipo_emergencia cursorATipoEmergencia(Cursor cursor) {
+        Tipo_emergencia tipo = new Tipo_emergencia();
+        tipo.setCod_emergencia(cursor.getString(cursor.getColumnIndexOrThrow("COD_EMERGENCIA")));
+        tipo.setPrioridad(cursor.getString(cursor.getColumnIndexOrThrow("PRIORIDAD")));
+        tipo.setCosto_emergencia(cursor.getFloat(cursor.getColumnIndexOrThrow("COSTO_EMERGENCIA")));
+        return tipo;
+    }
+    public ArrayList<Tipo_emergencia> consultarTodosTiposEmergencia() {
+        ArrayList<Tipo_emergencia> listaTipos = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            // Consultamos todos los registros de la tabla TIPO_EMERGENCIA
+            cursor = db.query(
+                    "TIPO_EMERGENCIA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "COD_EMERGENCIA ASC" // Ordenados por código
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    // Reutilizamos el método auxiliar que ya creamos
+                    listaTipos.add(cursorATipoEmergencia(cursor));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            // En caso de error, puedes imprimir el log o manejarlo
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return listaTipos;
+    }
     public Cursor consultarEmergenciasCursor() {
         try {
 

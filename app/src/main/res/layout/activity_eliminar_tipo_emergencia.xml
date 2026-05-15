@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/activityModificarConsulta"
+    android:id="@+id/activityEliminarTipoEmergencia"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -37,6 +37,7 @@
             android:layout_height="38dp"
             android:src="@drawable/ic_user_circle"
             android:scaleType="fitCenter" />
+
     </LinearLayout>
 
     <!-- CONTENIDO -->
@@ -65,7 +66,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Modificar Consulta"
+                    android:text="Eliminar Emergencia"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@color/text_black"
@@ -74,7 +75,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Ingrese el codigo para buscar y editar la consulta"
+                    android:text="Busca por código para dar de baja un tipo de emergencia"
                     android:textSize="14sp"
                     android:textColor="#666666"
                     android:layout_marginBottom="20dp" />
@@ -83,16 +84,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:background="@color/card_blue" />
+
             </LinearLayout>
 
-            <!-- SECCIÓN: BÚSQUEDA POR ID -->
+            <!-- SECCIÓN: BÚSQUEDA -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Búsqueda por Identificador"
+                android:text="Búsqueda por Código"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/header_blue"
+                android:layout_marginTop="20dp"
                 android:layout_marginBottom="12dp" />
 
             <LinearLayout
@@ -102,12 +105,11 @@
                 android:layout_marginBottom="28dp">
 
                 <EditText
-                    android:id="@+id/edtIdConsultaMod"
+                    android:id="@+id/edtCodEmergenciaEliminar"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:hint="Codigo Consulta"
-                    android:inputType="number"
+                    android:hint="Código de Emergencia"
                     android:padding="12dp"
                     android:textSize="15sp"
                     android:textColor="@color/text_black"
@@ -116,7 +118,7 @@
                     android:layout_marginEnd="8dp" />
 
                 <Button
-                    android:id="@+id/btnBuscarModificar"
+                    android:id="@+id/btnBuscarEliminar"
                     android:layout_width="115dp"
                     android:layout_height="48dp"
                     android:text="Buscar"
@@ -126,169 +128,95 @@
                     android:backgroundTint="@color/card_blue" />
             </LinearLayout>
 
-            <!-- SECCIÓN: REFERENCIAS (LLAVES FORÁNEAS) -->
+            <!-- SECCIÓN: VISTA PREVIA -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Personal y Paciente Relacionado"
+                android:text="Detalles de la Emergencia"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/header_blue"
                 android:layout_marginBottom="12dp" />
 
-            <EditText
-                android:id="@+id/edtDuiPacienteMod"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="DUI Paciente"
-                android:padding="12dp"
-                android:textSize="15sp"
-                android:textColor="@color/text_black"
-                android:textColorHint="#999999"
-                android:backgroundTint="@color/card_blue"
-                android:layout_marginBottom="12dp" />
-
-            <EditText
-                android:id="@+id/edtDuiDoctorMod"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="DUI Doctor"
-                android:padding="12dp"
-                android:textSize="15sp"
-                android:textColor="@color/text_black"
-                android:textColorHint="#999999"
-                android:backgroundTint="@color/card_blue"
-                android:layout_marginBottom="20dp" />
-
-            <!-- SECCIÓN: DETALLES DE ATENCIÓN -->
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Detalles de la Consulta"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/header_blue"
-                android:layout_marginBottom="12dp" />
+                android:orientation="vertical"
+                android:background="@drawable/bg_table_card"
+                android:padding="16dp"
+                android:layout_marginBottom="28dp">
 
-            <Spinner
-                android:id="@+id/spnEmergenciaMod"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:backgroundTint="@color/card_blue"
-                android:layout_marginBottom="12dp" />
+                <TextView
+                    android:id="@+id/txtEmergenciaEliminar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Busca una emergencia para visualizar sus datos"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_black"
+                    android:lineSpacingExtra="8dp" />
 
-            <EditText
-                android:id="@+id/edtFechaConsultaMod"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="Fecha (YYYY-MM-DD)"
-                android:padding="12dp"
-                android:textSize="15sp"
-                android:textColor="@color/text_black"
-                android:textColorHint="#999999"
-                android:backgroundTint="@color/card_blue"
-                android:layout_marginBottom="12dp" />
-
-            <EditText
-                android:id="@+id/edtDiagnosticoMod"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="100dp"
-                android:hint="Diagnóstico médico"
-                android:gravity="top"
-                android:padding="12dp"
-                android:textSize="15sp"
-                android:textColor="@color/text_black"
-                android:textColorHint="#999999"
-                android:backgroundTint="@color/card_blue"
-                android:layout_marginBottom="20dp" />
-
-            <!-- SECCIÓN: COBROS -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Información de Pago"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:textColor="@color/header_blue"
-                android:layout_marginBottom="12dp" />
-
-            <EditText
-                android:id="@+id/edtCargoTotalMod"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:hint="Pago Total"
-                android:inputType="numberDecimal"
-                android:padding="12dp"
-                android:textSize="15sp"
-                android:textColor="@color/text_black"
-                android:textColorHint="#999999"
-                android:backgroundTint="@color/card_blue"
-                android:layout_marginBottom="12dp" />
-
-            <Spinner
-                android:id="@+id/spnPagaMedMod"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:backgroundTint="@color/card_blue"
-                android:layout_marginBottom="28dp" />
+            </LinearLayout>
 
             <!-- BOTONES -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:layout_marginTop="12dp">
 
                 <Button
-                    android:id="@+id/btnRegresarModificar"
+                    android:id="@+id/btnRegresarEliminar"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:text="Regresar"
                     android:textAllCaps="false"
                     android:textStyle="bold"
+                    android:textSize="15sp"
                     android:textColor="@color/primary_dark"
                     android:backgroundTint="#E8E8E8"
                     android:layout_marginEnd="8dp" />
 
                 <Button
-                    android:id="@+id/btnActualizarConsulta"
+                    android:id="@+id/btnEliminarEmergencia"
                     android:layout_width="0dp"
                     android:layout_height="48dp"
                     android:layout_weight="1"
-                    android:text="Actualizar"
+                    android:text="Eliminar"
                     android:textAllCaps="false"
                     android:textStyle="bold"
-                    android:textColor="@color/primary_dark"
-                    android:backgroundTint="@color/card_blue"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#D9534F"
                     android:layout_marginStart="8dp" />
+
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
 
     <!-- BARRA INFERIOR -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="62dp"
+        android:layout_height="78dp"
         android:orientation="horizontal"
         android:gravity="center"
         android:background="@color/bottom_nav"
         android:elevation="8dp">
 
-        <!-- INICIO -->
         <LinearLayout
             android:id="@+id/navInicio"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:src="@drawable/ic_home"
                 android:scaleType="fitCenter" />
 
@@ -296,23 +224,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Inicio"
-                android:textColor="@color/text_gray"
-                android:textSize="12sp" />
-
+                android:textSize="13sp"
+                android:textColor="@color/text_gray" />
         </LinearLayout>
 
-        <!-- PERFIL -->
         <LinearLayout
             android:id="@+id/navPerfil"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:src="@drawable/ic_profile"
                 android:scaleType="fitCenter" />
 
@@ -320,23 +246,21 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Perfil"
-                android:textColor="@color/text_gray"
-                android:textSize="12sp" />
-
+                android:textSize="13sp"
+                android:textColor="@color/text_gray" />
         </LinearLayout>
 
-        <!-- SALIR -->
         <LinearLayout
             android:id="@+id/navSalir"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
 
             <ImageView
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:src="@drawable/ic_logout"
                 android:scaleType="fitCenter" />
 
@@ -344,11 +268,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Salir"
-                android:textColor="@color/text_gray"
-                android:textSize="12sp" />
-
+                android:textSize="13sp"
+                android:textColor="@color/text_gray" />
         </LinearLayout>
-
     </LinearLayout>
 
 </LinearLayout>
