@@ -16,8 +16,6 @@ import ues.fia.proyecto1pdm115.modelos.Especialidad;
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
 
 import ues.fia.proyecto1pdm115.R;
-import ues.fia.proyecto1pdm115.modelos.Opcion_crud;
-import ues.fia.proyecto1pdm115.modelos.Usuario;
 
 public class CrearPoseeActivity extends AppCompatActivity {
     Spinner spinnerHospitalesCrear,spinnerEspecialidadCrear;
@@ -68,6 +66,11 @@ public class CrearPoseeActivity extends AppCompatActivity {
             Integer idEspe = espeSel.getIdEspecialidad();
 
             helper.abrir();
+            if (helper.verificarAsignacionExistenteHospital(idHospi, idEspe)) {
+                Toast.makeText(this, "El hospital ya tiene asignada esa especialidad", Toast.LENGTH_LONG).show();
+                helper.cerrar();
+                return; // Detenemos la ejecución aquí
+            }
 
             String mensaje = helper.insertarPosee(idHospi,idEspe);
             helper.cerrar();

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/DoctoresMenuActivity"
+    android:id="@+id/ConsultasMenuActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -54,7 +54,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Doctores"
+            android:text="Consultas Médicas"
             android:textColor="@color/text_black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -62,7 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Seleccione una acción"
+            android:text="Gestión de atención y diagnósticos"
             android:textColor="@color/text_gray"
             android:textSize="13sp"
             android:layout_marginTop="4dp"
@@ -76,7 +76,7 @@
 
             <!-- VISUALIZAR -->
             <LinearLayout
-                android:id="@+id/cardVisualizarDoctor"
+                android:id="@+id/cardVisualizarConsulta"
                 android:layout_width="0dp"
                 android:layout_height="92dp"
                 android:layout_weight="1"
@@ -106,7 +106,7 @@
 
             <!-- CREAR -->
             <LinearLayout
-                android:id="@+id/cardCrearDoctor"
+                android:id="@+id/cardCrearConsulta"
                 android:layout_width="0dp"
                 android:layout_height="92dp"
                 android:layout_weight="1"
@@ -145,7 +145,7 @@
 
             <!-- MODIFICAR -->
             <LinearLayout
-                android:id="@+id/cardModificarDoctor"
+                android:id="@+id/cardModificarConsulta"
                 android:layout_width="0dp"
                 android:layout_height="92dp"
                 android:layout_weight="1"
@@ -175,7 +175,7 @@
 
             <!-- ELIMINAR -->
             <LinearLayout
-                android:id="@+id/cardEliminarDoctor"
+                android:id="@+id/cardEliminarConsulta"
                 android:layout_width="0dp"
                 android:layout_height="92dp"
                 android:layout_weight="1"
@@ -213,30 +213,10 @@
 
         <!-- BOTÓN REGRESAR -->
         <Button
-            android:id="@+id/btnRegresarDoctor"
+            android:id="@+id/btnRegresarConsultas"
             android:layout_width="120dp"
             android:layout_height="42dp"
             android:text="Regresar"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:textColor="@color/primary_dark"
-            android:backgroundTint="@color/button_blue" />
-        <Button
-            android:id="@+id/btnCrearEspeDoc"
-            android:layout_width="200dp"
-            android:layout_height="42dp"
-            android:text="Asignar especialidad"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:textColor="@color/primary_dark"
-            android:backgroundTint="@color/button_blue" />
-        <Button
-            android:id="@+id/btnEliminarEspeDoc"
-            android:layout_width="200dp"
-            android:layout_height="42dp"
-            android:text="Quitar especialidad"
             android:textAllCaps="false"
             android:textStyle="bold"
             android:textSize="15sp"

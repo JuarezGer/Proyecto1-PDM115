@@ -16,6 +16,7 @@ import java.util.Set;
 
 import ues.fia.proyecto1pdm115.modelos.Departamento;
 import ues.fia.proyecto1pdm115.modelos.Distrito;
+import ues.fia.proyecto1pdm115.modelos.Doctor;
 import ues.fia.proyecto1pdm115.modelos.Especialidad;
 import ues.fia.proyecto1pdm115.modelos.Hospital;
 import ues.fia.proyecto1pdm115.modelos.Municipio;
@@ -28,7 +29,8 @@ import ues.fia.proyecto1pdm115.modelos.Establecimiento;
 import ues.fia.proyecto1pdm115.modelos.Aseguradora;
 import ues.fia.proyecto1pdm115.modelos.Pago;
 import ues.fia.proyecto1pdm115.modelos.Seguro;
-
+import ues.fia.proyecto1pdm115.modelos.Consulta;
+import ues.fia.proyecto1pdm115.modelos.Tipo_emergencia;
 public class controlDBHospitalApp {
 
     private static final String BASE_DATOS = "hospital_app.db";
@@ -104,7 +106,6 @@ public class controlDBHospitalApp {
             }
         }
     }
-
 
 
     public String obtenerIdUsuario(String usuario) {
@@ -277,7 +278,7 @@ public class controlDBHospitalApp {
 
             db.execSQL("CREATE TABLE DOCTOR (" +
                     "DUI_DOCTOR TEXT PRIMARY KEY, " +
-                    "ID_HOSPITAL INTEGER NOT NULL, " +
+                    "ID_HOSPITAL INTEGER, " +
                     "ID_USUARIO TEXT NOT NULL, " +
                     "NOMBRE_DOCTOR TEXT NOT NULL, " +
                     "APELLIDO_DOCTOR TEXT NOT NULL, " +
@@ -692,10 +693,10 @@ public class controlDBHospitalApp {
             // ============================
             // PUEDE_ELEGIR
             // ============================
-            insertarPuedeElegir(db,"U1","ADM");
-            insertarPuedeElegir(db,"U1","FAC");
-            insertarPuedeElegir(db,"U1","PAC");
-            insertarPuedeElegir(db,"U2","FAC");
+            insertarPuedeElegir(db, "U1", "ADM");
+            insertarPuedeElegir(db, "U1", "FAC");
+            insertarPuedeElegir(db, "U1", "PAC");
+            insertarPuedeElegir(db, "U2", "FAC");
 
             // ============================
             // MUNICIPIO
@@ -911,12 +912,13 @@ public class controlDBHospitalApp {
             db.insertWithOnConflict("OPCION_CRUD", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
         }
 
-        private void insertarPuedeElegir(SQLiteDatabase db, String idUsuario, String idOpcion){
-            ContentValues valores= new ContentValues();
-            valores.put("ID_USUARIO",idUsuario);
-            valores.put("ID_OPCION",idOpcion);
-            db.insertWithOnConflict("PUEDE_ELEGIR",null,valores,SQLiteDatabase.CONFLICT_IGNORE);
+        private void insertarPuedeElegir(SQLiteDatabase db, String idUsuario, String idOpcion) {
+            ContentValues valores = new ContentValues();
+            valores.put("ID_USUARIO", idUsuario);
+            valores.put("ID_OPCION", idOpcion);
+            db.insertWithOnConflict("PUEDE_ELEGIR", null, valores, SQLiteDatabase.CONFLICT_IGNORE);
         }
+
         private void insertarMunicipio(SQLiteDatabase db, String codMunicipio, String codDpto, String nombreMunicipio) {
             ContentValues valores = new ContentValues();
             valores.put("COD_MUNICIPIO", codMunicipio);
@@ -1203,17 +1205,301 @@ public class controlDBHospitalApp {
 
         return paciente;
     }
+// =========================================================
+    // CRUD CONSULTA
+    // =========================================================
+
+    public String insertarConsulta(Consulta consulta) {
+        try {
+            ContentValues valores = new ContentValues();
+
+            // El ID_CONSULTA suele ser autoincrementable o manejado manualmente según tu diseño
+            valores.put("ID_CONSULTA", consulta.getIdConsulta());
+            valores.put("DUI_PACIENTE", consulta.getDuiPaciente());
+            valores.put("DUI_DOCTOR", consulta.getDuiDoctor());
+            valores.put("COD_EMERGENCIA", consulta.getCodEmergencia());
+            valores.put("FECHA_CONSULTA", consulta.getFechaConsulta());
+            valores.put("DIAGNOSTICO", consulta.getDiagnostico());
+            valores.put("CARGO_TOTAL_CONSULTA", consulta.getCargoTotalConsulta());
+            valores.put("PAGA_MEDICAMENTO", consulta.getPagaMedicamento());
+
+            long resultado = db.insertOrThrow("CONSULTA", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar consulta.";
+            }
+
+            return "Consulta insertada correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: Verifique que el DUI del paciente y doctor existan.";
+        } catch (Exception e) {
+            return "Error al insertar consulta: " + e.getMessage();
+        }
+    }
+
+    public Consulta consultarConsulta(int idConsulta) {
+        Cursor cursor = null;
+        try {
+            cursor = db.query(
+                    "CONSULTA",
+                    null,
+                    "ID_CONSULTA = ?",
+                    new String[]{String.valueOf(idConsulta)},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorAConsulta(cursor);
+            }
+            return null;
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+    }
+
+    public ArrayList<Consulta> consultarTodasConsultas() {
+        ArrayList<Consulta> listaConsultas = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            cursor = db.query(
+                    "CONSULTA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "FECHA_CONSULTA DESC" // Ordenamos por la más reciente
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    listaConsultas.add(cursorAConsulta(cursor));
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return listaConsultas;
+    }
+
+    public String actualizarConsulta(Consulta consulta) {
+        try {
+            ContentValues valores = new ContentValues();
+
+            valores.put("DUI_PACIENTE", consulta.getDuiPaciente());
+            valores.put("DUI_DOCTOR", consulta.getDuiDoctor());
+            valores.put("COD_EMERGENCIA", consulta.getCodEmergencia());
+            valores.put("FECHA_CONSULTA", consulta.getFechaConsulta());
+            valores.put("DIAGNOSTICO", consulta.getDiagnostico());
+            valores.put("CARGO_TOTAL_CONSULTA", consulta.getCargoTotalConsulta());
+            valores.put("PAGA_MEDICAMENTO", consulta.getPagaMedicamento());
+
+            int filas = db.update(
+                    "CONSULTA",
+                    valores,
+                    "ID_CONSULTA = ?",
+                    new String[]{String.valueOf(consulta.getIdConsulta())}
+            );
+
+            if (filas > 0) {
+                return "Consulta actualizada correctamente.";
+            } else {
+                return "No se encontró la consulta.";
+            }
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al actualizar consulta: " + e.getMessage();
+        }
+    }
+
+    public String eliminarConsulta(int idConsulta) {
+        try {
+            int filas = db.delete(
+                    "CONSULTA",
+                    "ID_CONSULTA = ?",
+                    new String[]{String.valueOf(idConsulta)}
+            );
+
+            if (filas > 0) {
+                return "Consulta eliminada correctamente.";
+            } else {
+                return "No se encontró la consulta.";
+            }
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar la consulta porque tiene recetas o pagos relacionados.";
+        } catch (Exception e) {
+            return "Error al eliminar consulta: " + e.getMessage();
+        }
+    }
+
+    private Consulta cursorAConsulta(Cursor cursor) {
+        Consulta consulta = new Consulta();
+
+        consulta.setIdConsulta(cursor.getInt(cursor.getColumnIndexOrThrow("ID_CONSULTA")));
+        consulta.setDuiPaciente(cursor.getString(cursor.getColumnIndexOrThrow("DUI_PACIENTE")));
+        consulta.setDuiDoctor(cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+        consulta.setCodEmergencia(cursor.getString(cursor.getColumnIndexOrThrow("COD_EMERGENCIA")));
+        consulta.setFechaConsulta(cursor.getString(cursor.getColumnIndexOrThrow("FECHA_CONSULTA")));
+        consulta.setDiagnostico(cursor.getString(cursor.getColumnIndexOrThrow("DIAGNOSTICO")));
+        consulta.setCargoTotalConsulta(cursor.getFloat(cursor.getColumnIndexOrThrow("CARGO_TOTAL_CONSULTA")));
+        consulta.setPagaMedicamento(cursor.getInt(cursor.getColumnIndexOrThrow("PAGA_MEDICAMENTO")));
+
+        return consulta;
+    }
+
+    // =========================================================
+    // CRUD TIPO_EMERGENCIA
+    // =========================================================
+    public String insertarTipoEmergencia(Tipo_emergencia tipo) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("COD_EMERGENCIA", tipo.getCod_emergencia());
+            valores.put("PRIORIDAD", tipo.getPrioridad());
+            valores.put("COSTO_EMERGENCIA", tipo.getCosto_emergencia());
+
+            long resultado = db.insertOrThrow("TIPO_EMERGENCIA", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar tipo de emergencia.";
+            }
+            return "Tipo de emergencia insertado correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error: El código " + tipo.getCod_emergencia() + " ya existe.";
+        } catch (Exception e) {
+            return "Error al insertar: " + e.getMessage();
+        }
+    }
+
+    public Tipo_emergencia consultarTipoEmergencia(String codEmergencia) {
+        Cursor cursor = null;
+        try {
+            cursor = db.query(
+                    "TIPO_EMERGENCIA",
+                    null,
+                    "COD_EMERGENCIA = ?",
+                    new String[]{codEmergencia},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorATipoEmergencia(cursor);
+            }
+            return null;
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+    }
+
+    public String actualizarTipoEmergencia(Tipo_emergencia tipo) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("PRIORIDAD", tipo.getPrioridad());
+            valores.put("COSTO_EMERGENCIA", tipo.getCosto_emergencia());
+
+            int filas = db.update(
+                    "TIPO_EMERGENCIA",
+                    valores,
+                    "COD_EMERGENCIA = ?",
+                    new String[]{tipo.getCod_emergencia()}
+            );
+
+            if (filas > 0) {
+                return "Registro actualizado correctamente.";
+            } else {
+                return "No se encontró el código para actualizar.";
+            }
+        } catch (Exception e) {
+            return "Error al actualizar: " + e.getMessage();
+        }
+    }
+
+    public String eliminarTipoEmergencia(String codEmergencia) {
+        try {
+            int filas = db.delete(
+                    "TIPO_EMERGENCIA",
+                    "COD_EMERGENCIA = ?",
+                    new String[]{codEmergencia}
+            );
+
+            if (filas > 0) {
+                return "Registro eliminado correctamente.";
+            } else {
+                return "No se encontró el registro.";
+            }
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar: Este tipo de emergencia está siendo utilizado en consultas médicas.";
+        } catch (Exception e) {
+            return "Error al eliminar: " + e.getMessage();
+        }
+    }
+    private Tipo_emergencia cursorATipoEmergencia(Cursor cursor) {
+        Tipo_emergencia tipo = new Tipo_emergencia();
+        tipo.setCod_emergencia(cursor.getString(cursor.getColumnIndexOrThrow("COD_EMERGENCIA")));
+        tipo.setPrioridad(cursor.getString(cursor.getColumnIndexOrThrow("PRIORIDAD")));
+        tipo.setCosto_emergencia(cursor.getFloat(cursor.getColumnIndexOrThrow("COSTO_EMERGENCIA")));
+        return tipo;
+    }
+    public ArrayList<Tipo_emergencia> consultarTodosTiposEmergencia() {
+        ArrayList<Tipo_emergencia> listaTipos = new ArrayList<>();
+        Cursor cursor = null;
+        try {
+            // Consultamos todos los registros de la tabla TIPO_EMERGENCIA
+            cursor = db.query(
+                    "TIPO_EMERGENCIA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "COD_EMERGENCIA ASC" // Ordenados por código
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    // Reutilizamos el método auxiliar que ya creamos
+                    listaTipos.add(cursorATipoEmergencia(cursor));
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            // En caso de error, puedes imprimir el log o manejarlo
+            e.printStackTrace();
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return listaTipos;
+    }
+    public Cursor consultarEmergenciasCursor() {
+        try {
+
+            return db.query("TIPO_EMERGENCIA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "PRIORIDAD ASC");
+        } catch (Exception e) {
+            return null;
+        }
+    }
     // =========================================================
     // MÉTODOS PARA PUEDE_ELEGIR (PERMISOS)
     // =========================================================
-    public ArrayList<Opcion_crud> consultarPermisos(){
+    public ArrayList<Opcion_crud> consultarPermisos() {
         ArrayList<Opcion_crud> lista = new ArrayList<>();
         Cursor cursor = null;
 
-        try{
+        try {
             cursor = db.rawQuery("SELECT ID_OPCION,DESCRIPCION_OPC FROM OPCION_CRUD ORDER BY ID_OPCION ASC",
                     null);
-            if (cursor.moveToFirst()){
+            if (cursor.moveToFirst()) {
                 do {
                     Opcion_crud opcionCrud = new Opcion_crud();
 
@@ -1221,6 +1507,319 @@ public class controlDBHospitalApp {
                     opcionCrud.setDescripcion(cursor.getString(cursor.getColumnIndexOrThrow("DESCRIPCION_OPC")));
 
                     lista.add(opcionCrud);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+
+    public String insertarPermiso(String idUsuario, String idPermiso) {
+        try {
+            ContentValues values = new ContentValues();
+            values.put("ID_USUARIO", idUsuario);
+            values.put("ID_OPCION", idPermiso);
+
+            long control = db.insert("PUEDE_ELEGIR", null, values);
+
+            if (control == -1) {
+                return "Error al crear permiso";
+            }
+            return "Permiso creado exitosamente";
+        } catch (Exception e) {
+            return "Fallo al crear permiso: " + e.getMessage();
+        }
+    }
+
+    public ArrayList<Puede_elegir> consultarPermisos(String idUsuario) {
+        ArrayList<Puede_elegir> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery("SELECT * FROM PUEDE_ELEGIR WHERE ID_USUARIO =?",
+                    new String[]{String.valueOf(idUsuario)});
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Puede_elegir puedeElegir = new Puede_elegir();
+                    puedeElegir.setId_usuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
+                    puedeElegir.setId_opcion(cursor.getString(cursor.getColumnIndexOrThrow("ID_OPCION")));
+
+                    lista.add(puedeElegir);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+
+    public String eliminarPermiso(String idUsuario, String idOpcion) {
+        try {
+            int control = db.delete("PUEDE_ELEGIR", "ID_USUARIO=? AND ID_OPCION=?",
+                    new String[]{idUsuario, idOpcion});
+            if (control > 0) {
+                return "Permiso eliminado";
+            } else {
+                return "Error en eliminacion";
+            }
+        } catch (Exception e) {
+            return "No se pudo eliminar el permiso de usuario por: " + e.getMessage();
+        }
+    }
+    // =========================================================
+    // MÉTODOS PARA DOCTORES
+    // =========================================================
+    public String insertarDoctor(Doctor doctor){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("DUI_DOCTOR",doctor.getDuiDoctor());
+            values.put("ID_USUARIO",doctor.getIdUsuario());
+            values.put("NOMBRE_DOCTOR",doctor.getNombreDoctor());
+            values.put("APELLIDO_DOCTOR",doctor.getApellidoDoctor());
+
+            long control = db.insert("DOCTOR",null,values);
+            if (control==-1){
+                return "Error al crear doctor";
+            }
+            return "Doctor creado exitosamente. ";
+        }catch (Exception e){
+            return "Error al crear doctor: "+e.getMessage();
+        }
+    }
+
+    public Doctor consultarDoctor(String dui) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(
+                    "SELECT * FROM DOCTOR WHERE DUI_DOCTOR = ?",
+                    new String[]{String.valueOf(dui)}
+            );
+
+            if (cursor.moveToFirst()) {
+                Doctor doctor = new Doctor();
+
+                doctor.setDuiDoctor(cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+                doctor.setNombreDoctor(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR")));
+                doctor.setApellidoDoctor(cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO_DOCTOR")));
+                doctor.setIdUsuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
+
+                return doctor;
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+    public Doctor consultarDoctorUsuario(String idUsuario) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.rawQuery(
+                    "SELECT * FROM DOCTOR WHERE ID_USUARIO = ?",
+                    new String[]{String.valueOf(idUsuario)}
+            );
+
+            if (cursor.moveToFirst()) {
+                Doctor doctor = new Doctor();
+
+                doctor.setDuiDoctor(cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+
+                return doctor;
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public String actualizarDoctor(Doctor doctor){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("DUI_DOCTOR",doctor.getDuiDoctor());
+            values.put("ID_USUARIO",doctor.getIdUsuario());
+            values.put("NOMBRE_DOCTOR",doctor.getNombreDoctor());
+            values.put("APELLIDO_DOCTOR",doctor.getApellidoDoctor());
+            values.put("ID_HOSPITAL",doctor.getIdHospital());
+
+            int control = db.update(
+                    "DOCTOR",
+                    values,
+                    "DUI_DOCTOR=?",
+                    new String[]{String.valueOf(doctor.getDuiDoctor())}
+            );
+
+            if(control == 0){
+                return "Doctor no encontrado";
+            }
+
+            return "Doctor actualizado correctamente";
+
+        }catch(Exception e){
+            return "Error al actualizar: " + e.getMessage();
+        }
+    }
+
+    public ArrayList<HashMap<String, String>> consultarDoctoresDetalle() {
+        ArrayList<HashMap<String, String>> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+
+        String query = "SELECT d.NOMBRE_DOCTOR, d.APELLIDO_DOCTOR, d.DUI_DOCTOR, " +
+                "IFNULL(h.ID_HOSPITAL || ' - ' || h.NOMBRE_HOSPITAL, 'Sin Hospital') AS DATOSH, " +
+                "IFNULL(u.ID_USUARIO || ' - ' || u.NOMBRE_USUARIO, 'Sin Usuario') AS DATOSU, " +
+                "GROUP_CONCAT(e.NOMBRE_ESPECIALIDAD, ', ') AS ESPECIALIDADES " +
+                "FROM DOCTOR d " +
+                "LEFT JOIN HOSPITAL h ON h.ID_HOSPITAL = d.ID_HOSPITAL " + // Cambiado a LEFT
+                "LEFT JOIN USUARIO u ON u.ID_USUARIO = d.ID_USUARIO " +     // Cambiado a LEFT
+                "LEFT JOIN CUENTA_CON c ON d.DUI_DOCTOR = c.DUI_DOCTOR " +
+                "LEFT JOIN ESPECIALIDAD e ON c.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD " +
+                "GROUP BY d.DUI_DOCTOR " +
+                "ORDER BY d.NOMBRE_DOCTOR ASC";
+
+        try {
+            cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    HashMap<String, String> map = new HashMap<>();
+
+                    map.put("dui", cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+                    map.put("nombre", cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR")));
+                    map.put("apellido", cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO_DOCTOR")));
+                    map.put("hospital", cursor.getString(cursor.getColumnIndexOrThrow("DATOSH")));
+                    map.put("usuario", cursor.getString(cursor.getColumnIndexOrThrow("DATOSU")));
+                    map.put("especialidades", cursor.getString(cursor.getColumnIndexOrThrow("ESPECIALIDADES")));
+
+                    lista.add(map);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return lista;
+    }
+
+    public HashMap<String,String> consultarDoctorDetalle(String dui){
+        Cursor cursor = null;
+        HashMap<String,String> map = null;
+
+        String query = "SELECT d.NOMBRE_DOCTOR, d.APELLIDO_DOCTOR, d.DUI_DOCTOR, " +
+                "IFNULL(h.ID_HOSPITAL || ' - ' || h.NOMBRE_HOSPITAL, 'Sin Hospital') AS DATOSH, " +
+                "IFNULL(u.ID_USUARIO || ' - ' || u.NOMBRE_USUARIO, 'Sin Usuario') AS DATOSU, " +
+                "GROUP_CONCAT(e.NOMBRE_ESPECIALIDAD, ', ') AS ESPECIALIDADES " +
+                "FROM DOCTOR d " +
+                "LEFT JOIN HOSPITAL h ON h.ID_HOSPITAL = d.ID_HOSPITAL " + // Cambiado a LEFT
+                "LEFT JOIN USUARIO u ON u.ID_USUARIO = d.ID_USUARIO " +     // Cambiado a LEFT
+                "LEFT JOIN CUENTA_CON c ON d.DUI_DOCTOR = c.DUI_DOCTOR " +
+                "LEFT JOIN ESPECIALIDAD e ON c.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD " +
+                "WHERE d.DUI_DOCTOR=? "+
+                "GROUP BY d.DUI_DOCTOR " +
+                "ORDER BY d.NOMBRE_DOCTOR ASC";
+
+        try{
+            cursor=db.rawQuery(query,new String[]{String.valueOf(dui)});
+            if (cursor.moveToFirst()){
+                map = new HashMap<>();
+                map.put("dui", cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+                map.put("nombre", cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR")));
+                map.put("apellido", cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO_DOCTOR")));
+                map.put("hospital", cursor.getString(cursor.getColumnIndexOrThrow("DATOSH")));
+                map.put("usuario", cursor.getString(cursor.getColumnIndexOrThrow("DATOSU")));
+                map.put("especialidades", cursor.getString(cursor.getColumnIndexOrThrow("ESPECIALIDADES")));
+            }
+        }catch (Exception e){
+            Log.e("DB_ERROR","FALLO AL CONSULTAR DETALLE: "+e.getMessage());
+
+        } finally{
+            if (cursor!=null) cursor.close();
+        }
+        return map;
+    }
+
+    public String eliminarDoctor(String dui){
+        try{
+
+            db.delete(
+                    "CUENTA_CON",
+                    "DUI_DOCTOR=?",
+                    new String[]{String.valueOf(dui)}
+            );
+
+            int control = db.delete(
+                    "DOCTOR",
+                    "DUI_DOCTOR=?",
+                    new String[]{String.valueOf(dui)}
+            );
+
+            if(control > 0){
+                return "Doctor eliminado correctamente";
+            }else{
+                return "Doctor no encontrado";
+            }
+
+        }catch (Exception e){
+            return "Error al eliminar: " + e.getMessage();
+        }
+    }
+
+    public boolean verificarAsignacionExistente(String dui, Integer idEspe) {
+        SQLiteDatabase dbLectura = DBHelper.getReadableDatabase();
+
+        Cursor cursor = null;
+        boolean existe = false;
+
+        try {
+            cursor = dbLectura.rawQuery(
+                    "SELECT * FROM CUENTA_CON WHERE DUI_DOCTOR = ? AND ID_ESPECIALIDAD = ?",
+                    new String[]{dui, String.valueOf(idEspe)}
+            );
+
+            // Si el conteo es mayor a 0, significa que ya existe la relación
+            existe = (cursor != null && cursor.getCount() > 0);
+
+        } catch (Exception e) {
+            Log.e("DB_ERROR", "Error al verificar duplicado: " + e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // No cerramos dbLectura aquí porque podrías estar usándola en otros métodos
+        }
+
+        return existe;
+    }
+
+    public ArrayList<Doctor> consultarDoctores(){
+        ArrayList<Doctor> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try{
+            cursor = db.rawQuery("SELECT * FROM DOCTOR ORDER BY NOMBRE_DOCTOR ASC",
+                    null);
+            if (cursor.moveToFirst()){
+                do {
+                    Doctor doctor = new Doctor();
+
+                    doctor.setDuiDoctor(cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+                    doctor.setNombreDoctor(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR")));
+                    doctor.setApellidoDoctor(cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO_DOCTOR")));
+
+                    lista.add(doctor);
                 }while (cursor.moveToNext());
             }
         }finally {
@@ -1230,65 +1829,98 @@ public class controlDBHospitalApp {
         }
         return lista;
     }
-
-    public String insertarPermiso(String idUsuario,String idPermiso){
+    public String insertarCuentaCon(String dui,Integer idEspe){
         try{
             ContentValues values = new ContentValues();
-            values.put("ID_USUARIO",idUsuario);
-            values.put("ID_OPCION",idPermiso);
+            values.put("DUI_DOCTOR",dui);
+            values.put("ID_ESPECIALIDAD",idEspe);
 
-            long control = db.insert("PUEDE_ELEGIR",null,values);
+            long control = db.insert("CUENTA_CON",null,values);
 
             if (control==-1){
-                return "Error al crear permiso";
+                return "Error al asignar especialidad";
             }
-            return "Permiso creado exitosamente";
+            return "Especialidad asignada";
         }catch (Exception e){
-            return "Fallo al crear permiso: "+e.getMessage();
+            return "Fallo al asignar especialidad: "+e.getMessage();
         }
     }
 
-    public ArrayList<Puede_elegir> consultarPermisos(String idUsuario){
-        ArrayList<Puede_elegir> lista = new ArrayList<>();
-        Cursor cursor = null;
-
+    public String eliminarCuentaCon(String dui,Integer idEspe){
         try{
-            cursor = db.rawQuery("SELECT * FROM PUEDE_ELEGIR WHERE ID_USUARIO =?",
-                    new String[]{String.valueOf(idUsuario)});
-
-            if(cursor.moveToFirst()){
-                do {
-                    Puede_elegir puedeElegir = new Puede_elegir();
-                    puedeElegir.setId_usuario(cursor.getString(cursor.getColumnIndexOrThrow("ID_USUARIO")));
-                    puedeElegir.setId_opcion(cursor.getString(cursor.getColumnIndexOrThrow("ID_OPCION")));
-
-                    lista.add(puedeElegir);
-                }while(cursor.moveToNext());
-            }
-        }finally {
-            if (cursor!=null){
-                cursor.close();
-            }
-        }
-        return lista;
-    }
-
-    public String eliminarPermiso(String idUsuario,String idOpcion){
-        try{
-            int control = db.delete("PUEDE_ELEGIR","ID_USUARIO=? AND ID_OPCION=?",
-                    new String[]{idUsuario,idOpcion});
+            int control = db.delete("CUENTA_CON","DUI_DOCTOR=? AND ID_ESPECIALIDAD=?",
+                    new String[]{dui,idEspe.toString()});
             if (control>0){
-                return "Permiso eliminado";
+                return "Especialidad eliminada de doctor";
             }else {
                 return "Error en eliminacion";
             }
         }catch (Exception e){
-            return "No se pudo eliminar el permiso de usuario por: "+e.getMessage();
+            return "No se pudo eliminar la especialidad del doctor por: "+e.getMessage();
         }
     }
+
+
+    public ArrayList<Especialidad> consultarEspecialidadesPorDoctor(String dui) {
+        ArrayList<Especialidad> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        String sql = "SELECT E.ID_ESPECIALIDAD, E.NOMBRE_ESPECIALIDAD " +
+                "FROM ESPECIALIDAD E " +
+                "INNER JOIN CUENTA_CON C ON E.ID_ESPECIALIDAD = C.ID_ESPECIALIDAD " +
+                "WHERE C.DUI_DOCTOR = ?";
+
+        try {
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(dui)});
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Especialidad especialidad = new Especialidad();
+                    especialidad.setIdEspecialidad(cursor.getInt(0));
+                    especialidad.setNombreEspecialidad(cursor.getString(1));
+
+                    lista.add(especialidad);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DB_ERROR", "Error al consultar especialidades: " + e.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return lista;
+    }
+
+
     // =========================================================
     // MÉTODOS PARA HOSPITALES
     // =========================================================
+
+    public boolean verificarAsignacionExistenteHospital(Integer idHos, Integer idEspe) {
+        SQLiteDatabase dbLectura = DBHelper.getReadableDatabase();
+
+        Cursor cursor = null;
+        boolean existe = false;
+
+        try {
+            cursor = dbLectura.rawQuery(
+                    "SELECT * FROM POSEE WHERE ID_HOSPITAL = ? AND ID_ESPECIALIDAD = ?",
+                    new String[]{String.valueOf(idHos), String.valueOf(idEspe)}
+            );
+
+            // Si el conteo es mayor a 0, significa que ya existe la relación
+            existe = (cursor != null && cursor.getCount() > 0);
+
+        } catch (Exception e) {
+            Log.e("DB_ERROR", "Error al verificar duplicado: " + e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // No cerramos dbLectura aquí porque podrías estar usándola en otros métodos
+        }
+
+        return existe;
+    }
     public String asignarEspecialidadHospital(Especialidad especialidad,Integer idHospital){
         try{
             ContentValues values = new ContentValues();
@@ -1536,7 +2168,6 @@ public class controlDBHospitalApp {
         ArrayList<Especialidad> lista = new ArrayList<>();
         Cursor cursor = null;
 
-        // La "magia" del JOIN: unimos POSEE con ESPECIALIDAD
         String sql = "SELECT E.ID_ESPECIALIDAD, E.NOMBRE_ESPECIALIDAD " +
                 "FROM ESPECIALIDAD E " +
                 "INNER JOIN POSEE P ON E.ID_ESPECIALIDAD = P.ID_ESPECIALIDAD " +
@@ -1548,7 +2179,6 @@ public class controlDBHospitalApp {
             if (cursor.moveToFirst()) {
                 do {
                     Especialidad especialidad = new Especialidad();
-                    // Asegúrate de que los nombres de columna coincidan con tu tabla ESPECIALIDAD
                     especialidad.setIdEspecialidad(cursor.getInt(0));
                     especialidad.setNombreEspecialidad(cursor.getString(1));
 

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/DoctoresMenuActivity"
+    android:id="@+id/TipoEmergenciaMenuActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -54,7 +54,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Doctores"
+            android:text="Tipo de Emergencia"
             android:textColor="@color/text_black"
             android:textSize="18sp"
             android:textStyle="bold" />
@@ -76,7 +76,7 @@
 
             <!-- VISUALIZAR -->
             <LinearLayout
-                android:id="@+id/cardVisualizarDoctor"
+                android:id="@+id/cardVisualizarEmergencia"
                 android:layout_width="0dp"
                 android:layout_height="92dp"
                 android:layout_weight="1"
@@ -106,7 +106,7 @@
 
             <!-- CREAR -->
             <LinearLayout
-                android:id="@+id/cardCrearDoctor"
+                android:id="@+id/cardCrearEmergencia"
                 android:layout_width="0dp"
                 android:layout_height="92dp"
                 android:layout_weight="1"
@@ -145,7 +145,7 @@
 
             <!-- MODIFICAR -->
             <LinearLayout
-                android:id="@+id/cardModificarDoctor"
+                android:id="@+id/cardModificarEmergencia"
                 android:layout_width="0dp"
                 android:layout_height="92dp"
                 android:layout_weight="1"
@@ -175,7 +175,7 @@
 
             <!-- ELIMINAR -->
             <LinearLayout
-                android:id="@+id/cardEliminarDoctor"
+                android:id="@+id/cardEliminarEmergencia"
                 android:layout_width="0dp"
                 android:layout_height="92dp"
                 android:layout_weight="1"
@@ -213,7 +213,7 @@
 
         <!-- BOTÓN REGRESAR -->
         <Button
-            android:id="@+id/btnRegresarDoctor"
+            android:id="@+id/btnRegresarEmergencias"
             android:layout_width="120dp"
             android:layout_height="42dp"
             android:text="Regresar"
@@ -222,30 +222,10 @@
             android:textSize="15sp"
             android:textColor="@color/primary_dark"
             android:backgroundTint="@color/button_blue" />
-        <Button
-            android:id="@+id/btnCrearEspeDoc"
-            android:layout_width="200dp"
-            android:layout_height="42dp"
-            android:text="Asignar especialidad"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:textColor="@color/primary_dark"
-            android:backgroundTint="@color/button_blue" />
-        <Button
-            android:id="@+id/btnEliminarEspeDoc"
-            android:layout_width="200dp"
-            android:layout_height="42dp"
-            android:text="Quitar especialidad"
-            android:textAllCaps="false"
-            android:textStyle="bold"
-            android:textSize="15sp"
-            android:textColor="@color/primary_dark"
-            android:backgroundTint="@color/button_blue" />
 
     </LinearLayout>
 
-    <!-- BARRA INFERIOR -->
+    <!-- BARRA INFERIOR (Mantenemos los IDs para que Navegador.java funcione) -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="62dp"
@@ -254,7 +234,6 @@
         android:background="@color/bottom_nav"
         android:elevation="8dp">
 
-        <!-- INICIO -->
         <LinearLayout
             android:id="@+id/navInicio"
             android:layout_width="0dp"
@@ -275,10 +254,8 @@
                 android:text="Inicio"
                 android:textColor="@color/text_gray"
                 android:textSize="12sp" />
-
         </LinearLayout>
 
-        <!-- PERFIL -->
         <LinearLayout
             android:id="@+id/navPerfil"
             android:layout_width="0dp"
@@ -299,10 +276,8 @@
                 android:text="Perfil"
                 android:textColor="@color/text_gray"
                 android:textSize="12sp" />
-
         </LinearLayout>
 
-        <!-- SALIR -->
         <LinearLayout
             android:id="@+id/navSalir"
             android:layout_width="0dp"
@@ -323,9 +298,6 @@
                 android:text="Salir"
                 android:textColor="@color/text_gray"
                 android:textSize="12sp" />
-
         </LinearLayout>
-
     </LinearLayout>
-
 </LinearLayout>
