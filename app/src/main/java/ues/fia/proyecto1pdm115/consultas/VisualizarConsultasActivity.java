@@ -26,7 +26,6 @@ public class VisualizarConsultasActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Asegúrate de tener el layout activity_visualizar_consultas.xml
         setContentView(R.layout.activity_visualizar_consultas);
         Navegador.configurarBarra(this);
 
@@ -44,7 +43,6 @@ public class VisualizarConsultasActivity extends AppCompatActivity {
         tablaConsultas.removeAllViews();
 
         helper.abrir();
-        // Debes implementar este método en tu helper
         ArrayList<Consulta> lista = helper.consultarTodasConsultas();
         helper.cerrar();
 

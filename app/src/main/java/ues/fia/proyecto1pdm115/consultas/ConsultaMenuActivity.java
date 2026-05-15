@@ -19,7 +19,6 @@ public class ConsultaMenuActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Asegúrate de crear el layout activity_consultas.xml basado en activity_pacientes.xml
         setContentView(R.layout.activity_consultas);
 
 

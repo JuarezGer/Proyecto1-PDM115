@@ -39,7 +39,6 @@
             android:name=".consultas.VisualizarConsultasActivity"
             android:exported="false" />
         <activity
-            android:name=".consultas.CrearConsultaActivity"
             android:name=".doctores.EliminarCuentaConActivity"
             android:exported="false" />
         <activity
