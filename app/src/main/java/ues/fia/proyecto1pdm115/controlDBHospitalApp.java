@@ -1390,10 +1390,253 @@ public class controlDBHospitalApp {
         }
     }
 
+    public ArrayList<HashMap<String, String>> consultarDoctoresDetalle() {
+        ArrayList<HashMap<String, String>> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+
+        String query = "SELECT d.NOMBRE_DOCTOR, d.APELLIDO_DOCTOR, d.DUI_DOCTOR, " +
+                "IFNULL(h.ID_HOSPITAL || ' - ' || h.NOMBRE_HOSPITAL, 'Sin Hospital') AS DATOSH, " +
+                "IFNULL(u.ID_USUARIO || ' - ' || u.NOMBRE_USUARIO, 'Sin Usuario') AS DATOSU, " +
+                "GROUP_CONCAT(e.NOMBRE_ESPECIALIDAD, ', ') AS ESPECIALIDADES " +
+                "FROM DOCTOR d " +
+                "LEFT JOIN HOSPITAL h ON h.ID_HOSPITAL = d.ID_HOSPITAL " + // Cambiado a LEFT
+                "LEFT JOIN USUARIO u ON u.ID_USUARIO = d.ID_USUARIO " +     // Cambiado a LEFT
+                "LEFT JOIN CUENTA_CON c ON d.DUI_DOCTOR = c.DUI_DOCTOR " +
+                "LEFT JOIN ESPECIALIDAD e ON c.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD " +
+                "GROUP BY d.DUI_DOCTOR " +
+                "ORDER BY d.NOMBRE_DOCTOR ASC";
+
+        try {
+            cursor = db.rawQuery(query, null);
+
+            if (cursor.moveToFirst()) {
+                do {
+                    HashMap<String, String> map = new HashMap<>();
+
+                    map.put("dui", cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+                    map.put("nombre", cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR")));
+                    map.put("apellido", cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO_DOCTOR")));
+                    map.put("hospital", cursor.getString(cursor.getColumnIndexOrThrow("DATOSH")));
+                    map.put("usuario", cursor.getString(cursor.getColumnIndexOrThrow("DATOSU")));
+                    map.put("especialidades", cursor.getString(cursor.getColumnIndexOrThrow("ESPECIALIDADES")));
+
+                    lista.add(map);
+                } while (cursor.moveToNext());
+            }
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return lista;
+    }
+
+    public HashMap<String,String> consultarDoctorDetalle(String dui){
+        Cursor cursor = null;
+        HashMap<String,String> map = null;
+
+        String query = "SELECT d.NOMBRE_DOCTOR, d.APELLIDO_DOCTOR, d.DUI_DOCTOR, " +
+                "IFNULL(h.ID_HOSPITAL || ' - ' || h.NOMBRE_HOSPITAL, 'Sin Hospital') AS DATOSH, " +
+                "IFNULL(u.ID_USUARIO || ' - ' || u.NOMBRE_USUARIO, 'Sin Usuario') AS DATOSU, " +
+                "GROUP_CONCAT(e.NOMBRE_ESPECIALIDAD, ', ') AS ESPECIALIDADES " +
+                "FROM DOCTOR d " +
+                "LEFT JOIN HOSPITAL h ON h.ID_HOSPITAL = d.ID_HOSPITAL " + // Cambiado a LEFT
+                "LEFT JOIN USUARIO u ON u.ID_USUARIO = d.ID_USUARIO " +     // Cambiado a LEFT
+                "LEFT JOIN CUENTA_CON c ON d.DUI_DOCTOR = c.DUI_DOCTOR " +
+                "LEFT JOIN ESPECIALIDAD e ON c.ID_ESPECIALIDAD = e.ID_ESPECIALIDAD " +
+                "WHERE d.DUI_DOCTOR=? "+
+                "GROUP BY d.DUI_DOCTOR " +
+                "ORDER BY d.NOMBRE_DOCTOR ASC";
+
+        try{
+            cursor=db.rawQuery(query,new String[]{String.valueOf(dui)});
+            if (cursor.moveToFirst()){
+                map = new HashMap<>();
+                map.put("dui", cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+                map.put("nombre", cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR")));
+                map.put("apellido", cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO_DOCTOR")));
+                map.put("hospital", cursor.getString(cursor.getColumnIndexOrThrow("DATOSH")));
+                map.put("usuario", cursor.getString(cursor.getColumnIndexOrThrow("DATOSU")));
+                map.put("especialidades", cursor.getString(cursor.getColumnIndexOrThrow("ESPECIALIDADES")));
+            }
+        }catch (Exception e){
+            Log.e("DB_ERROR","FALLO AL CONSULTAR DETALLE: "+e.getMessage());
+
+        } finally{
+            if (cursor!=null) cursor.close();
+        }
+        return map;
+    }
+
+    public String eliminarDoctor(String dui){
+        try{
+
+            db.delete(
+                    "CUENTA_CON",
+                    "DUI_DOCTOR=?",
+                    new String[]{String.valueOf(dui)}
+            );
+
+            int control = db.delete(
+                    "DOCTOR",
+                    "DUI_DOCTOR=?",
+                    new String[]{String.valueOf(dui)}
+            );
+
+            if(control > 0){
+                return "Doctor eliminado correctamente";
+            }else{
+                return "Doctor no encontrado";
+            }
+
+        }catch (Exception e){
+            return "Error al eliminar: " + e.getMessage();
+        }
+    }
+
+    public boolean verificarAsignacionExistente(String dui, Integer idEspe) {
+        SQLiteDatabase dbLectura = DBHelper.getReadableDatabase();
+
+        Cursor cursor = null;
+        boolean existe = false;
+
+        try {
+            cursor = dbLectura.rawQuery(
+                    "SELECT * FROM CUENTA_CON WHERE DUI_DOCTOR = ? AND ID_ESPECIALIDAD = ?",
+                    new String[]{dui, String.valueOf(idEspe)}
+            );
+
+            // Si el conteo es mayor a 0, significa que ya existe la relación
+            existe = (cursor != null && cursor.getCount() > 0);
+
+        } catch (Exception e) {
+            Log.e("DB_ERROR", "Error al verificar duplicado: " + e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // No cerramos dbLectura aquí porque podrías estar usándola en otros métodos
+        }
+
+        return existe;
+    }
+
+    public ArrayList<Doctor> consultarDoctores(){
+        ArrayList<Doctor> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try{
+            cursor = db.rawQuery("SELECT * FROM DOCTOR ORDER BY NOMBRE_DOCTOR ASC",
+                    null);
+            if (cursor.moveToFirst()){
+                do {
+                    Doctor doctor = new Doctor();
+
+                    doctor.setDuiDoctor(cursor.getString(cursor.getColumnIndexOrThrow("DUI_DOCTOR")));
+                    doctor.setNombreDoctor(cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR")));
+                    doctor.setApellidoDoctor(cursor.getString(cursor.getColumnIndexOrThrow("APELLIDO_DOCTOR")));
+
+                    lista.add(doctor);
+                }while (cursor.moveToNext());
+            }
+        }finally {
+            if (cursor!=null){
+                cursor.close();
+            }
+        }
+        return lista;
+    }
+    public String insertarCuentaCon(String dui,Integer idEspe){
+        try{
+            ContentValues values = new ContentValues();
+            values.put("DUI_DOCTOR",dui);
+            values.put("ID_ESPECIALIDAD",idEspe);
+
+            long control = db.insert("CUENTA_CON",null,values);
+
+            if (control==-1){
+                return "Error al asignar especialidad";
+            }
+            return "Especialidad asignada";
+        }catch (Exception e){
+            return "Fallo al asignar especialidad: "+e.getMessage();
+        }
+    }
+
+    public String eliminarCuentaCon(String dui,Integer idEspe){
+        try{
+            int control = db.delete("CUENTA_CON","DUI_DOCTOR=? AND ID_ESPECIALIDAD=?",
+                    new String[]{dui,idEspe.toString()});
+            if (control>0){
+                return "Especialidad eliminada de doctor";
+            }else {
+                return "Error en eliminacion";
+            }
+        }catch (Exception e){
+            return "No se pudo eliminar la especialidad del doctor por: "+e.getMessage();
+        }
+    }
+
+
+    public ArrayList<Especialidad> consultarEspecialidadesPorDoctor(String dui) {
+        ArrayList<Especialidad> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        String sql = "SELECT E.ID_ESPECIALIDAD, E.NOMBRE_ESPECIALIDAD " +
+                "FROM ESPECIALIDAD E " +
+                "INNER JOIN CUENTA_CON C ON E.ID_ESPECIALIDAD = C.ID_ESPECIALIDAD " +
+                "WHERE C.DUI_DOCTOR = ?";
+
+        try {
+            cursor = db.rawQuery(sql, new String[]{String.valueOf(dui)});
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Especialidad especialidad = new Especialidad();
+                    especialidad.setIdEspecialidad(cursor.getInt(0));
+                    especialidad.setNombreEspecialidad(cursor.getString(1));
+
+                    lista.add(especialidad);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e("DB_ERROR", "Error al consultar especialidades: " + e.getMessage());
+        } finally {
+            if (cursor != null) cursor.close();
+        }
+        return lista;
+    }
+
 
     // =========================================================
     // MÉTODOS PARA HOSPITALES
     // =========================================================
+
+    public boolean verificarAsignacionExistenteHospital(Integer idHos, Integer idEspe) {
+        SQLiteDatabase dbLectura = DBHelper.getReadableDatabase();
+
+        Cursor cursor = null;
+        boolean existe = false;
+
+        try {
+            cursor = dbLectura.rawQuery(
+                    "SELECT * FROM POSEE WHERE ID_HOSPITAL = ? AND ID_ESPECIALIDAD = ?",
+                    new String[]{String.valueOf(idHos), String.valueOf(idEspe)}
+            );
+
+            // Si el conteo es mayor a 0, significa que ya existe la relación
+            existe = (cursor != null && cursor.getCount() > 0);
+
+        } catch (Exception e) {
+            Log.e("DB_ERROR", "Error al verificar duplicado: " + e.getMessage());
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+            // No cerramos dbLectura aquí porque podrías estar usándola en otros métodos
+        }
+
+        return existe;
+    }
     public String asignarEspecialidadHospital(Especialidad especialidad,Integer idHospital){
         try{
             ContentValues values = new ContentValues();
@@ -1641,7 +1884,6 @@ public class controlDBHospitalApp {
         ArrayList<Especialidad> lista = new ArrayList<>();
         Cursor cursor = null;
 
-        // La "magia" del JOIN: unimos POSEE con ESPECIALIDAD
         String sql = "SELECT E.ID_ESPECIALIDAD, E.NOMBRE_ESPECIALIDAD " +
                 "FROM ESPECIALIDAD E " +
                 "INNER JOIN POSEE P ON E.ID_ESPECIALIDAD = P.ID_ESPECIALIDAD " +
@@ -1653,7 +1895,6 @@ public class controlDBHospitalApp {
             if (cursor.moveToFirst()) {
                 do {
                     Especialidad especialidad = new Especialidad();
-                    // Asegúrate de que los nombres de columna coincidan con tu tabla ESPECIALIDAD
                     especialidad.setIdEspecialidad(cursor.getInt(0));
                     especialidad.setNombreEspecialidad(cursor.getString(1));
 

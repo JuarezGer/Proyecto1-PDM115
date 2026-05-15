@@ -34,7 +34,7 @@ public class DoctorMenuActivity extends AppCompatActivity {
         });
 
         cardVisualizarDoctor.setOnClickListener(v -> {
-            // startActivity(new Intent(this, VisualizarPacientesActivity.class));
+             startActivity(new Intent(this, VisualizarDoctorActivity.class));
         });
 
         cardCrearDoctor.setOnClickListener(v -> {
@@ -46,7 +46,15 @@ public class DoctorMenuActivity extends AppCompatActivity {
         });
 
         cardEliminarDoctor.setOnClickListener(v -> {
-            // startActivity(new Intent(this, EliminarPacienteActivity.class));
+             startActivity(new Intent(this, EliminarDoctorActivity.class));
+        });
+
+        btnCrearEspeDoc.setOnClickListener(v -> {
+            startActivity(new Intent(this,CrearCuentaConActivity.class));
+        });
+
+        btnEliminarEspeDoc.setOnClickListener(v -> {
+            startActivity(new Intent(this, EliminarCuentaConActivity.class));
         });
     }
 }

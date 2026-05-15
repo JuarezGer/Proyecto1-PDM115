@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <EditText
+        android:id="@+id/edtDuiDoctorEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="DUI DOCTOR"
+        android:inputType="number"/>
+
+    <Button
+        android:id="@+id/btnBuscarDoctorEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buscar"/>
+
+    <TextView
+        android:id="@+id/txtSubtituloDoctor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Datos de doctor..."
+        android:textSize="16sp"
+        android:padding="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nombre Doctor"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtNombreDoctorEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:padding="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Apellido Doctor"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtApellidoDoctorEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:padding="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Hospital asignado"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtDoctorHospitalEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:padding="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Usuario asignado"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtUsuarioDoctorEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:padding="20dp"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Especialidades de doctor"
+        android:textStyle="bold"/>
+    <TextView
+        android:id="@+id/txtEspecilidadDoctorEliminar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="16sp"
+        android:padding="20dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btnEliminarHospital"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Eliminar"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnRegresarEliminarHospital"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Regresar"/>
+
+</LinearLayout>
