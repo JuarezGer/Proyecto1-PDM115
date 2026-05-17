@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activityEliminarDetalleReceta"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_app">
+
+    <!-- HEADER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="108dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:background="@color/header_blue">
+
+        <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_hospital_cross"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hospital App"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary_dark"
+            android:layout_marginStart="14dp" />
+
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@drawable/ic_user_circle"
+            android:scaleType="fitCenter" />
+
+    </LinearLayout>
+
+    <!-- CONTENIDO -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- TITULO -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Eliminar Detalle Receta"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_black"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Busca y elimina un detalle de receta"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="24dp" />
+
+            <!-- BUSQUEDA -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
+
+                <EditText
+                    android:id="@+id/edtIdDetalleEliminar"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="ID Detalle"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:backgroundTint="@color/card_blue"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnBuscarDetalleEliminar"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:text="Buscar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="@color/card_blue" />
+
+            </LinearLayout>
+
+            <!-- DATOS -->
+            <TextView
+                android:id="@+id/txtIdRecetaDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ID Receta:"
+                android:textSize="16sp"
+                android:textColor="@color/text_black"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/txtCantidadDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cantidad:"
+                android:textSize="16sp"
+                android:textColor="@color/text_black"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/txtInstruccionesDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Instrucciones:"
+                android:textSize="16sp"
+                android:textColor="@color/text_black"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/txtPrecioDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Precio:"
+                android:textSize="16sp"
+                android:textColor="@color/text_black"
+                android:layout_marginBottom="12dp" />
+
+            <TextView
+                android:id="@+id/txtSubtotalDetalle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Subtotal:"
+                android:textSize="16sp"
+                android:textColor="@color/text_black"
+                android:layout_marginBottom="32dp" />
+
+            <!-- BOTONES -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnRegresarEliminar"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Regresar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="#E8E8E8"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnEliminarDetalle"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Eliminar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="#D32F2F"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

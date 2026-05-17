@@ -30,6 +30,11 @@ import ues.fia.proyecto1pdm115.pagos.*;
 import ues.fia.proyecto1pdm115.seguros.*;
 import ues.fia.proyecto1pdm115.consultas.*;
 import ues.fia.proyecto1pdm115.tipo_emergencia.*;
+import ues.fia.proyecto1pdm115.detallesRecetas.*;
+import ues.fia.proyecto1pdm115.hospitalizaciones.*;
+import ues.fia.proyecto1pdm115.medicamentos.*;
+import ues.fia.proyecto1pdm115.recetas.*;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
@@ -129,6 +134,10 @@ public class MainActivity extends AppCompatActivity {
         configurarClick("cardSeguros",SeguroMenuActivity.class);
         configurarClick("cardConsultas", ConsultaMenuActivity.class);
         configurarClick("cardTipoEmergencia", TipoEmergenciaMenuActivity.class);
+        configurarClick("cardRecetas",RecetaMenuActivity.class);
+        configurarClick("cardMedicamentos",MedicamentoMenuActivity.class);
+        configurarClick("cardHospitalizacion", HospitalizacionMenuActivity.class);
+        configurarClick("cardDetalleReceta", DetalleRecetaMenuActivity.class);
     }
 
     private void configurarClick(String nombreId, Class<?> activityDestino) {

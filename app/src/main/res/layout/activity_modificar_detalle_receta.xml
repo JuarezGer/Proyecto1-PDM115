@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activityActualizarDetalleReceta"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/background_app">
+
+    <!-- HEADER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="108dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="24dp"
+        android:background="@color/header_blue">
+
+        <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_hospital_cross"
+            android:scaleType="fitCenter" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Hospital App"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/primary_dark"
+            android:layout_marginStart="14dp" />
+
+        <ImageView
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:src="@drawable/ic_user_circle"
+            android:scaleType="fitCenter" />
+
+    </LinearLayout>
+
+    <!-- CONTENIDO -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- TITULO -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Actualizar Detalle Receta"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_black"
+                android:layout_marginBottom="4dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Busca y modifica un detalle de receta"
+                android:textSize="14sp"
+                android:textColor="#666666"
+                android:layout_marginBottom="24dp" />
+
+            <!-- BUSQUEDA -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
+
+                <EditText
+                    android:id="@+id/edtIdDetalleModificar"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:hint="ID Detalle"
+                    android:inputType="number"
+                    android:padding="12dp"
+                    android:backgroundTint="@color/card_blue"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnBuscarDetalle"
+                    android:layout_width="115dp"
+                    android:layout_height="48dp"
+                    android:text="Buscar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="@color/card_blue" />
+
+            </LinearLayout>
+
+            <!-- CAMPOS -->
+            <EditText
+                android:id="@+id/edtCantidadModificar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Cantidad"
+                android:inputType="number"
+                android:padding="12dp"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/edtInstruccionesModificar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Instrucciones"
+                android:padding="12dp"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/edtPrecioModificar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Precio histórico"
+                android:inputType="numberDecimal"
+                android:padding="12dp"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="12dp" />
+
+            <EditText
+                android:id="@+id/edtSubtotalModificar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:hint="Subtotal"
+                android:inputType="numberDecimal"
+                android:padding="12dp"
+                android:backgroundTint="@color/card_blue"
+                android:layout_marginBottom="28dp" />
+
+            <!-- BOTONES -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnRegresarModificar"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Regresar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@color/primary_dark"
+                    android:backgroundTint="#E8E8E8"
+                    android:layout_marginEnd="8dp" />
+
+                <Button
+                    android:id="@+id/btnActualizarDetalle"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Actualizar"
+                    android:textAllCaps="false"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:backgroundTint="@color/card_blue"
+                    android:layout_marginStart="8dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

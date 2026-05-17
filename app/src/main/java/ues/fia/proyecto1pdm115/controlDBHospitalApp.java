@@ -31,6 +31,11 @@ import ues.fia.proyecto1pdm115.modelos.Pago;
 import ues.fia.proyecto1pdm115.modelos.Seguro;
 import ues.fia.proyecto1pdm115.modelos.Consulta;
 import ues.fia.proyecto1pdm115.modelos.Tipo_emergencia;
+import ues.fia.proyecto1pdm115.modelos.DetalleReceta;
+import ues.fia.proyecto1pdm115.modelos.Hospitalizacion;
+import ues.fia.proyecto1pdm115.modelos.Medicamento;
+import ues.fia.proyecto1pdm115.modelos.Receta;
+
 public class controlDBHospitalApp {
 
     private static final String BASE_DATOS = "hospital_app.db";
@@ -3280,6 +3285,936 @@ public class controlDBHospitalApp {
         establecimiento.setDireccionEstablecimiento(cursor.getString(cursor.getColumnIndexOrThrow("DIRECCION_ESTABLECIMIENTO")));
 
         return establecimiento;
+    }
+
+    // =========================================================
+    // CRUD MEDICAMENTO
+    // =========================================================
+
+    public String insertarMedicamento(Medicamento medicamento) {
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("COD_MEDICAMENTO", medicamento.getCodMedicamento());
+            valores.put("NOMBRE_MEDICAMENTO", medicamento.getNombreMedicamento());
+            valores.put("FECHA_VENCIMIENTO", medicamento.getFechaVencimiento());
+            valores.put("CANTIDAD_INVENTARIO", medicamento.getCantidadInventario());
+            valores.put("PRECIO_VENTA", medicamento.getPrecioVenta());
+            valores.put("LOTE", medicamento.getLote());
+
+            long resultado = db.insertOrThrow("MEDICAMENTO", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar el medicamento.";
+            }
+
+            return "Medicamento insertado correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al insertar medicamento: " + e.getMessage();
+        }
+    }
+
+    public Medicamento consultarMedicamento(String codMedicamento) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "MEDICAMENTO",
+                    null,
+                    "COD_MEDICAMENTO = ?",
+                    new String[]{codMedicamento},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorAMedicamento(cursor);
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    private Medicamento cursorAMedicamento(Cursor cursor) {
+
+        Medicamento medicamento = new Medicamento();
+
+        medicamento.setCodMedicamento(
+                cursor.getString(cursor.getColumnIndexOrThrow("COD_MEDICAMENTO")));
+
+        medicamento.setNombreMedicamento(
+                cursor.getString(cursor.getColumnIndexOrThrow("NOMBRE_MEDICAMENTO")));
+
+        medicamento.setFechaVencimiento(
+                cursor.getString(cursor.getColumnIndexOrThrow("FECHA_VENCIMIENTO")));
+
+        medicamento.setCantidadInventario(
+                cursor.getInt(cursor.getColumnIndexOrThrow("CANTIDAD_INVENTARIO")));
+
+        medicamento.setPrecioVenta(
+                cursor.getDouble(cursor.getColumnIndexOrThrow("PRECIO_VENTA")));
+
+        medicamento.setLote(
+                cursor.getString(cursor.getColumnIndexOrThrow("LOTE")));
+
+        return medicamento;
+    }
+
+    public String eliminarMedicamento(String codMedicamento) {
+        try {
+            int filas = db.delete(
+                    "MEDICAMENTO",
+                    "COD_MEDICAMENTO = ?",
+                    new String[]{codMedicamento});
+
+            if (filas > 0) {
+                return "Medicamento eliminado correctamente.";
+            } else {
+                return "No se encontró el medicamento.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar el medicamento porque tiene registros relacionados.";
+        } catch (Exception e) {
+            return "Error al eliminar medicamento: " + e.getMessage();
+        }
+    }
+
+    public ArrayList<Medicamento> consultarTodosMedicamentos() {
+
+        ArrayList<Medicamento> listaMedicamentos =
+                new ArrayList<>();
+
+        Cursor cursor = null;
+
+        try {
+
+            cursor = db.query(
+                    "MEDICAMENTO",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "NOMBRE_MEDICAMENTO ASC"
+            );
+
+            if (cursor.moveToFirst()) {
+
+                do {
+
+                    Medicamento medicamento =
+                            cursorAMedicamento(
+                                    cursor
+                            );
+
+                    listaMedicamentos.add(
+                            medicamento
+                    );
+
+                } while (cursor.moveToNext());
+            }
+
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return listaMedicamentos;
+    }
+
+    public String actualizarMedicamento(Medicamento medicamento) {
+
+        try {
+
+            ContentValues valores = new ContentValues();
+
+            valores.put(
+                    "NOMBRE_MEDICAMENTO",
+                    medicamento.getNombreMedicamento()
+            );
+
+            valores.put(
+                    "FECHA_VENCIMIENTO",
+                    medicamento.getFechaVencimiento()
+            );
+
+            valores.put(
+                    "CANTIDAD_INVENTARIO",
+                    medicamento.getCantidadInventario()
+            );
+
+            valores.put(
+                    "PRECIO_VENTA",
+                    medicamento.getPrecioVenta()
+            );
+
+            valores.put(
+                    "LOTE",
+                    medicamento.getLote()
+            );
+
+            int filas = db.update(
+                    "MEDICAMENTO",
+                    valores,
+                    "COD_MEDICAMENTO = ?",
+                    new String[]{
+                            medicamento.getCodMedicamento()
+                    }
+            );
+
+            if (filas > 0) {
+
+                return "Medicamento actualizado correctamente.";
+
+            } else {
+
+                return "No se encontró el medicamento.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+
+            return "Error de integridad: "
+                    + e.getMessage();
+
+        } catch (Exception e) {
+
+            return "Error al actualizar medicamento: "
+                    + e.getMessage();
+        }
+    }
+
+    // =========================================================
+    // CRUD HOSPITALIZACION
+    // =========================================================
+
+    public String insertarHospitalizacion(Hospitalizacion hospitalizacion){
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("ID_CONSULTA", hospitalizacion.getIdConsulta());
+            valores.put("FECHA_INICIO_HOSP", hospitalizacion.getFechaInicioHosp());
+            valores.put("FECHA_FIN_HOSP", hospitalizacion.getFechaFinHosp());
+            valores.put("MOTIVO_INGRESO", hospitalizacion.getMotivoIngreso());
+            valores.put("COSTO_HOSPITALIZACION", hospitalizacion.getCostoHospitalizacion());
+
+            long resultado = db.insertOrThrow("HOSPITALIZACION", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar la hospitalizacion.";
+            }
+
+            return "Hospitalizacion insertada correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al insertar hospitalizacion: " + e.getMessage();
+        }
+    }
+
+    public Hospitalizacion consultarHospitalizacion(Integer idHospitalizacion) {
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "HOSPITALIZACION",
+                    null,
+                    "ID_HOSPITALIZACION = ?",
+                    new String[]{
+                            String.valueOf(idHospitalizacion)},
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorAHospitalizacion(cursor);
+            }
+
+            return null;
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    private Hospitalizacion cursorAHospitalizacion(Cursor cursor) {
+
+        Hospitalizacion hospitalizacion = new Hospitalizacion();
+
+        hospitalizacion.setIdHospitalizacion(
+                cursor.getInt(cursor.getColumnIndexOrThrow(
+                        "ID_HOSPITALIZACION")));
+
+        hospitalizacion.setIdConsulta(
+                cursor.getInt(cursor.getColumnIndexOrThrow("ID_CONSULTA")));
+
+        hospitalizacion.setFechaInicioHosp(
+                cursor.getString(cursor.getColumnIndexOrThrow("FECHA_INICIO_HOSP")));
+
+        hospitalizacion.setFechaFinHosp(
+                cursor.getString(cursor.getColumnIndexOrThrow("FECHA_FIN_HOSP")));
+
+        hospitalizacion.setMotivoIngreso(
+                cursor.getString(cursor.getColumnIndexOrThrow("MOTIVO_INGRESO")));
+
+        hospitalizacion.setCostoHospitalizacion(
+                cursor.getDouble(cursor.getColumnIndexOrThrow("COSTO_HOSPITALIZACION")));
+
+        return hospitalizacion;
+    }
+
+    public String eliminarHospitalizacion(int idHospitalizacion) {
+        try {
+            int filas = db.delete(
+                    "HOSPITALIZACION",
+                    "ID_HOSPITALIZACION = ?",
+                    new String[]{
+                            String.valueOf(idHospitalizacion)
+                    }
+            );
+
+            if (filas > 0) {
+                return "Hospitalización eliminada correctamente.";
+            } else {
+                return "No se encontró la hospitalización.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar la hospitalización porque tiene registros relacionados.";
+        } catch (Exception e) {
+            return "Error al eliminar hospitalización: " + e.getMessage();
+        }
+    }
+
+    public ArrayList<Hospitalizacion> consultarTodasHospitalizaciones() {
+
+        ArrayList<Hospitalizacion> listaHospitalizaciones = new ArrayList<>();
+
+        Cursor cursor = null;
+
+        try {
+            cursor = db.query(
+                    "HOSPITALIZACION",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "ID_HOSPITALIZACION ASC"
+            );
+
+            if (cursor.moveToFirst()) {
+                do {
+                    Hospitalizacion hospitalizacion =
+                            cursorAHospitalizacion(
+                                    cursor
+                            );
+                    listaHospitalizaciones
+                            .add(
+                                    hospitalizacion
+                            );
+
+                } while (
+                        cursor.moveToNext()
+                );
+            }
+
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return listaHospitalizaciones;
+    }
+
+    public String actualizarHospitalizacion(
+            Hospitalizacion hospitalizacion
+    ) {
+
+        try {
+
+            ContentValues valores =
+                    new ContentValues();
+
+            valores.put(
+                    "ID_CONSULTA",
+                    hospitalizacion.getIdConsulta()
+            );
+
+            valores.put(
+                    "FECHA_INICIO_HOSP",
+                    hospitalizacion.getFechaInicioHosp()
+            );
+
+            valores.put(
+                    "FECHA_FIN_HOSP",
+                    hospitalizacion.getFechaFinHosp()
+            );
+
+            valores.put(
+                    "MOTIVO_INGRESO",
+                    hospitalizacion.getMotivoIngreso()
+            );
+
+            valores.put(
+                    "COSTO_HOSPITALIZACION",
+                    hospitalizacion
+                            .getCostoHospitalizacion()
+            );
+
+            int filas = db.update(
+                    "HOSPITALIZACION",
+                    valores,
+                    "ID_HOSPITALIZACION = ?",
+                    new String[]{
+                            String.valueOf(
+                                    hospitalizacion
+                                            .getIdHospitalizacion()
+                            )
+                    }
+            );
+
+            if (filas > 0) {
+
+                return
+                        "Hospitalización actualizada correctamente.";
+
+            } else {
+
+                return
+                        "No se encontró la hospitalización.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+
+            return
+                    "Error de integridad: "
+                            + e.getMessage();
+
+        } catch (Exception e) {
+
+            return
+                    "Error al actualizar hospitalización: "
+                            + e.getMessage();
+        }
+    }
+
+    // =========================================================
+    // CRUD RECETA
+    // =========================================================
+    public String insertarReceta(Receta r){
+        try {
+            ContentValues valores = new ContentValues();
+            valores.put("ID_CONSULTA", r.getIdConsulta());
+            valores.put("FECHA_EMISION", r.getFechaEmision());
+            valores.put("ESTADO_RECETA", r.getEstadoReceta());
+
+            long resultado = db.insertOrThrow("RECETA", null, valores);
+
+            if (resultado == -1) {
+                return "Error al insertar la receta.";
+            }
+
+            return "Receta insertada correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al insertar receta: " + e.getMessage();
+        }
+    }
+
+    public Receta consultarReceta(Integer idReceta) {
+
+        Cursor cursor = null;
+        try {
+            cursor = db.query(
+                    "RECETA",
+                    null,
+                    "ID_RECETA = ?",
+                    new String[]{
+                            String.valueOf(idReceta)
+                    },
+                    null,
+                    null,
+                    null
+            );
+
+            if (cursor.moveToFirst()) {
+                return cursorAReceta(cursor);
+            }
+
+            return null;
+
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    private Receta cursorAReceta(Cursor cursor) {
+
+        Receta receta = new Receta();
+
+        receta.setIdReceta(cursor.getInt(cursor.getColumnIndexOrThrow("ID_RECETA")));
+
+        receta.setIdConsulta(cursor.getInt(cursor.getColumnIndexOrThrow("ID_CONSULTA")));
+
+        receta.setFechaEmision(cursor.getString(cursor.getColumnIndexOrThrow("FECHA_EMISION")));
+
+        receta.setEstadoReceta(cursor.getString(cursor.getColumnIndexOrThrow("ESTADO_RECETA")));
+
+        return receta;
+    }
+
+    public String eliminarReceta(Integer idReceta) {
+
+        try {
+            int filas = db.delete(
+                    "RECETA",
+                    "ID_RECETA = ?",
+                    new String[]{
+                            String.valueOf(idReceta)
+                    }
+            );
+
+            if (filas > 0) {
+                return "Receta eliminada correctamente.";
+            } else {
+                return "No se encontró la receta.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+            return "No se puede eliminar la receta porque tiene registros relacionados.";
+        } catch (Exception e) {
+            return "Error al eliminar receta: "
+                    + e.getMessage();
+        }
+    }
+
+    public ArrayList<Receta>
+    consultarTodasRecetas() {
+
+        ArrayList<Receta>
+                listaRecetas =
+                new ArrayList<>();
+
+        Cursor cursor = null;
+
+        try {
+
+            cursor = db.query(
+                    "RECETA",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    "ID_RECETA ASC"
+            );
+
+            if (cursor.moveToFirst()) {
+
+                do {
+
+                    Receta receta =
+                            cursorAReceta(
+                                    cursor
+                            );
+
+                    listaRecetas.add(
+                            receta
+                    );
+
+                } while (
+                        cursor.moveToNext()
+                );
+            }
+
+        } finally {
+
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return listaRecetas;
+    }
+
+    public String actualizarReceta(
+            Receta receta
+    ) {
+
+        try {
+
+            ContentValues valores =
+                    new ContentValues();
+
+            valores.put(
+                    "ID_CONSULTA",
+                    receta.getIdConsulta()
+            );
+
+            valores.put(
+                    "FECHA_EMISION",
+                    receta.getFechaEmision()
+            );
+
+            valores.put(
+                    "ESTADO_RECETA",
+                    receta.getEstadoReceta()
+            );
+
+            int filas = db.update(
+                    "RECETA",
+                    valores,
+                    "ID_RECETA = ?",
+                    new String[]{
+                            String.valueOf(
+                                    receta.getIdReceta()
+                            )
+                    }
+            );
+
+            if (filas > 0) {
+
+                return
+                        "Receta actualizada correctamente.";
+
+            } else {
+
+                return
+                        "No se encontró la receta.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+
+            return
+                    "Error de integridad: "
+                            + e.getMessage();
+
+        } catch (Exception e) {
+
+            return
+                    "Error al actualizar receta: "
+                            + e.getMessage();
+        }
+    }
+
+    // =========================================================
+    // CRUD DETALLE_RECETA
+    // =========================================================
+    public String insertarDetalleReceta(DetalleReceta detalleReceta,
+                                        String codMedicamento){
+        try {
+            ContentValues valores = new ContentValues();
+
+            valores.put("ID_RECETA", detalleReceta.getIdReceta());
+            valores.put("CANTIDAD", detalleReceta.getCantidad());
+            valores.put("INSTRUCCIONES", detalleReceta.getInstrucciones());
+            valores.put("PRECIO_UNITARIO_HISTORICO",
+                    detalleReceta.getPrecioUnitarioHistorico());
+            valores.put("SUB_TOTAL_ITEM", detalleReceta.getSubTotalItem());
+
+            long idDetalleGenerado =
+                    db.insertOrThrow(
+                            "DETALLE_RECETA",
+                            null,
+                            valores
+                    );
+
+            if (idDetalleGenerado == -1) {
+                return "Error al insertar detalle receta.";
+            }
+
+            ContentValues valoresFormadoPor = new ContentValues();
+
+            valoresFormadoPor.put("ID_DETALLE_RECETA", idDetalleGenerado);
+            valoresFormadoPor.put("COD_MEDICAMENTO", codMedicamento);
+
+            long resultadoFormadoPor =
+                    db.insertOrThrow(
+                            "FORMADO_POR",
+                            null,
+                            valoresFormadoPor
+                    );
+
+            if (resultadoFormadoPor == -1) {
+                return "Error al asociar medicamento.";
+            }
+
+            return "Detalle receta insertado correctamente.";
+
+        } catch (SQLiteConstraintException e) {
+            return "Error de integridad: " + e.getMessage();
+        } catch (Exception e) {
+            return "Error al insertar detalle receta: " + e.getMessage();
+        }
+    }
+
+    public ArrayList<DetalleReceta> consultarDetallesPorReceta(int idReceta) {
+
+        ArrayList<DetalleReceta> lista = new ArrayList<>();
+        Cursor cursor = null;
+
+        try {
+
+            String sql =
+                    "SELECT DR.ID_DETALLE_RECETA, " +
+                            "DR.ID_RECETA, " +
+                            "DR.CANTIDAD, " +
+                            "DR.INSTRUCCIONES, " +
+                            "DR.PRECIO_UNITARIO_HISTORICO, " +
+                            "DR.SUB_TOTAL_ITEM, " +
+                            "M.NOMBRE_MEDICAMENTO " +
+                            "FROM DETALLE_RECETA DR " +
+                            "INNER JOIN FORMADO_POR FP " +
+                            "ON DR.ID_DETALLE_RECETA = FP.ID_DETALLE_RECETA " +
+                            "INNER JOIN MEDICAMENTO M " +
+                            "ON FP.COD_MEDICAMENTO = M.COD_MEDICAMENTO " +
+                            "WHERE DR.ID_RECETA = ?";
+
+            cursor = db.rawQuery(sql,
+                    new String[]{String.valueOf(idReceta)});
+
+            if (cursor.moveToFirst()) {
+
+                do {
+
+                    DetalleReceta detalle = new DetalleReceta();
+
+                    detalle.setIdDetalleReceta(cursor.getInt(0));
+                    detalle.setIdReceta(cursor.getInt(1));
+                    detalle.setCantidad(cursor.getInt(2));
+                    detalle.setInstrucciones(cursor.getString(3));
+                    detalle.setPrecioUnitarioHistorico(cursor.getDouble(4));
+                    detalle.setSubTotalItem(cursor.getDouble(5));
+
+                    // EXTRA: guardamos el nombre del medicamento en instrucciones temporalmente
+                    String nombreMedicamento = cursor.getString(6);
+
+                    detalle.setInstrucciones(
+                            nombreMedicamento + " - " + detalle.getInstrucciones()
+                    );
+
+                    lista.add(detalle);
+
+                } while (cursor.moveToNext());
+            }
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+
+        return lista;
+    }
+
+    public DetalleReceta consultarDetalleReceta(
+            int idDetalleReceta
+    ) {
+
+        Cursor cursor =
+                db.rawQuery(
+                        "SELECT * FROM DETALLE_RECETA " +
+                                "WHERE ID_DETALLE_RECETA = ?",
+                        new String[]{
+                                String.valueOf(
+                                        idDetalleReceta
+                                )
+                        }
+                );
+
+        if (cursor.moveToFirst()) {
+
+            DetalleReceta detalle =
+                    new DetalleReceta();
+
+            detalle.setIdDetalleReceta(
+                    cursor.getInt(
+                            cursor.getColumnIndexOrThrow(
+                                    "ID_DETALLE_RECETA"
+                            )
+                    )
+            );
+
+            detalle.setIdReceta(
+                    cursor.getInt(
+                            cursor.getColumnIndexOrThrow(
+                                    "ID_RECETA"
+                            )
+                    )
+            );
+
+            detalle.setCantidad(
+                    cursor.getInt(
+                            cursor.getColumnIndexOrThrow(
+                                    "CANTIDAD"
+                            )
+                    )
+            );
+
+            detalle.setInstrucciones(
+                    cursor.getString(
+                            cursor.getColumnIndexOrThrow(
+                                    "INSTRUCCIONES"
+                            )
+                    )
+            );
+
+            detalle.setPrecioUnitarioHistorico(
+                    cursor.getDouble(
+                            cursor.getColumnIndexOrThrow(
+                                    "PRECIO_UNITARIO_HISTORICO"
+                            )
+                    )
+            );
+
+            detalle.setSubTotalItem(
+                    cursor.getDouble(
+                            cursor.getColumnIndexOrThrow(
+                                    "SUB_TOTAL_ITEM"
+                            )
+                    )
+            );
+
+            cursor.close();
+
+            return detalle;
+        }
+
+        cursor.close();
+
+        return null;
+    }
+
+    public String eliminarDetalleReceta(
+            int idDetalleReceta
+    ) {
+
+        try {
+
+            db.delete(
+                    "FORMADO_POR",
+                    "ID_DETALLE_RECETA = ?",
+                    new String[]{
+                            String.valueOf(
+                                    idDetalleReceta
+                            )
+                    }
+            );
+
+            int filas =
+                    db.delete(
+                            "DETALLE_RECETA",
+                            "ID_DETALLE_RECETA = ?",
+                            new String[]{
+                                    String.valueOf(
+                                            idDetalleReceta
+                                    )
+                            }
+                    );
+
+            if (filas > 0) {
+
+                return
+                        "Detalle eliminado correctamente.";
+
+            } else {
+
+                return
+                        "No se encontró el detalle.";
+            }
+
+        } catch (Exception e) {
+
+            return
+                    "Error al eliminar detalle: "
+                            + e.getMessage();
+        }
+    }
+
+    public String actualizarDetalleReceta(
+            DetalleReceta detalle
+    ) {
+
+        try {
+
+            ContentValues valores =
+                    new ContentValues();
+
+            valores.put(
+                    "CANTIDAD",
+                    detalle.getCantidad()
+            );
+
+            valores.put(
+                    "INSTRUCCIONES",
+                    detalle.getInstrucciones()
+            );
+
+            valores.put(
+                    "PRECIO_UNITARIO_HISTORICO",
+                    detalle.getPrecioUnitarioHistorico()
+            );
+
+            valores.put(
+                    "SUB_TOTAL_ITEM",
+                    detalle.getSubTotalItem()
+            );
+
+            int filas = db.update(
+                    "DETALLE_RECETA",
+                    valores,
+                    "ID_DETALLE_RECETA = ?",
+                    new String[]{
+                            String.valueOf(
+                                    detalle.getIdDetalleReceta()
+                            )
+                    }
+            );
+
+            if (filas > 0) {
+
+                return
+                        "Detalle actualizado correctamente.";
+
+            } else {
+
+                return
+                        "No se encontró el detalle.";
+            }
+
+        } catch (SQLiteConstraintException e) {
+
+            return
+                    "Error de integridad: "
+                            + e.getMessage();
+
+        } catch (Exception e) {
+
+            return
+                    "Error al actualizar detalle: "
+                            + e.getMessage();
+        }
     }
 
 

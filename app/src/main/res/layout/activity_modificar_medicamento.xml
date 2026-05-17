@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- BUSCAR -->
+    <EditText
+        android:id="@+id/edtCodMedicamentoModificar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Código medicamento"/>
+
+    <Button
+        android:id="@+id/btnBuscarMedicamento"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Buscar"/>
+
+    <!-- DATOS -->
+    <EditText
+        android:id="@+id/edtNombreMedicamento"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Nombre"/>
+
+    <EditText
+        android:id="@+id/edtFechaVencimiento"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Fecha vencimiento"/>
+
+    <EditText
+        android:id="@+id/edtCantidadInventario"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Cantidad inventario"
+        android:inputType="number"/>
+
+    <EditText
+        android:id="@+id/edtPrecioVenta"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Precio venta"
+        android:inputType="numberDecimal"/>
+
+    <EditText
+        android:id="@+id/edtLote"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="Lote"/>
+
+    <!-- BOTÓN -->
+    <Button
+        android:id="@+id/btnActualizarMedicamento"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="Actualizar"/>
+
+</LinearLayout>

@@ -163,6 +163,31 @@
         <activity android:name=".establecimientos.VisualizarEstablecimientosActivity" />
         <activity android:name=".establecimientos.ActualizarEstablecimientoActivity" />
         <activity android:name=".establecimientos.EliminarEstablecimientoActivity" />
+
+        <activity android:name=".detallesRecetas.DetalleRecetaMenuActivity"/>
+        <activity android:name=".detallesRecetas.CrearDetalleRecetaActivity"/>
+        <activity android:name=".detallesRecetas.ActualizarDetalleRecetaActivity"/>
+        <activity android:name=".detallesRecetas.VisualizarDetalleRecetaActivity"/>
+        <activity android:name=".detallesRecetas.EliminarDetalleRecetaActivity"/>
+
+        <activity android:name=".medicamentos.MedicamentoMenuActivity"/>
+        <activity android:name=".medicamentos.CrearMedicamentoActivity"/>
+        <activity android:name=".medicamentos.ActualizarMedicamentoActivity"/>
+        <activity android:name=".medicamentos.VisualizarMedicamentoActivity"/>
+        <activity android:name=".medicamentos.EliminarMedicamentoActivity"/>
+
+        <activity android:name=".hospitalizaciones.HospitalizacionMenuActivity"/>
+        <activity android:name=".hospitalizaciones.CrearHospitalizacionActivity"/>
+        <activity android:name=".hospitalizaciones.ActualizarHospitalizacionActivity"/>
+        <activity android:name=".hospitalizaciones.VisualizarHospitalizacionActivity"/>
+        <activity android:name=".hospitalizaciones.EliminarHospitalizacionActivity"/>
+
+        <activity android:name=".recetas.RecetaMenuActivity"/>
+        <activity android:name=".recetas.CrearRecetaActivity"/>
+        <activity android:name=".recetas.ActualizarRecetaActivity"/>
+        <activity android:name=".recetas.VisualizarRecetaActivity"/>
+        <activity android:name=".recetas.EliminarRecetaActivity"/>
+
     </application>
 
 </manifest>
