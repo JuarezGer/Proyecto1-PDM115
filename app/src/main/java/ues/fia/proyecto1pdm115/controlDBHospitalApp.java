@@ -3809,8 +3809,7 @@ public class controlDBHospitalApp {
         }
     }
 
-    public ArrayList<Receta>
-    consultarTodasRecetas() {
+    public ArrayList<Receta> consultarTodasRecetas() {
 
         ArrayList<Receta>
                 listaRecetas =

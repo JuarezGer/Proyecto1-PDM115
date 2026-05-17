@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import ues.fia.proyecto1pdm115.Navegador;
 import ues.fia.proyecto1pdm115.R;
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
+import ues.fia.proyecto1pdm115.modelos.Consulta;
 import ues.fia.proyecto1pdm115.modelos.Hospitalizacion;
 import android.database.Cursor;
 import android.widget.ArrayAdapter;
@@ -132,29 +133,45 @@ public class CrearHospitalizacionActivity extends AppCompatActivity {
                 obtenerIdConsultaSeleccionada() == 0;
     }
 
-    private void cargarConsultas(){
-            idsConsultas.clear();
-            nombresConsultas.clear();
+    private void cargarConsultas() {
 
-            idsConsultas.add(0);
-            nombresConsultas.add("Seleccione una consulta");
+        idsConsultas.clear();
+        nombresConsultas.clear();
 
-            idsConsultas.add(1);
-            nombresConsultas.add("Consulta #1");
+        idsConsultas.add(0);
+        nombresConsultas.add("Seleccione una consulta");
 
-            ArrayAdapter<String> adapter =
-                    new ArrayAdapter<>(
-                            this,
-                            android.R.layout.simple_spinner_item,
-                            nombresConsultas
-                    );
+        helper.abrir();
 
-            adapter.setDropDownViewResource(
-                    android.R.layout.simple_spinner_dropdown_item
+        ArrayList<Consulta> lista =
+                helper.consultarTodasConsultas();
+
+        helper.cerrar();
+
+        for (Consulta c : lista) {
+
+            idsConsultas.add(
+                    c.getIdConsulta()
             );
 
-            spnConsultaCrear.setAdapter(adapter);
+            nombresConsultas.add(
+                    "Consulta #" + c.getIdConsulta()
+            );
         }
+
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        nombresConsultas
+                );
+
+        adapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+
+        spnConsultaCrear.setAdapter(adapter);
+    }
 
     private int obtenerIdConsultaSeleccionada(){
         int posicion =

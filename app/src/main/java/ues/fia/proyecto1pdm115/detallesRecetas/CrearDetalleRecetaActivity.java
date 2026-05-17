@@ -188,14 +188,30 @@ public class CrearDetalleRecetaActivity extends AppCompatActivity{
 
 
     private void cargarRecetas() {
+
         idsRecetas.clear();
         nombresRecetas.clear();
 
         idsRecetas.add(0);
         nombresRecetas.add("Seleccione una receta");
 
-        idsRecetas.add(1);
-        nombresRecetas.add("Receta #1");
+        helper.abrir();
+
+        ArrayList<Receta> lista =
+                helper.consultarTodasRecetas();
+
+        helper.cerrar();
+
+        for (Receta r : lista) {
+
+            idsRecetas.add(
+                    r.getIdReceta()
+            );
+
+            nombresRecetas.add(
+                    "Receta #" + r.getIdReceta()
+            );
+        }
 
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(

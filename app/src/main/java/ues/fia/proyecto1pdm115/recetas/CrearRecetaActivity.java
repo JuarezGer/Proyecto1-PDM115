@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import ues.fia.proyecto1pdm115.Navegador;
 import ues.fia.proyecto1pdm115.R;
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
+import ues.fia.proyecto1pdm115.modelos.Consulta;
 import ues.fia.proyecto1pdm115.modelos.Receta;
 import android.database.Cursor;
 import android.widget.ArrayAdapter;
@@ -103,15 +104,31 @@ public class CrearRecetaActivity extends AppCompatActivity {
                 obtenerIdConsultaSeleccionada() == 0;
     }
 
-    private void cargarConsultas(){
+    private void cargarConsultas() {
+
         idsConsultas.clear();
         nombresConsultas.clear();
 
         idsConsultas.add(0);
         nombresConsultas.add("Seleccione una consulta");
 
-        idsConsultas.add(1);
-        nombresConsultas.add("Consulta #1");
+        helper.abrir();
+
+        ArrayList<Consulta> lista =
+                helper.consultarTodasConsultas();
+
+        helper.cerrar();
+
+        for (Consulta c : lista) {
+
+            idsConsultas.add(
+                    c.getIdConsulta()
+            );
+
+            nombresConsultas.add(
+                    "Consulta #" + c.getIdConsulta()
+            );
+        }
 
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
