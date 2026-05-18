@@ -92,6 +92,12 @@ public class CrearDetalleRecetaActivity extends AppCompatActivity{
         cargarRecetas();
         cargarMedicamentos();
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        cargarRecetas();
+        cargarMedicamentos();
+    }
 
     private void guardarDetalleReceta(){
         if (camposObligatoriosVacios()) {
@@ -210,6 +216,8 @@ public class CrearDetalleRecetaActivity extends AppCompatActivity{
 
             nombresRecetas.add(
                     "Receta #" + r.getIdReceta()
+                            + " | Consulta #" + r.getIdConsulta()
+                            + " | " + r.getFechaEmision()
             );
         }
 

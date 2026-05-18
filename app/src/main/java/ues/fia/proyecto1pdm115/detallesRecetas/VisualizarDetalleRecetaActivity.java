@@ -13,15 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
-import ues.fia.proyecto1pdm115.Navegador;
 import ues.fia.proyecto1pdm115.R;
 import ues.fia.proyecto1pdm115.controlDBHospitalApp;
-import ues.fia.proyecto1pdm115.medicamentos.ActualizarMedicamentoActivity;
-import ues.fia.proyecto1pdm115.medicamentos.EliminarMedicamentoActivity;
 import ues.fia.proyecto1pdm115.modelos.DetalleReceta;
-import ues.fia.proyecto1pdm115.modelos.Medicamento;
 
 public class VisualizarDetalleRecetaActivity extends AppCompatActivity {
+
     TableLayout tablaDetallesData;
     Button btnRegresarVisualizar;
     controlDBHospitalApp helper;
@@ -38,10 +35,16 @@ public class VisualizarDetalleRecetaActivity extends AppCompatActivity {
         tablaDetallesData = findViewById(R.id.tablaDetallesData);
         btnRegresarVisualizar = findViewById(R.id.btnRegresarVisualizar);
 
-        idReceta = getIntent().getIntExtra("ID_RECETA", -1);
+        // Si viene desde una receta específica, se usa ese ID.
+        // Si no viene ningún ID, se mostrará todo.
+        idReceta = getIntent().getIntExtra("ID_RECETA", 0);
 
         btnRegresarVisualizar.setOnClickListener(v -> finish());
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         cargarDetalles();
     }
 
@@ -59,9 +62,11 @@ public class VisualizarDetalleRecetaActivity extends AppCompatActivity {
         if (lista.isEmpty()) {
 
             TextView tv = new TextView(this);
-            tv.setText("No hay detalles en esta receta");
+            tv.setText("No hay detalles de receta registrados");
             tv.setGravity(Gravity.CENTER);
             tv.setPadding(20, 40, 20, 40);
+            tv.setTextSize(15);
+            tv.setTextColor(getResources().getColor(R.color.text_black));
 
             tablaDetallesData.addView(tv);
             return;
@@ -81,53 +86,34 @@ public class VisualizarDetalleRecetaActivity extends AppCompatActivity {
         fila.setPadding(0, 6, 0, 6);
 
         // N°
-        fila.addView(crearCelda(String.valueOf(numero), 45));
+        fila.addView(crearCelda(String.valueOf(numero), 0.8f));
 
-        // ID detalle
-        fila.addView(crearCelda(
-                String.valueOf(detalle.getIdDetalleReceta()),
-                70
-        ));
-
-        // Medicamento (viene en instrucciones modificado)
-        fila.addView(crearCelda(
-                valor(detalle.getInstrucciones()),
-                180
-        ));
+        // Medicamento
+        fila.addView(crearCelda(obtenerMedicamento(detalle.getInstrucciones()), 2.8f));
 
         // Cantidad
-        fila.addView(crearCelda(
-                String.valueOf(detalle.getCantidad()),
-                70
-        ));
+        fila.addView(crearCelda(String.valueOf(detalle.getCantidad()), 1f));
 
         // Subtotal
-        fila.addView(crearCelda(
-                "$" + detalle.getSubTotalItem(),
-                90
-        ));
+        fila.addView(crearCelda("$" + detalle.getSubTotalItem(), 1.4f));
 
-        // Click → modal
-        fila.setOnClickListener(v ->
-                mostrarModalDetalle(detalle)
-        );
+        fila.setOnClickListener(v -> mostrarModalDetalle(detalle));
 
         tablaDetallesData.addView(fila);
     }
 
-    private TextView crearCelda(String texto, int anchoDp) {
+    private TextView crearCelda(String texto, float peso) {
+
         TextView textView = new TextView(this);
 
-        int anchoPx = convertirDpAPx(anchoDp);
-
         TableRow.LayoutParams params = new TableRow.LayoutParams(
-                anchoPx,
-                TableRow.LayoutParams.WRAP_CONTENT
+                0,
+                TableRow.LayoutParams.WRAP_CONTENT,
+                peso
         );
 
         textView.setLayoutParams(params);
-
-        textView.setText(texto);
+        textView.setText(valor(texto));
         textView.setTextColor(getResources().getColor(R.color.text_black));
         textView.setTextSize(13);
         textView.setGravity(Gravity.CENTER);
@@ -140,8 +126,10 @@ public class VisualizarDetalleRecetaActivity extends AppCompatActivity {
 
         String datos =
                 "ID Detalle: " + detalle.getIdDetalleReceta() + "\n\n" +
+                        "Receta: #" + detalle.getIdReceta() + "\n\n" +
+                        "Medicamento: " + obtenerMedicamento(detalle.getInstrucciones()) + "\n\n" +
                         "Cantidad: " + detalle.getCantidad() + "\n\n" +
-                        "Instrucciones: " + valor(detalle.getInstrucciones()) + "\n\n" +
+                        "Instrucciones: " + obtenerInstrucciones(detalle.getInstrucciones()) + "\n\n" +
                         "Precio unitario: $" + detalle.getPrecioUnitarioHistorico() + "\n\n" +
                         "Subtotal: $" + detalle.getSubTotalItem();
 
@@ -190,16 +178,37 @@ public class VisualizarDetalleRecetaActivity extends AppCompatActivity {
         builder.show();
     }
 
+    private String obtenerMedicamento(String texto) {
+
+        if (texto == null || texto.trim().isEmpty()) {
+            return "N/A";
+        }
+
+        if (texto.contains(" - ")) {
+            return texto.split(" - ", 2)[0];
+        }
+
+        return texto;
+    }
+
+    private String obtenerInstrucciones(String texto) {
+
+        if (texto == null || texto.trim().isEmpty()) {
+            return "N/A";
+        }
+
+        if (texto.contains(" - ")) {
+            return texto.split(" - ", 2)[1];
+        }
+
+        return texto;
+    }
+
     private String valor(String texto) {
         if (texto == null || texto.trim().isEmpty()) {
             return "N/A";
         }
 
         return texto;
-    }
-
-    private int convertirDpAPx(int dp) {
-        float escala = getResources().getDisplayMetrics().density;
-        return (int) (dp * escala + 0.5f);
     }
 }

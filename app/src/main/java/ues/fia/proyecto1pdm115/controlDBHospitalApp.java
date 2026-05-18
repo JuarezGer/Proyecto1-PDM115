@@ -4066,11 +4066,18 @@ public class controlDBHospitalApp {
                             "INNER JOIN FORMADO_POR FP " +
                             "ON DR.ID_DETALLE_RECETA = FP.ID_DETALLE_RECETA " +
                             "INNER JOIN MEDICAMENTO M " +
-                            "ON FP.COD_MEDICAMENTO = M.COD_MEDICAMENTO " +
-                            "WHERE DR.ID_RECETA = ?";
+                            "ON FP.COD_MEDICAMENTO = M.COD_MEDICAMENTO ";
 
-            cursor = db.rawQuery(sql,
-                    new String[]{String.valueOf(idReceta)});
+            String[] argumentos = null;
+
+            if (idReceta > 0) {
+                sql += "WHERE DR.ID_RECETA = ? ";
+                argumentos = new String[]{String.valueOf(idReceta)};
+            }
+
+            sql += "ORDER BY DR.ID_RECETA DESC, DR.ID_DETALLE_RECETA DESC";
+
+            cursor = db.rawQuery(sql, argumentos);
 
             if (cursor.moveToFirst()) {
 
@@ -4085,11 +4092,12 @@ public class controlDBHospitalApp {
                     detalle.setPrecioUnitarioHistorico(cursor.getDouble(4));
                     detalle.setSubTotalItem(cursor.getDouble(5));
 
-                    // EXTRA: guardamos el nombre del medicamento en instrucciones temporalmente
                     String nombreMedicamento = cursor.getString(6);
 
                     detalle.setInstrucciones(
-                            nombreMedicamento + " - " + detalle.getInstrucciones()
+                            "Receta #" + detalle.getIdReceta()
+                                    + " | " + nombreMedicamento
+                                    + " - " + detalle.getInstrucciones()
                     );
 
                     lista.add(detalle);
