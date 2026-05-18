@@ -6,6 +6,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.database.Cursor;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -92,15 +93,12 @@ public class ActualizarRecetaActivity
                         )
                 );
 
+        cargarConsultas();
+
         if (!idTexto.equals("-1")) {
-
-            edtIdRecetaModificar
-                    .setText(idTexto);
-
+            edtIdRecetaModificar.setText(idTexto);
             buscarReceta();
         }
-
-        cargarConsultas();
 
         btnBuscarReceta.setOnClickListener(
                 v -> buscarReceta()

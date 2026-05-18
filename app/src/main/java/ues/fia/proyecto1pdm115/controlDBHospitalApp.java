@@ -1289,6 +1289,23 @@ public class controlDBHospitalApp {
         }
         return listaConsultas;
     }
+    public Cursor consultarConsultasParaRecetaCursor() {
+        return db.rawQuery(
+                "SELECT C.ID_CONSULTA, " +
+                        "C.FECHA_CONSULTA, " +
+                        "C.DIAGNOSTICO, " +
+                        "C.DUI_PACIENTE, " +
+                        "C.DUI_DOCTOR, " +
+                        "P.PRIMER_NOMBRE_PACIENTE || ' ' || P.PRIMER_APELLIDO_PACIENTE AS NOMBRE_PACIENTE, " +
+                        "D.NOMBRE_DOCTOR || ' ' || D.APELLIDO_DOCTOR AS NOMBRE_DOCTOR " +
+                        "FROM CONSULTA C " +
+                        "INNER JOIN PACIENTE P ON P.DUI_PACIENTE = C.DUI_PACIENTE " +
+                        "INNER JOIN DOCTOR D ON D.DUI_DOCTOR = C.DUI_DOCTOR " +
+                        "ORDER BY C.FECHA_CONSULTA DESC, C.ID_CONSULTA DESC",
+                null
+        );
+    }
+
 
     public String actualizarConsulta(Consulta consulta) {
         try {
@@ -3642,14 +3659,19 @@ public class controlDBHospitalApp {
         return listaHospitalizaciones;
     }
 
-    public String actualizarHospitalizacion(
-            Hospitalizacion hospitalizacion
-    ) {
+    public String actualizarHospitalizacion(Hospitalizacion hospitalizacion) {
 
         try {
+            Hospitalizacion anterior =
+                    consultarHospitalizacion(
+                            hospitalizacion.getIdHospitalizacion()
+                    );
 
-            ContentValues valores =
-                    new ContentValues();
+            if (anterior == null) {
+                return "No se encontró la hospitalización.";
+            }
+
+            ContentValues valores = new ContentValues();
 
             valores.put(
                     "ID_CONSULTA",
@@ -3673,8 +3695,7 @@ public class controlDBHospitalApp {
 
             valores.put(
                     "COSTO_HOSPITALIZACION",
-                    hospitalizacion
-                            .getCostoHospitalizacion()
+                    hospitalizacion.getCostoHospitalizacion()
             );
 
             int filas = db.update(
@@ -3683,35 +3704,93 @@ public class controlDBHospitalApp {
                     "ID_HOSPITALIZACION = ?",
                     new String[]{
                             String.valueOf(
-                                    hospitalizacion
-                                            .getIdHospitalizacion()
+                                    hospitalizacion.getIdHospitalizacion()
                             )
                     }
             );
 
             if (filas > 0) {
 
-                return
-                        "Hospitalización actualizada correctamente.";
+                if (anterior.getIdConsulta() != hospitalizacion.getIdConsulta()) {
+                    ContentValues limpiarConsultaAnterior = new ContentValues();
+                    limpiarConsultaAnterior.putNull("ID_HOSPITALIZACION");
+
+                    db.update(
+                            "CONSULTA",
+                            limpiarConsultaAnterior,
+                            "ID_CONSULTA = ? AND ID_HOSPITALIZACION = ?",
+                            new String[]{
+                                    String.valueOf(anterior.getIdConsulta()),
+                                    String.valueOf(hospitalizacion.getIdHospitalizacion())
+                            }
+                    );
+                }
+
+                ContentValues marcarConsultaNueva = new ContentValues();
+                marcarConsultaNueva.put(
+                        "ID_HOSPITALIZACION",
+                        hospitalizacion.getIdHospitalizacion()
+                );
+
+                db.update(
+                        "CONSULTA",
+                        marcarConsultaNueva,
+                        "ID_CONSULTA = ?",
+                        new String[]{
+                                String.valueOf(
+                                        hospitalizacion.getIdConsulta()
+                                )
+                        }
+                );
+
+                return "Hospitalización actualizada correctamente.";
 
             } else {
-
-                return
-                        "No se encontró la hospitalización.";
+                return "No se encontró la hospitalización.";
             }
 
         } catch (SQLiteConstraintException e) {
-
-            return
-                    "Error de integridad: "
-                            + e.getMessage();
+            return "Error de integridad: " + e.getMessage();
 
         } catch (Exception e) {
-
-            return
-                    "Error al actualizar hospitalización: "
-                            + e.getMessage();
+            return "Error al actualizar hospitalización: " + e.getMessage();
         }
+    }
+
+    public Cursor consultarConsultasParaHospitalizacionCrearCursor() {
+        return db.rawQuery(
+                "SELECT C.ID_CONSULTA, " +
+                        "C.FECHA_CONSULTA, " +
+                        "C.DIAGNOSTICO, " +
+                        "P.PRIMER_NOMBRE_PACIENTE || ' ' || P.PRIMER_APELLIDO_PACIENTE AS NOMBRE_PACIENTE, " +
+                        "D.NOMBRE_DOCTOR || ' ' || D.APELLIDO_DOCTOR AS NOMBRE_DOCTOR " +
+                        "FROM CONSULTA C " +
+                        "INNER JOIN PACIENTE P ON P.DUI_PACIENTE = C.DUI_PACIENTE " +
+                        "INNER JOIN DOCTOR D ON D.DUI_DOCTOR = C.DUI_DOCTOR " +
+                        "LEFT JOIN HOSPITALIZACION H ON H.ID_CONSULTA = C.ID_CONSULTA " +
+                        "WHERE H.ID_HOSPITALIZACION IS NULL " +
+                        "ORDER BY C.FECHA_CONSULTA DESC, C.ID_CONSULTA DESC",
+                null
+        );
+    }
+
+    public Cursor consultarConsultasParaHospitalizacionActualizarCursor(int idHospitalizacionActual) {
+        return db.rawQuery(
+                "SELECT C.ID_CONSULTA, " +
+                        "C.FECHA_CONSULTA, " +
+                        "C.DIAGNOSTICO, " +
+                        "P.PRIMER_NOMBRE_PACIENTE || ' ' || P.PRIMER_APELLIDO_PACIENTE AS NOMBRE_PACIENTE, " +
+                        "D.NOMBRE_DOCTOR || ' ' || D.APELLIDO_DOCTOR AS NOMBRE_DOCTOR " +
+                        "FROM CONSULTA C " +
+                        "INNER JOIN PACIENTE P ON P.DUI_PACIENTE = C.DUI_PACIENTE " +
+                        "INNER JOIN DOCTOR D ON D.DUI_DOCTOR = C.DUI_DOCTOR " +
+                        "LEFT JOIN HOSPITALIZACION H " +
+                        "ON H.ID_CONSULTA = C.ID_CONSULTA " +
+                        "AND H.ID_HOSPITALIZACION <> ? " +
+                        "WHERE H.ID_HOSPITALIZACION IS NULL " +
+                        "ORDER BY C.FECHA_CONSULTA DESC, C.ID_CONSULTA DESC",
+                new String[]{String.valueOf(idHospitalizacionActual)}
+        );
     }
 
     // =========================================================

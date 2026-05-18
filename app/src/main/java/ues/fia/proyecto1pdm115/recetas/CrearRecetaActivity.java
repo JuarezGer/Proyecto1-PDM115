@@ -112,22 +112,67 @@ public class CrearRecetaActivity extends AppCompatActivity {
         idsConsultas.add(0);
         nombresConsultas.add("Seleccione una consulta");
 
-        helper.abrir();
+        Cursor cursor = null;
 
-        ArrayList<Consulta> lista =
-                helper.consultarTodasConsultas();
+        try {
+            helper.abrir();
 
-        helper.cerrar();
+            cursor = helper.consultarConsultasParaRecetaCursor();
 
-        for (Consulta c : lista) {
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int idConsulta = cursor.getInt(
+                            cursor.getColumnIndexOrThrow("ID_CONSULTA")
+                    );
 
-            idsConsultas.add(
-                    c.getIdConsulta()
-            );
+                    String fecha = cursor.getString(
+                            cursor.getColumnIndexOrThrow("FECHA_CONSULTA")
+                    );
 
-            nombresConsultas.add(
-                    "Consulta #" + c.getIdConsulta()
-            );
+                    String diagnostico = cursor.getString(
+                            cursor.getColumnIndexOrThrow("DIAGNOSTICO")
+                    );
+
+                    String paciente = cursor.getString(
+                            cursor.getColumnIndexOrThrow("NOMBRE_PACIENTE")
+                    );
+
+                    String doctor = cursor.getString(
+                            cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR")
+                    );
+
+                    idsConsultas.add(idConsulta);
+
+                    nombresConsultas.add(
+                            "Consulta #" + idConsulta +
+                                    " | " + fecha +
+                                    " | Paciente: " + paciente +
+                                    " | Doctor: " + doctor +
+                                    " | Diagnóstico: " + diagnostico
+                    );
+
+                } while (cursor.moveToNext());
+            } else {
+                Toast.makeText(
+                        this,
+                        "No hay consultas registradas",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(
+                    this,
+                    "Error al cargar consultas: " + e.getMessage(),
+                    Toast.LENGTH_LONG
+            ).show();
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            helper.cerrar();
         }
 
         ArrayAdapter<String> adapter =

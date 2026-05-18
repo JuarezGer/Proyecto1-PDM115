@@ -86,39 +86,6 @@ public class ActualizarHospitalizacionActivity extends AppCompatActivity {
                         R.id.spnConsultaModificar
                 );
 
-        btnBuscarHospitalizacion =
-                findViewById(
-                        R.id.btnBuscarHospitalizacion
-                );
-
-        btnActualizarHospitalizacion =
-                findViewById(
-                        R.id.btnActualizarHospitalizacion
-                );
-
-        btnRegresarModificar =
-                findViewById(
-                        R.id.btnRegresarModificar
-                );
-
-        String idTexto =
-                String.valueOf(
-                        getIntent().getIntExtra(
-                                "ID_HOSPITALIZACION",
-                                -1
-                        )
-                );
-
-        if (!idTexto.equals("-1")) {
-
-            edtIdHospitalizacionModificar
-                    .setText(idTexto);
-
-            buscarHospitalizacion();
-        }
-
-        cargarConsultas();
-
         btnBuscarHospitalizacion.setOnClickListener(
                 v -> buscarHospitalizacion()
         );
@@ -130,22 +97,97 @@ public class ActualizarHospitalizacionActivity extends AppCompatActivity {
         btnRegresarModificar.setOnClickListener(
                 v -> finish()
         );
+
+        cargarConsultas(-1);
+
+        int idHospitalizacionIntent =
+                getIntent().getIntExtra(
+                        "ID_HOSPITALIZACION",
+                        -1
+                );
+
+        if (idHospitalizacionIntent != -1) {
+            edtIdHospitalizacionModificar.setText(
+                    String.valueOf(idHospitalizacionIntent)
+            );
+
+            buscarHospitalizacion();
+        }
+
     }
 
-    private void cargarConsultas() {
+    private void cargarConsultas(int idHospitalizacionActual) {
 
         idsConsultas.clear();
         nombresConsultas.clear();
 
         idsConsultas.add(0);
-        nombresConsultas.add(
-                "Seleccione una consulta"
-        );
+        nombresConsultas.add("Seleccione una consulta");
 
-        idsConsultas.add(1);
-        nombresConsultas.add(
-                "Consulta #1"
-        );
+        Cursor cursor = null;
+
+        try {
+            helper.abrir();
+
+            cursor = helper.consultarConsultasParaHospitalizacionActualizarCursor(
+                    idHospitalizacionActual
+            );
+
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    int idConsulta = cursor.getInt(
+                            cursor.getColumnIndexOrThrow("ID_CONSULTA")
+                    );
+
+                    String fecha = cursor.getString(
+                            cursor.getColumnIndexOrThrow("FECHA_CONSULTA")
+                    );
+
+                    String diagnostico = cursor.getString(
+                            cursor.getColumnIndexOrThrow("DIAGNOSTICO")
+                    );
+
+                    String paciente = cursor.getString(
+                            cursor.getColumnIndexOrThrow("NOMBRE_PACIENTE")
+                    );
+
+                    String doctor = cursor.getString(
+                            cursor.getColumnIndexOrThrow("NOMBRE_DOCTOR")
+                    );
+
+                    idsConsultas.add(idConsulta);
+
+                    nombresConsultas.add(
+                            "Consulta #" + idConsulta +
+                                    " | " + fecha +
+                                    " | Paciente: " + paciente +
+                                    " | Doctor: " + doctor +
+                                    " | Diagnóstico: " + diagnostico
+                    );
+
+                } while (cursor.moveToNext());
+            } else {
+                Toast.makeText(
+                        this,
+                        "No hay consultas disponibles",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(
+                    this,
+                    "Error al cargar consultas: " + e.getMessage(),
+                    Toast.LENGTH_LONG
+            ).show();
+
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+
+            helper.cerrar();
+        }
 
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<>(
@@ -193,6 +235,8 @@ public class ActualizarHospitalizacionActivity extends AppCompatActivity {
         helper.cerrar();
 
         if (hospitalizacion != null) {
+
+            cargarConsultas(idHospitalizacion);
 
             edtFechaInicioHospModificar.setText(hospitalizacion.getFechaInicioHosp());
 
@@ -305,12 +349,19 @@ public class ActualizarHospitalizacionActivity extends AppCompatActivity {
                 Integer.parseInt(idTexto)
         );
 
-        hospitalizacion.setIdConsulta(
-                idsConsultas.get(
-                        spnConsultaModificar
-                                .getSelectedItemPosition()
-                )
-        );
+        int idConsultaSeleccionada = obtenerIdConsultaSeleccionada();
+
+        if (idConsultaSeleccionada == 0) {
+            Toast.makeText(
+                    this,
+                    "Seleccione una consulta",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            return;
+        }
+
+        hospitalizacion.setIdConsulta(idConsultaSeleccionada);
 
         hospitalizacion.setFechaInicioHosp(
                 edtFechaInicioHospModificar
@@ -356,5 +407,14 @@ public class ActualizarHospitalizacionActivity extends AppCompatActivity {
                 mensaje,
                 Toast.LENGTH_LONG
         ).show();
+    }
+    private int obtenerIdConsultaSeleccionada() {
+        int posicion = spnConsultaModificar.getSelectedItemPosition();
+
+        if (posicion < 0 || posicion >= idsConsultas.size()) {
+            return 0;
+        }
+
+        return idsConsultas.get(posicion);
     }
 }
