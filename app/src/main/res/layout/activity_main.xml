@@ -96,7 +96,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="58dp"
@@ -125,7 +125,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="58dp"
@@ -155,7 +155,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -184,7 +184,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -214,7 +214,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -243,7 +243,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -273,7 +273,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -302,7 +302,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -332,7 +332,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -361,7 +361,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -391,7 +391,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -420,7 +420,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -450,7 +450,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -479,7 +479,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -509,7 +509,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -538,7 +538,7 @@
                     android:background="@drawable/bg_menu_card"
                     android:clickable="true"
                     android:focusable="true"
-                   >
+                    >
 
                     <ImageView
                         android:layout_width="62dp"
@@ -550,6 +550,36 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Permisos"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/text_black"
+                        android:layout_marginTop="6dp" />
+                </LinearLayout>
+
+
+                <!-- FILA 9 / PRUEBA DE SERVICIO WEB -->
+                <LinearLayout
+                    android:id="@+id/cardServicioWeb"
+                    android:layout_width="0dp"
+                    android:layout_height="124dp"
+                    android:layout_margin="6dp"
+                    android:layout_columnWeight="1"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/bg_menu_card"
+                    android:clickable="true"
+                    android:focusable="true">
+
+                    <ImageView
+                        android:layout_width="62dp"
+                        android:layout_height="62dp"
+                        android:src="@drawable/ic_webServices"
+                        app:tint="@color/icon_black" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Servicio Web"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="@color/text_black"

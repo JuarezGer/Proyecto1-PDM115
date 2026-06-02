@@ -34,6 +34,7 @@ import ues.fia.proyecto1pdm115.detallesRecetas.*;
 import ues.fia.proyecto1pdm115.hospitalizaciones.*;
 import ues.fia.proyecto1pdm115.medicamentos.*;
 import ues.fia.proyecto1pdm115.recetas.*;
+import ues.fia.proyecto1pdm115.serviciosWeb.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -110,6 +111,7 @@ public class MainActivity extends AppCompatActivity {
         agregarCard("cardPagos");
         agregarCard("cardSeguros");
         agregarCard("cardPermisos");
+        agregarCard("cardServicioWeb");
     }
 
     private void agregarCard(String nombreId) {
@@ -138,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
         configurarClick("cardMedicamentos",MedicamentoMenuActivity.class);
         configurarClick("cardHospitalizacion", HospitalizacionMenuActivity.class);
         configurarClick("cardDetalleReceta", DetalleRecetaMenuActivity.class);
+        configurarClick("cardServicioWeb", VerPacientesActivityWeb.class);
     }
 
     private void configurarClick(String nombreId, Class<?> activityDestino) {
@@ -208,16 +211,16 @@ public class MainActivity extends AppCompatActivity {
     private void mostrarCardsAdministracion() {
         mostrar("cardDoctores", "cardEspecialidades", "cardHospitales", "cardUsuarios",
                 "cardEstablecimientos", "cardAseguradoras",
-                "cardTipoEmergencia", "cardMedicamentos", "cardPermisos");
+                "cardTipoEmergencia", "cardMedicamentos", "cardPermisos", "cardServicioWeb");
     }
 
     private void mostrarCardsFacturacion() {
-        mostrar("cardPagos", "cardSeguros", "cardAseguradoras");
+        mostrar("cardPagos", "cardSeguros", "cardAseguradoras", "cardServicioWeb");
     }
 
     private void mostrarCardsAtencionMedica() {
         mostrar("cardPacientes", "cardDoctores", "cardHospitales", "cardConsultas",
-                "cardRecetas", "cardHospitalizacion", "cardMedicamentos", "cardDetalleReceta");
+                "cardRecetas", "cardHospitalizacion", "cardMedicamentos", "cardDetalleReceta", "cardServicioWeb");
     }
 
     private void mostrar(String... ids) {
