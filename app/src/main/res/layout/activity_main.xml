@@ -573,7 +573,7 @@
                     <ImageView
                         android:layout_width="62dp"
                         android:layout_height="62dp"
-                        android:src="@drawable/ic_webServices"
+                        android:src="@drawable/ic_servicios"
                         app:tint="@color/icon_black" />
 
                     <TextView

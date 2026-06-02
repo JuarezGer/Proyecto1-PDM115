@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
         configurarClick("cardMedicamentos",MedicamentoMenuActivity.class);
         configurarClick("cardHospitalizacion", HospitalizacionMenuActivity.class);
         configurarClick("cardDetalleReceta", DetalleRecetaMenuActivity.class);
-        configurarClick("cardServicioWeb", VerPacientesActivityWeb.class);
+        configurarClick("cardServicioWeb", ServiciosWebMenuActivity.class);
     }
 
     private void configurarClick(String nombreId, Class<?> activityDestino) {
@@ -215,12 +215,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mostrarCardsFacturacion() {
-        mostrar("cardPagos", "cardSeguros", "cardAseguradoras", "cardServicioWeb");
+        mostrar("cardPagos", "cardSeguros", "cardAseguradoras");
     }
 
     private void mostrarCardsAtencionMedica() {
         mostrar("cardPacientes", "cardDoctores", "cardHospitales", "cardConsultas",
-                "cardRecetas", "cardHospitalizacion", "cardMedicamentos", "cardDetalleReceta", "cardServicioWeb");
+                "cardRecetas", "cardHospitalizacion", "cardMedicamentos", "cardDetalleReceta");
     }
 
     private void mostrar(String... ids) {

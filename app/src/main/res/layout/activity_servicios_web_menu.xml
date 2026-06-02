@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_app">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <Button
+            android:id="@+id/btnCrearUsuarioWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1. Crear Usuario" />
+
+        <Button
+            android:id="@+id/btnEliminarUsuarioWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="2. Eliminar Usuario" />
+
+        <Button
+            android:id="@+id/btnCrearPermisoWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="3. Crear Permiso" />
+
+        <Button
+            android:id="@+id/btnEliminarPermisoWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4. Eliminar Permiso" />
+
+        <Button
+            android:id="@+id/btnVerHospitalizacionesWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5. Ver Hospitalizaciones" />
+
+        <Button
+            android:id="@+id/btnVerMedicamentosWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="6. Ver Medicamentos" />
+
+        <Button
+            android:id="@+id/btnModificarEstablecimientoWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="7. Modificar Establecimiento" />
+
+        <Button
+            android:id="@+id/btnVerPacientesWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="8. Ver Pacientes" />
+
+        <Button
+            android:id="@+id/btnVerEstablecimientosWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="9. Ver Establecimientos" />
+
+    </LinearLayout>
+</ScrollView>
