@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Eliminar Usuario (Web)"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
+
+    <EditText
+        android:id="@+id/edtIdUsuarioEliminarWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID Usuario"
+        android:inputType="text"/>
+
+    <Button
+        android:id="@+id/btnBuscarUsuarioEliminarWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Buscar en Web"/>
+
+    <TextView
+        android:id="@+id/txtUsuarioEliminarWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Datos de usuario..."
+        android:textSize="16sp"
+        android:padding="20dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btnEliminarUsuarioWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Eliminar en Web"
+        android:layout_marginBottom="10dp"/>
+
+    <Button
+        android:id="@+id/btnRegresarEliminarUsuarioWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Regresar"/>
+
+</LinearLayout>
