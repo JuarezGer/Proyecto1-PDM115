@@ -17,6 +17,7 @@
         <activity android:name=".serviciosWeb.VerPacientesActivityWeb"/>
         <activity android:name=".serviciosWeb.ServiciosWebMenuActivity"/>
         <activity android:name=".serviciosWeb.VerEstablecimientosActivityWeb"/>
+        <activity android:name=".serviciosWeb.ModificarEstablecimientoActivityWeb"/>
         <activity android:name=".serviciosWeb.RegistrarUsuarioActivityWeb"/>
         <activity android:name=".serviciosWeb.EliminarUsuarioActivityWeb"/>
 

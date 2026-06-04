@@ -66,10 +66,10 @@ public class ServiciosWebMenuActivity extends AppCompatActivity {
 
         btnVerMedicamentos.setOnClickListener(v ->
                 startActivity(new Intent(this, VerMedicamentosActivityWeb.class))
-        );
+        );*/
 
         btnModificarEstablecimiento.setOnClickListener(v ->
                 startActivity(new Intent(this, ModificarEstablecimientoActivityWeb.class))
-        );*/
+        );
     }
 }
