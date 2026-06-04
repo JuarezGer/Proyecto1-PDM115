@@ -44,14 +44,14 @@ public class ServiciosWebMenuActivity extends AppCompatActivity {
                 startActivity(new Intent(this, VerEstablecimientosActivityWeb.class))
         );
 
-        /*btnCrearUsuario.setOnClickListener(v ->
-                startActivity(new Intent(this, CrearUsuarioActivityWeb.class))
+        btnCrearUsuario.setOnClickListener(v ->
+                startActivity(new Intent(this, RegistrarUsuarioActivityWeb.class))
         );
 
         btnEliminarUsuario.setOnClickListener(v ->
                 startActivity(new Intent(this, EliminarUsuarioActivityWeb.class))
         );
-
+        /*
         btnCrearPermiso.setOnClickListener(v ->
                 startActivity(new Intent(this, CrearPermisoActivityWeb.class))
         );

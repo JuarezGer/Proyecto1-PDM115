@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Registro de Usuario (Web)"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
+
+    <EditText
+        android:id="@+id/edtUsuarioIdWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="ID usuario (Ej: U1)"
+        android:maxLength="2"/>
+
+    <EditText
+        android:id="@+id/edtNombreUsuarioWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de usuario"
+        android:maxLength="20"/>
+
+    <EditText
+        android:id="@+id/edtClaveUsuarioWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Clave usuario"
+        android:inputType="textPassword"
+        android:maxLength="20"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/btnRegresarUsuarioWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Regresar" />
+
+    <Button
+        android:id="@+id/btnGuardarUsuarioWeb"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Guardar en Web"
+        android:layout_marginBottom="10dp"/>
+
+</LinearLayout>
