@@ -59,14 +59,14 @@ public class ServiciosWebMenuActivity extends AppCompatActivity {
         btnEliminarPermiso.setOnClickListener(v ->
                 startActivity(new Intent(this, EliminarPermisoActivityWeb.class))
         );
-
+*/
         btnVerHospitalizaciones.setOnClickListener(v ->
                 startActivity(new Intent(this, VerHospitalizacionesActivityWeb.class))
         );
 
         btnVerMedicamentos.setOnClickListener(v ->
                 startActivity(new Intent(this, VerMedicamentosActivityWeb.class))
-        );*/
+        );
 
         btnModificarEstablecimiento.setOnClickListener(v ->
                 startActivity(new Intent(this, ModificarEstablecimientoActivityWeb.class))
