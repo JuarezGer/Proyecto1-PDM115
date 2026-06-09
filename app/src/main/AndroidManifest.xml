@@ -15,6 +15,9 @@
         android:theme="@style/Theme.Proyecto1PDM115"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".serviciosWeb.EliminarPermisoActivityWeb"
+            android:exported="false" />
+        <activity
             android:name=".serviciosWeb.VerMedicamentosActivityWeb"
             android:exported="false" />
         <activity
@@ -26,6 +29,7 @@
         <activity android:name=".serviciosWeb.ModificarEstablecimientoActivityWeb" />
         <activity android:name=".serviciosWeb.RegistrarUsuarioActivityWeb" />
         <activity android:name=".serviciosWeb.EliminarUsuarioActivityWeb" />
+        <activity android:name=".serviciosWeb.CrearPermisoActivityWeb" />
         <activity
             android:name=".tipo_emergencia.EliminarTipoEmergenciaActivity"
             android:exported="false" />
