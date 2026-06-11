@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_app">
@@ -9,61 +10,113 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="16dp">
 
-        <Button
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:gravity="center"
+            android:background="@color/background_app"
+            android:layout_marginBottom="20dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Servicios Web"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Selecciona una opción"
+                android:textSize="14sp"
+                android:alpha="0.7" />
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCrearUsuarioWeb"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1. Crear Usuario" />
+            android:layout_height="48dp"
+            android:text="1. Crear Usuario"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="8dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEliminarUsuarioWeb"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="2. Eliminar Usuario" />
+            android:layout_height="48dp"
+            android:text="2. Eliminar Usuario"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="8dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnCrearPermisoWeb"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="3. Crear Permiso" />
+            android:layout_height="48dp"
+            android:text="3. Crear Permiso"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="8dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnEliminarPermisoWeb"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="4. Eliminar Permiso" />
+            android:layout_height="48dp"
+            android:text="4. Eliminar Permiso"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="8dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerHospitalizacionesWeb"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="5. Ver Hospitalizaciones" />
+            android:layout_height="48dp"
+            android:text="5. Ver Hospitalizaciones"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="8dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerMedicamentosWeb"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="6. Ver Medicamentos" />
+            android:layout_height="48dp"
+            android:text="6. Ver Medicamentos"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="8dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnModificarEstablecimientoWeb"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="7. Modificar Establecimiento" />
+            android:layout_height="48dp"
+            android:text="7. Modificar Establecimiento"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="8dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerPacientesWeb"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="8. Ver Pacientes" />
+            android:layout_height="48dp"
+            android:text="8. Ver Pacientes"
+            android:textSize="15sp"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="8dp" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnVerEstablecimientosWeb"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="9. Ver Establecimientos" />
+            android:layout_height="48dp"
+            android:text="9. Ver Establecimientos"
+            android:textSize="15sp"
+            app:cornerRadius="8dp" />
 
     </LinearLayout>
 </ScrollView>
